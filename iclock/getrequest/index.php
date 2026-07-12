@@ -1,15 +1,8 @@
 <?php
-// Endpoint ADMS: /iclock/getrequest
-// El equipo consulta si hay comandos pendientes (ENROLL_BIO, DATA UPDATE, etc.)
-
-header('Content-Type: text/plain');
-
-$sn = $_GET['SN'] ?? '';
 $logFile = __DIR__ . '/../device_log.txt';
-
-file_put_contents($logFile, date('Y-m-d H:i:s') . " GETREQUEST SN={$sn}\n", FILE_APPEND);
-
-// TODO: aquí consultamos una tabla de "comandos pendientes" en la base de datos
-
-echo "OK";
-exit;
+$sn = $_GET['SN'] ?? 'UNKNOWN';
+@file_put_contents($logFile, date('Y-m-d H:i:s') . " GETREQUEST SN=$sn QS=" . ($_SERVER['QUERY_STRING'] ?? '') . "\n", FILE_APPEND);
+$body = "OK";
+header('Content-Type: text/plain');
+header('Content-Length: ' . strlen($body));
+echo $body;
