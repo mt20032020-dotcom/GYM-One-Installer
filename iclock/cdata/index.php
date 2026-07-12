@@ -19,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $response .= "TransFlag=TransData AttLog OpLog AttPhoto EnrollFP EnrollUser ChgUser EnrollFace ChgFP\r\n";
     $response .= "Realtime=1\r\n";
     $response .= "Encrypt=0\r\n";
+    $response .= "SessionID=" . strtoupper(substr(md5($sn . 'ADRENALINE'), 0, 10)) . "\r\n";
 
     echo $response;
     file_put_contents($logFile, date('Y-m-d H:i:s') . " GET SN={$sn}\n" . $response . "\n---\n", FILE_APPEND);
