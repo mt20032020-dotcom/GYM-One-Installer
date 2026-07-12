@@ -10,4 +10,6 @@ $logFile = __DIR__ . '/../device_log.txt';
 file_put_contents($logFile, date('Y-m-d H:i:s') . " GETREQUEST SN={$sn}\n", FILE_APPEND);
 
 // TODO: aquí consultamos una tabla de "comandos pendientes" en la base de datos
+
+echo "OK";
 exit;
