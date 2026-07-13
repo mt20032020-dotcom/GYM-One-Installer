@@ -1,101 +1,346 @@
-<?php
-session_start();
+<?php function read_env_file($file_path)
+{
+    $env_file = file_get_contents($file_path);
+    $env_lines = explode("\n", $env_file);
+    $env_data = [];
 
-require_once __DIR__ . '/helpers.php';
+    foreach ($env_lines as $line) {
+        $line_parts = explode('=', $line);
+        if (count($line_parts) == 2) {
+            $key = trim($line_parts[0]);
+            $value = trim($line_parts[1]);
+            $env_data[$key] = $value;
+        }
+    }
 
-if (empty($_SESSION['server_logged'])) {
-    logServerData();
-    $_SESSION['server_logged'] = true;
+    return $env_data;
+}
+$copyright_year = date("Y");
+
+$env_data = read_env_file('.env');
+
+$db_host = $env_data['DB_SERVER'] ?? '';
+$db_username = $env_data['DB_USERNAME'] ?? '';
+$db_password = $env_data['DB_PASSWORD'] ?? '';
+$db_name = $env_data['DB_NAME'] ?? '';
+$country = $env_data['COUNTRY'] ?? '';
+$street = $env_data['STREET'] ?? '';
+$city = $env_data['CITY'] ?? '';
+$hause_no = $env_data['HOUSE_NUMBER'] ?? '';
+$description = $env_data['DESCRIPTION'] ?? '';
+$metakey = $env_data['META_KEY'] ?? '';
+$gkey = $env_data['GOOGLE_KEY'] ?? '';
+$capacity = $env_data['CAPACITY'] ?? '';
+$about_us = $env_data['ABOUT'] ?? '';
+
+$business_name = $env_data['BUSINESS_NAME'] ?? '';
+$lang_code = $env_data['LANG_CODE'] ?? '';
+
+$lang = $lang_code;
+
+$langDir = __DIR__ . "/assets/lang/";
+
+$langFile = $langDir . "$lang.json";
+
+if (!file_exists($langFile)) {
+    die("A nyelvi fájl nem található: $langFile");
 }
 
-$langData     = loadTranslations();
-$lang         = $langData['lang'];
-$languages    = $langData['languages'];
-$translations = $langData['translations'];
-$assetBase    = '';
+$translations = json_decode(file_get_contents($langFile), true);
 
-$texts = [
-    'Welcome!',
-    'Üdvözöllek!',
-    'Welkom!',
-    'Bienvenue!',
-    'Willkommen!',
-    'Benvenuti!',
-    'Velkommen!',
-    'Velkommen!',
-    'Witamy!',
-    'Bun venit!',
-    'Добродошли!',
-    'Vitajte!',
-    'Pozdravljam!',
-    'Bienvenido!',
-    'Välkommen!',
-    'Hoşgeldiniz!',
-    'मैं आपका स्वागत करता हूं',
-    'أهلاً وسهلاً بك',
+$conn = new mysqli($db_host, $db_username, $db_password, $db_name);
+
+if ($conn->connect_error) {
+    die("Kapcsolódási hiba: " . $conn->connect_error);
+}
+
+$dayNames = [
+    1 => $translations["Mon"],
+    2 => $translations["Tue"],
+    3 => $translations["Wed"],
+    4 => $translations["Thu"],
+    5 => $translations["Fri"],
+    6 => $translations["Sat"],
+    7 => $translations["Sun"]
 ];
+
+$days = [];
+$result = $conn->query("SELECT * FROM opening_hours ORDER BY day ASC");
+while ($row = $result->fetch_assoc()) {
+    $days[] = $row;
+}
+
+$today = new DateTime('today');
+$maxDate = (new DateTime('today'))->modify('+14 days');
+
+$todayStr = $today->format('Y-m-d');
+$maxDateStr = $maxDate->format('Y-m-d');
+
+$exceptions = [];
+$stmt = $conn->prepare("
+    SELECT * 
+    FROM opening_hours_exceptions 
+    WHERE date BETWEEN ? AND ?
+    ORDER BY date ASC
+");
+$stmt->bind_param("ss", $todayStr, $maxDateStr);
+$stmt->execute();
+
+$res = $stmt->get_result();
+while ($row = $res->fetch_assoc()) {
+    $exceptions[] = $row;
+}
+$stmt->close();
+
+$months = [
+    1 => $translations["Jan"],
+    2 => $translations["Feb"],
+    3 => $translations["Mar"],
+    4 => $translations["Apr"],
+    5 => $translations["May"],
+    6 => $translations["Jun"],
+    7 => $translations["Jul"],
+    8 => $translations["Aug"],
+    9 => $translations["Sep"],
+    10 => $translations["Oct"],
+    11 => $translations["Nov"],
+    12 => $translations["Dec"],
+];
+
+
+$sql = "SELECT COUNT(*) AS total FROM temp_loggeduser";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $workoutpeoplenow = $row['total'];
+} else {
+    $workoutpeoplenow = 0;
+}
+
+if ($capacity > 0) {
+    $capacityPercent = ($workoutpeoplenow / $capacity) * 100;
+} else {
+    $capacityPercent = 0;
+}
+
+$progresscolor = '';
+
+if ($capacityPercent >= 0 && $capacityPercent < 70) {
+    $progresscolor = 'success';
+} elseif ($capacityPercent >= 70 && $capacityPercent < 90) {
+    $progresscolor = 'warning';
+} elseif ($capacityPercent >= 90) {
+    $progresscolor = 'danger';
+}
+
 ?>
-<?php include __DIR__ . '/partials/header.php'; ?>
 
-<div class="container justify-content-center">
-  <div class="row text-center justify-content-center">
 
-    <div class="col-md-8 mx-auto text-center mb-5">
-      <img class="img img-fluid mb-3"
-           src="https://gymoneglobal.com/assets/img/text-logo.png"
-           alt="GYM One Logo" width="35%">
-      <h1 id="animated-text" class="mb-3 fw-semibold" aria-live="polite">!</h1>
-      <p class="lead mb-4 fs-4">
-        <?php echo e($translations['installerVersion'] ?? ''); ?> &ndash; <?php echo e(INSTALLER_VERSION); ?>
-      </p>
-    </div>
 
-    <div class="col-md-8 mx-auto text-center mb-5">
-      <p class="mb-4 fs-4 lead"><?php echo e($translations['lang_select'] ?? ''); ?></p>
-      <div class="dropdown">
-        <a id="langDropdown" class="btn dropdown-toggle" href="#" role="button"
-           data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <img src="https://raw.githubusercontent.com/lipis/flag-icons/main/flags/4x3/<?php echo e(strtolower($lang)); ?>.svg"
-               class="svg country" alt="<?php echo e($lang); ?>">
-        </a>
-        <div class="dropdown-menu" aria-labelledby="langDropdown">
-          <?php foreach ($languages as $code => $name): ?>
-            <a class="dropdown-item" href="?lang=<?php echo e($code); ?>">
-              <img src="https://raw.githubusercontent.com/lipis/flag-icons/main/flags/4x3/<?php echo e(strtolower($code)); ?>.svg"
-                   class="svg" alt="<?php echo e($name); ?>">
-              <?php echo e($translations[$name] ?? $name); ?>
-            </a>
-          <?php endforeach; ?>
-        </div>
-      </div>
-    </div>
 
-    <div class="col-md-8 mx-auto text-center mb-5">
-      <a href="stage1/" class="btn btn-success btn-lg text-white mx-2 mb-4" role="button">
-        <?php echo e($translations['continue'] ?? 'Continue'); ?>
-      </a>
-    </div>
+<!DOCTYPE html>
+<html lang="<?php echo $lang_code; ?>">
 
-  </div>
-</div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo $business_name; ?> - <?php echo $translations["mainpage"]; ?></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- CUSTOM STYLE INSERT HERE! -->
+    <link rel="stylesheet" href="assets/css/default.css">
+    <!-- CUSTOM STYLE INSERT HERE! -->
+    <link rel="shortcut icon" href="assets/img/brand/favicon.png" type="image/x-icon">
+    <meta name="title" content="<?php echo $business_name; ?> - <?php echo $translations["mainpage"]; ?>">
+    <meta name="description" content="<?php echo $description; ?>">
+    <meta name="keywords" content="<?php echo $metakey; ?>">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="author" content="<?php echo $business_name; ?>">
 
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $gkey; ?>"></script>
 <script>
-  const texts = <?php echo json_encode($texts, JSON_UNESCAPED_UNICODE); ?>;
-  let currentIndex = 0;
-  const textEl = document.getElementById('animated-text');
+    window.dataLayer = window.dataLayer || [];
 
-  textEl.textContent = texts[currentIndex++];
-  textEl.style.opacity = '1';
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
 
-  setInterval(() => {
-    textEl.style.transition = 'opacity .5s';
-    textEl.style.opacity    = '0';
-    setTimeout(() => {
-      textEl.textContent   = texts[currentIndex];
-      textEl.style.opacity = '1';
-      currentIndex = (currentIndex + 1) % texts.length;
-    }, 500);
-  }, 2000);
+    gtag('config', '<?php echo $gkey; ?>');
 </script>
 
-<?php include __DIR__ . '/partials/footer.php'; ?>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <img class="img" src="assets/img/brand/logo.png" width="148px" alt="<?php echo $business_name; ?> Logo">
+            <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href=""><?php echo $translations["mainpage"]; ?></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="trainers/"><?php echo $translations["trainerspage"]; ?></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="prices/"><?php echo $translations["pricespage"]; ?></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact/"><?php echo $translations["contactpage"]; ?></a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a href="login/" rel="noopener noreferrer" title="Login" class="nav-link ps-0 ps-lg-3 pe-3">
+                            <i class="bi bi-person-circle"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col bg-imageback">
+            </div>
+        </div>
+        <div class="row text-center justify-content-center">
+            <div class="col-sm-6">
+                <h1><?php echo $translations["about-us"]; ?></h1>
+                <p><?php echo $about_us; ?></p>
+            </div>
+            <div class="status-bar mt-3" id="statusBar">
+                <h2><?php echo $translations["capacitytext"]; ?></h2>
+                <div class="progress" style="height: 6px;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-<?php echo $progresscolor; ?>"
+                        style="width: <?php echo $capacityPercent; ?>%" role="progressbar"></div>
+                </div>
+                <p id="peopleCount"><?php echo $workoutpeoplenow; ?> <?php echo $translations["people"]; ?></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="mt-3"></div>
+                <div class="col-md-4 mb-1">
+                    <h2 class="mb-4">
+                        <img src="assets/img/brand/logo.png" alt="<?php echo $business_name; ?> - Logo" height="105">
+                    </h2>
+
+                    <p><?php echo $country; ?>, <?php echo $city; ?></p>
+                    <p><?php echo $street; ?> <?php echo $hause_no; ?></p>
+                </div>
+                <div class="col-md-3 offset-md-1">
+                    <?php if (!empty($days)): ?>
+                        <div class="list-group">
+                            <?php foreach ($days as $day): ?>
+                                <div class="list-group-itemcustom d-flex justify-content-between align-items-center">
+                                    <span><strong><?= htmlspecialchars($dayNames[$day['day']]) ?></strong></span>
+                                    <span class="text-center justify-content-center">
+                                        <?php if (is_null($day['open_time']) && is_null($day['close_time'])): ?>
+                                            <span class="badge bg-danger"><?= $translations["closed"]; ?></span>
+                                        <?php else: ?>
+                                            <span class="badge bg-success">
+                                                <?= date('H:i', strtotime($day['open_time'])) ?> -
+                                                <?= date('H:i', strtotime($day['close_time'])) ?>
+                                            </span>
+                                        <?php endif; ?>
+                                    </span>
+                                </div>
+                            <?php endforeach; ?>
+                            <hr>
+                            <?php foreach ($exceptions as $ex): ?>
+                                <?php
+                                $date = new DateTime($ex['date']);
+                                $monthName = $months[(int) $date->format('n')];
+                                $day = $date->format('j');
+                                ?>
+                                <div class="list-group-itemcustom d-flex justify-content-between align-items-center">
+                                    <span><strong><?= $monthName . ' ' . $day . '.' ?></strong></span>
+
+                                    <span class="text-center justify-content-center">
+                                        <?php if ($ex['is_closed']): ?>
+                                            <span class="badge bg-danger"><?= $translations["closed"]; ?></span>
+                                        <?php else: ?>
+                                            <span class="badge bg-warning text-dark">
+                                                <?= date('H:i', strtotime($ex['open_time'])) ?> -
+                                                <?= date('H:i', strtotime($ex['close_time'])) ?>
+                                            </span>
+                                        <?php endif; ?>
+                                    </span>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <div class="col-md-2 offset-md-1">
+                    <h5 class="text-light mb-4"></h5>
+
+                </div>
+            </div>
+
+            <div class="border-top border-secondary pt-3 mt-3">
+                <p class="small text-center mb-0">
+                    Copyright © <?php echo $copyright_year; ?> <?php echo $business_name; ?> -
+                    <?php echo $translations["copyright"]; ?>
+                    &nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red"
+                        class="bi bi-heart-fill" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314">
+                        </path>
+                    </svg>
+                    <a href="https://www.gymoneglobal.com/?lang=<?php echo $lang_code; ?>">GYM One</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+<script>
+    setTimeout(function () {
+        document.getElementById('statusBar').classList.add('visible');
+    }, 500);
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const navbarToggler = document.querySelector('.navbar-toggler');
+        const statusBar = document.getElementById('statusBar');
+
+        if (navbarToggler && statusBar) {
+            navbarToggler.addEventListener('click', function () {
+                const isNavbarExpanded = navbarToggler.getAttribute('aria-expanded') === 'true';
+
+                if (isNavbarExpanded) {
+                    statusBar.classList.remove('visible');
+                } else {
+                    setTimeout(function () {
+                        statusBar.classList.add('visible');
+                    }, 200);
+                }
+            });
+        }
+    });
+</script>
+
+
+
+</html>
