@@ -67,7 +67,7 @@ $result_avg_time = $conn->query($sql_avg_time);
 if (!$result_avg_time) {
     die("Hiba az átlagos edzésidő lekérdezésekor: " . $conn->error);
 }
-$avg_duration = ($result_avg_time->num_rows > 0) ? round($result_avg_time->fetch_assoc()['avg_duration']) : 0;
+$avg_duration = ($result_avg_time->num_rows > 0) ? round($result_avg_time->fetch_assoc()['avg_duration'] ?? 0) : 0;
 
 $sql_latest_training = "SELECT workout_date FROM workout_stats WHERE userid = $userid ORDER BY workout_date DESC LIMIT 1";
 $result_latest_training = $conn->query($sql_latest_training);

@@ -9,3 +9,4 @@ admin/shop/gateway/PAYPALCHECK.php
 .env
 /\!\!\!SHOWCASE
 .log_FIX
+vendor/

@@ -90,7 +90,7 @@ if (isset($_GET['user'])) {
                 // Paraméterek bindolása
                 $insert_stmt->bind_param("iis", $userid, $minutes_spent, $workout_date);
                 if ($insert_stmt->execute()) {
-                    echo "Edzésidő sikeresen hozzáadva a statisztikákhoz!";
+                    /* ok */;
                 } else {
                     echo "Hiba történt az edzés statisztika hozzáadásánál: " . $insert_stmt->error;
                 }
@@ -105,7 +105,7 @@ if (isset($_GET['user'])) {
         if ($delete_stmt = $conn->prepare($delete_sql)) {
             $delete_stmt->bind_param("s", $userid);
             if ($delete_stmt->execute()) {
-                echo "Felhasználó sikeresen törölve!";
+                /* ok */;
             } else {
                 echo "Hiba történt a felhasználó törlésénél: " . $delete_stmt->error;
             }
@@ -116,7 +116,7 @@ if (isset($_GET['user'])) {
         if ($update_stmt = $conn->prepare($update_sql)) {
             $update_stmt->bind_param("s", $userid);
             if ($update_stmt->execute()) {
-                echo "A felhasználó szekrényéhez rendelt ID sikeresen nullázva!";
+                /* ok */;
             } else {
                 echo "Hiba történt a szekrény user_id nullázásánál: " . $update_stmt->error;
             }

@@ -134,7 +134,8 @@ function is_valid_uploaded_image($fileKey)
 
 $alerts_html = "";
 
-require_once '../vendor/autoload.php'; // COMPOSER!
+require_once __DIR__ . '/../../includes/mailer.php';
+// COMPOSER!
 
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
 
@@ -187,7 +188,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $confirm_password = $_POST['confirm_password'];
   $gender = $_POST['gender'];
   $birthdate = $_POST['birthdate'];
-  if ($password !== $confirm_password) {
+  $cedula_dup = false;
+  $connChk = @new mysqli($db_host, $db_username, $db_password, $db_name);
+  if (!$connChk->connect_error) {
+    $ced_post = trim($_POST['cedula'] ?? '');
+    if ($ced_post !== '') {
+      $stmtChk = $connChk->prepare("SELECT userid FROM users WHERE cedula = ?");
+      $stmtChk->bind_param("s", $ced_post);
+      $stmtChk->execute();
+      $cedula_dup = $stmtChk->get_result()->num_rows > 0;
+      $stmtChk->close();
+    }
+    $connChk->close();
+  }
+  if ($cedula_dup) {
+    $alerts_html .= '<div class="alert alert-danger">Esta c&eacute;dula ya est&aacute; registrada. Si ya tienes una cuenta, inicia sesi&oacute;n.</div>';
+    header("Refresh: 5");
+  } elseif ($password !== $confirm_password) {
     $alerts_html .= '<div class="alert alert-danger">' . $translations["twopasswordnot"] . '</div>';
     header("Refresh: 5");
   } elseif (!is_valid_uploaded_image('profile_photo')) {
@@ -233,14 +250,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($stmt->execute()) {
       // Profilkép mentése (opcionális) – assets/img/profiles/{userid}.png
       $photo_saved = save_profile_photo('profile_photo', __DIR__ . '/../assets/img/profiles/' . $userid . '.png');
+      if ($photo_saved) {
+        require_once __DIR__ . '/../iclock/lib/enroll.php';
+        @enrolar_en_speedface($userid); // si falla, el registro no se afecta
+      }
 
       $alerts_html .= '<div class="alert alert-success">Sikeres regisztráció!</div>';
       header("Refresh: 5");
-      $transport = (new Swift_SmtpTransport($smtp_host, $smtp_port, $smtp_encryption))
-        ->setUsername($smtp_username)
-        ->setPassword($smtp_password);
-
-      $mailer = new Swift_Mailer($transport);
 
       $successEmailContent = <<<EOD
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -300,6 +316,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       </tr>
     </table>
   </center>
+<script>
+(function(){
+  var btn=document.getElementById('btnWebcam'),panel=document.getElementById('webcamPanel'),
+      video=document.getElementById('webcamVideo'),cap=document.getElementById('btnCapture'),
+      cancel=document.getElementById('btnWebcamCancel'),input=document.getElementById('profile_photo');
+  if(!btn)return;
+  var stream=null;
+  function stop(){if(stream){stream.getTracks().forEach(function(t){t.stop();});stream=null;}panel.style.display='none';}
+  btn.addEventListener('click',function(){
+    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){alert('Este navegador no soporta camara');return;}
+    navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:720},height:{ideal:960}},audio:false})
+    .then(function(s){stream=s;video.srcObject=s;panel.style.display='block';})
+    .catch(function(){alert('No se pudo acceder a la camara. Revisa permisos.');});
+  });
+  cancel.addEventListener('click',stop);
+  cap.addEventListener('click',function(){
+    var c=document.createElement('canvas');
+    c.width=video.videoWidth;c.height=video.videoHeight;
+    var ctx=c.getContext('2d');
+    ctx.translate(c.width,0);ctx.scale(-1,1);
+    ctx.drawImage(video,0,0);
+    c.toBlob(function(blob){
+      var file=new File([blob],'captura.png',{type:'image/png'});
+      var dt=new DataTransfer();dt.items.add(file);
+      input.files=dt.files;
+      input.dispatchEvent(new Event('change',{bubbles:true}));
+      stop();
+    },'image/png');
+  });
+})();
+</script>
 </body>
 </html>
 EOD;
@@ -310,13 +357,12 @@ EOD;
 
       $isRegistrationSuccessful = true;
 
-      if ($isRegistrationSuccessful) {
-        $message = (new Swift_Message($subject))
-          ->setFrom(["{$smtp_username}" => "{$ConfirmEmailPage_PLACEHOLDER}"])
-          ->setTo([$recipientEmail])
-          ->setBody($successEmailContent, 'text/html');
+      $result = 1;
+      if ($isRegistrationSuccessful && !empty($smtp_username) && $mailer) {
+        try {
+          $result = send_mail($env_data ?? [], $recipientEmail, $subject, $successEmailContent, $business_name ?? '');
+        } catch (\Exception $e) { /* correo de cortesia: no bloquea el registro */ }
       }
-      $result = $mailer->send($message);
       header("Refresh: 5");
     }
 
@@ -568,7 +614,15 @@ EOD;
                       </svg>
                     </span>
                   </label>
-                  <input type="file" class="reg-avatar-input" id="profile_photo" name="profile_photo" accept="image/png,image/jpeg,image/webp,image/gif">
+                  <input type="file" class="reg-avatar-input" id="profile_photo" name="profile_photo" accept="image/png,image/jpeg,image/webp,image/gif" capture="user">
+                  <button type="button" class="btn-webcam" id="btnWebcam">&#128247; Usar c&aacute;mara</button>
+                  <div class="webcam-panel" id="webcamPanel" style="display:none;">
+                    <video id="webcamVideo" autoplay playsinline></video>
+                    <div class="webcam-actions">
+                      <button type="button" class="btn btn-primary" id="btnCapture">Capturar</button>
+                      <button type="button" class="btn-webcam-cancel" id="btnWebcamCancel">Cancelar</button>
+                    </div>
+                  </div>
                   <button type="button" class="reg-avatar-remove" id="regAvatarRemove"><?php echo $translations["delete"] ?? 'Eltávolítás'; ?></button>
                   <div class="reg-avatar-hint"><?php echo $translations["profilepicturehintrequired"] ?? 'Profilkép (kötelező, max. 8 MB)'; ?> <span class="reg-req">*</span></div>
                   <div class="reg-avatar-error" id="regAvatarError"><?php echo $translations["profilepicturerequired"] ?? 'A profilkép feltöltése kötelező!'; ?></div>
@@ -576,12 +630,12 @@ EOD;
 
                 <div class="form-row">
                   <div class="form-group col-md-6">
-                    <label for="firstname"><?php echo $translations["firstname"]; ?></label>
-                    <input type="text" class="form-control" id="firstname" name="firstname" required>
-                  </div>
-                  <div class="form-group col-md-6">
                     <label for="lastname"><?php echo $translations["lastname"]; ?></label>
                     <input type="text" class="form-control" id="lastname" name="lastname" required>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="firstname"><?php echo $translations["firstname"]; ?></label>
+                    <input type="text" class="form-control" id="firstname" name="firstname" required>
                   </div>
                 </div>
                 <div class="form-group">
@@ -699,6 +753,58 @@ EOD;
       }
     })();
   </script>
+<script>
+(function(){
+  var btn=document.getElementById('btnWebcam'),panel=document.getElementById('webcamPanel'),
+      video=document.getElementById('webcamVideo'),cap=document.getElementById('btnCapture'),
+      cancel=document.getElementById('btnWebcamCancel'),input=document.getElementById('profile_photo');
+  if(!btn)return;
+  var stream=null;
+  function stop(){if(stream){stream.getTracks().forEach(function(t){t.stop();});stream=null;}panel.style.display='none';}
+  btn.addEventListener('click',function(){
+    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){alert('Este navegador no soporta camara');return;}
+    navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:720},height:{ideal:960}},audio:false})
+    .then(function(s){stream=s;video.srcObject=s;panel.style.display='block';})
+    .catch(function(){alert('No se pudo acceder a la camara. Revisa permisos.');});
+  });
+  cancel.addEventListener('click',stop);
+  cap.addEventListener('click',function(){
+    var c=document.createElement('canvas');
+    c.width=video.videoWidth;c.height=video.videoHeight;
+    var ctx=c.getContext('2d');
+    ctx.translate(c.width,0);ctx.scale(-1,1);
+    ctx.drawImage(video,0,0);
+    c.toBlob(function(blob){
+      var file=new File([blob],'captura.png',{type:'image/png'});
+      var dt=new DataTransfer();dt.items.add(file);
+      input.files=dt.files;
+      input.dispatchEvent(new Event('change',{bubbles:true}));
+      stop();
+    },'image/png');
+  });
+})();
+</script>
+<script>
+(function(){
+  var p1=document.querySelector('input[name="password"]'),
+      p2=document.querySelector('input[name="confirm_password"]');
+  if(!p1||!p2)return;
+  var aviso=document.createElement('div');
+  aviso.style.cssText='color:#e31e24;font-size:.85rem;font-weight:600;margin-top:4px;display:none;';
+  aviso.textContent='Las contrase\u00f1as no coinciden';
+  p2.parentNode.appendChild(aviso);
+  var form=p2.closest('form');
+  function check(){
+    var mal = p2.value!=='' && p1.value!==p2.value;
+    aviso.style.display = mal ? 'block' : 'none';
+    p2.style.borderColor = mal ? '#e31e24' : '';
+    return !mal;
+  }
+  p1.addEventListener('input',check);
+  p2.addEventListener('input',check);
+  if(form){ form.addEventListener('submit',function(e){ if(!check()||p1.value!==p2.value){ e.preventDefault(); aviso.style.display='block'; p2.focus(); } }); }
+})();
+</script>
 </body>
 
 </html>

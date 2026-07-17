@@ -138,7 +138,7 @@
             const res = await fetch(ENDPOINT, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({ action: 'lookup', qrcode: userId }).toString()
+                body: new URLSearchParams({ action: 'lookup', qrcode: userId, companions: (document.getElementById('compCount')||{textContent:'0'}).textContent.trim() }).toString()
             });
             if (!res.ok) throw new Error('HTTP ' + res.status);
 
@@ -292,7 +292,7 @@
                 const res = await fetch(ENDPOINT, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: new URLSearchParams({ action: 'commit', qrcode: userData.userid }).toString()
+                    body: new URLSearchParams({ action: 'commit', qrcode: userData.userid, companions: (document.getElementById('compCount')||{textContent:'0'}).textContent.trim() }).toString()
                 });
                 const d = await res.json();
                 if (!d.success) {
@@ -543,4 +543,18 @@
         .checkin-modal .cm-btn-ghost{ background:#f1f5f9; color:#475569; }
         .checkin-modal .cm-btn-ghost:hover{ background:#e2e8f0; }
     `).appendTo('head');
+})();
+// ===== Acompanantes (tiqueteras compartidas) =====
+(function(){
+  var minus=document.getElementById('compMinus'),
+      plus=document.getElementById('compPlus'),
+      count=document.getElementById('compCount');
+  if(!minus||!plus||!count) return;
+  function set(v){ count.textContent = Math.max(0, Math.min(20, v)); }
+  minus.addEventListener('click', function(){ set(parseInt(count.textContent)-1); });
+  plus.addEventListener('click', function(){ set(parseInt(count.textContent)+1); });
+  // reset al abrir el modal
+  var modal=document.getElementById('Logginer_MODAL');
+  if(modal){ modal.addEventListener('show.bs.modal', function(){ set(0); });
+             $(modal).on('show.bs.modal', function(){ set(0); }); }
 })();

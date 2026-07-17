@@ -109,7 +109,7 @@ $months = [
 ];
 
 
-$sql = "SELECT * FROM tickets";
+$sql = "SELECT * FROM tickets WHERE visible = 1";
 $result = $conn->query($sql);
 
 ?>
@@ -188,7 +188,7 @@ $result = $conn->query($sql);
     </div>
     <div class="container-fluid">
         <div class="row">
-            <div class="col bg-imageback">
+            <div class="col bg-imageback"><div class="promo-ticker"><div class="promo-item">Entrena a los <span>mejores precios</span> de Pasto</div><div class="promo-item">Mensualidad estudiantil <span>$70.000</span></div><div class="promo-item">La versi&oacute;n m&aacute;s <span>fuerte</span> de ti</div></div>
             </div>
         </div>
         <div class="row mt-2 text-center justify-content-center">
@@ -198,18 +198,27 @@ $result = $conn->query($sql);
         </div>
         <?php
         if ($result->num_rows > 0) {
-            echo "<div class='row mt-3'>";
+            echo "<div class='row mt-3 justify-content-center'>";
 
             while ($row = $result->fetch_assoc()) {
-                echo "<div class='col-sm-3 mb-4'>";
-                echo "<div class='card shadow-sm border-light'>";
-                echo "<div class='card-body'>";
-                echo "<h5 class='card-title text-first'>" . htmlspecialchars($row["name"]) . "</h5>";
-                echo "<p class='card-text'>" . $translations["tickettableexpiry"] . ": " . htmlspecialchars($row["expire_days"]) . "</p>";
-                echo "<p class='card-text'><strong>" . $translations["price"] . ": " . htmlspecialchars($row["price"]) . " " . htmlspecialchars($currency) . "</strong></p>";
-                $occasions = $row["occasions"] === NULL ? $translations["unlimited"] : htmlspecialchars($row["occasions"]);
+                $nombre = htmlspecialchars($row["name"]);
+                $precio = "$" . number_format((float)$row["price"], 0, ",", ".");
+                $dias = (int)$row["expire_days"];
+                $vigencia = $dias > 0 ? ($dias == 1 ? "1 dia de vigencia" : $dias . " dias de vigencia") : "Valido para el dia";
+                $occasions = $row["occasions"] === NULL ? "Acceso ilimitado" : htmlspecialchars($row["occasions"]) . " ingreso(s)";
+                $esPopular = (stripos($row["name"], "mensual") !== false);
+                $clasePopular = $esPopular ? " popular" : "";
+                $cinta = $esPopular ? "<div class='popular-badge'>Mas popular</div>" : "";
 
-                echo "<p class='card-text'>" . $translations["tickettableoccassion"] . ": " . $occasions . "</p>";
+                echo "<div class='col-lg-3 col-md-4 col-sm-6 mb-4'>";
+                echo "<div class='card price-card$clasePopular'>";
+                echo $cinta;
+                echo "<div class='card-body'>";
+                echo "<h5 class='price-name'>$nombre</h5>";
+                echo "<div class='price-amount'>$precio <small>COP</small></div>";
+                echo "<p class='price-meta mt-3'><i class='bi bi-calendar-check'></i>$vigencia</p>";
+                echo "<p class='price-meta'><i class='bi bi-lightning-charge-fill'></i>$occasions</p>";
+                echo "<div class='price-cta'><a href='../register/' class='btn btn-adr'>Inscribete</a></div>";
                 echo "</div>";
                 echo "</div>";
                 echo "</div>";

@@ -154,7 +154,13 @@ try {
     $opportunities = $ticket['opportunities']; // lehet NULL (korlátlan)
     $expiredate    = $ticket['expiredate'];
     $currentDate   = date('Y-m-d');
+    $companions = max(0, min(20, (int)($_POST['companions'] ?? $_GET['companions'] ?? 0)));
 
+    if ($companions > 0 && $opportunities !== null && (int)$opportunities < (1 + $companions)) {
+        $response['error'] = "Saldo insuficiente: quedan " . (int)$opportunities . " ingreso(s) y se necesitan " . (1 + $companions) . ".";
+        echo json_encode($response);
+        exit;
+    }
     $response['ticket_status']           = $translations['valid'] ?? 'Valid';
     $response['remaining_opportunities'] = $opportunities;
     $response['expiredate']              = $expiredate;
@@ -203,12 +209,17 @@ try {
 
             // alkalom levonás (csak ha nem korlátlan)
             if ($opportunities !== null && (int) $opportunities > 0) {
-                $newOpportunities = (int) $opportunities - 1;
+                $newOpportunities = (int) $opportunities - 1 - $companions;
+                if ($newOpportunities < 0) { $newOpportunities = 0; }
                 $stmt = $conn->prepare("UPDATE current_tickets SET opportunities = ? WHERE id = ?");
                 $stmt->bind_param('ii', $newOpportunities, $ticketId);
                 $stmt->execute();
                 $stmt->close();
                 $response['remaining_opportunities'] = $newOpportunities;
+                if ($newOpportunities <= 0) {
+                    require_once __DIR__ . '/../../iclock/lib/endtime.php';
+                    @sincronizar_acceso_speedface((int)$qrCode);
+                }
             }
 
             // naplózás
@@ -220,6 +231,20 @@ try {
             $stmt->bind_param('ssi', $fullName, $qrCode, $lockerNum);
             $stmt->execute();
             $stmt->close();
+            $stmtL = $conn->prepare("INSERT INTO access_log (userid, display_name, is_companion) VALUES (?, ?, 0)");
+            $stmtL->bind_param('ss', $qrCode, $fullName);
+            $stmtL->execute(); $stmtL->close();
+            for ($ci = 1; $ci <= $companions; $ci++) {
+                $compName = 'Acompanante de ' . $user['lastname'] . ' (' . $ci . ')';
+                $stmtC = $conn->prepare("INSERT INTO temp_loggeduser (name, userid, login_date, lockerid) VALUES (?, ?, NOW(), 0)");
+                $stmtC->bind_param('ss', $compName, $qrCode);
+                $stmtC->execute();
+                $stmtC->close();
+                $stmtL2 = $conn->prepare("INSERT INTO access_log (userid, display_name, is_companion) VALUES (?, ?, 1)");
+                $stmtL2->bind_param('ss', $qrCode, $compName);
+                $stmtL2->execute(); $stmtL2->close();
+            }
+            if ($companions > 0) { $response['companions_registered'] = $companions; }
 
             $response['assigned_locker'] = $lockerNum;
         } else {

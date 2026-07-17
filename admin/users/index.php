@@ -107,7 +107,7 @@ if (!empty($search_name)) {
     $types .= "ss";
 }
 if (!empty($search_email)) {
-    $conditions[] = "email LIKE ?";
+    $conditions[] = "cedula LIKE ?";
     $params[] = "%$search_email%";
     $types .= "s";
 }
@@ -381,7 +381,7 @@ $result = $stmt->get_result();
                                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
                                         <div class="form-group">
                                             <input type="text" class="form-control"
-                                                placeholder="<?= $translations["email-search"]; ?>" name="search_email"
+                                                placeholder="Buscar por c&eacute;dula" name="search_email"
                                                 value="<?php echo htmlspecialchars($search_email); ?>">
                                         </div>
                                     </div>
@@ -397,6 +397,7 @@ $result = $stmt->get_result();
                                             <a href="index.php" class="btn btn-success btn-block"><i
                                                     class="bi bi-arrow-clockwise"></i>
                                                 <?php echo $translations["resetbtn"]; ?></a>
+                                            <a href="../../register/" target="_blank" class="btn btn-danger btn-block mt-1"><i class="bi bi-person-plus"></i> Registrar nuevo</a>
                                         </div>
                                     </div>
                                 </div>
@@ -406,10 +407,12 @@ $result = $stmt->get_result();
                                 <table class="table table-dark table-bordered text-center">
                                     <thead>
                                         <tr>
-                                            <th><?php echo $translations["firstname"]; ?></th>
                                             <th><?php echo $translations["lastname"]; ?></th>
-                                            <th><?php echo $translations["email"]; ?></th>
+                                            <th><?php echo $translations["firstname"]; ?></th>
+                                            <th>C&eacute;dula</th>
+                                            <th>&Uacute;ltimo plan</th>
                                             <th><?php echo $translations["expiredate"]; ?></th>
+                                            <th>Nueva venta</th>
                                             <th><?php echo $translations["action"]; ?></th>
                                         </tr>
                                     </thead>
@@ -419,16 +422,16 @@ $result = $stmt->get_result();
                                             while ($row = $result->fetch_assoc()) {
 
                                                 echo "<tr>";
-                                                echo "<td>" . htmlspecialchars($row["firstname"], ENT_QUOTES, 'UTF-8') . "</td>";
                                                 echo "<td>" . htmlspecialchars($row["lastname"], ENT_QUOTES, 'UTF-8') . "</td>";
-                                                echo "<td>" . htmlspecialchars($row["email"], ENT_QUOTES, 'UTF-8');
+                                                echo "<td>" . htmlspecialchars($row["firstname"], ENT_QUOTES, 'UTF-8') . "</td>";
+                                                echo "<td>" . htmlspecialchars($row["cedula"] ?? "", ENT_QUOTES, 'UTF-8');
                                                 if ($row["confirmed"] == "No") {
                                                     echo " <span class='text-danger bi bi-exclamation-triangle-fill' data-bs-toggle='tooltip' title='" . $translations["waitingconfirm"] . "'></span>";
                                                 }
                                                 echo "</td>";
 
                                                 $userid = $row["userid"];
-                                                $ticket_sql = "SELECT expiredate FROM current_tickets WHERE userid = ? ORDER BY expiredate DESC LIMIT 1";
+                                                $ticket_sql = "SELECT expiredate, ticketname FROM current_tickets WHERE userid = ? ORDER BY id DESC LIMIT 1";
                                                 $ticket_stmt = $conn->prepare($ticket_sql);
                                                 $ticket_stmt->bind_param("i", $userid);
                                                 $ticket_stmt->execute();
@@ -437,6 +440,7 @@ $result = $stmt->get_result();
                                                 if ($ticket_result->num_rows > 0) {
                                                     $ticket = $ticket_result->fetch_assoc();
                                                     $expiredate = $ticket["expiredate"];
+                                                    echo "<td>" . htmlspecialchars($ticket["ticketname"]) . "</td>";
 
                                                     $today = new DateTime();
                                                     $expire = new DateTime($expiredate);
@@ -456,15 +460,17 @@ $result = $stmt->get_result();
                                                         echo "<td class='text-danger'>" . $translations["expired"] . " (" . $originalExpire->format("Y-m-d") . ")</td>";
                                                     }
                                                 } else {
+                                                    echo "<td class='text-muted'>&mdash;</td>";
                                                     echo "<td class='text-muted'>" . $translations["youdonthaveticket"] . "</td>";
                                                 }
 
 
+                                                echo '<td><a class="btn btn-danger" href="../boss/sell/ticket/?userid=' . $row["userid"] . '"><i class="bi bi-cart-plus"></i> Vender</a></td>';
                                                 echo '<td><a class="btn btn-primary" href="edit/?user=' . $row["userid"] . '"><i class="bi bi-box-arrow-in-right"></i> ' . $translations["profilesee"] . '</a></td>';
                                                 echo "</tr>";
                                             }
                                         } else {
-                                            echo "<tr><td colspan='5'>No user data!</td></tr>";
+                                            echo "<tr><td colspan='7'>No user data!</td></tr>";
                                         }
                                         ?>
                                     </tbody>
@@ -485,7 +491,7 @@ $result = $stmt->get_result();
                                 $types .= "ss";
                             }
                             if (!empty($search_email)) {
-                                $conditions[] = "email LIKE ?";
+                                $conditions[] = "cedula LIKE ?";
                                 $params[] = "%$search_email%";
                                 $types .= "s";
                             }

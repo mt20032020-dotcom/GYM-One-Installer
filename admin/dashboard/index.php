@@ -118,6 +118,16 @@ if ($resultRegistrations->num_rows > 0) {
 }
 
 
+// ----- Resumen financiero para el tablero -----
+$hoy = date('Y-m-d'); $mesIni = date('Y-m-01'); $mesFin = date('Y-m-t');
+$fin_hoy = 0; $fin_mes = 0; $fin_gastos = 0;
+$rF = $conn->query("SELECT COALESCE(SUM(cash+bank_card+transfer),0) t FROM revenu_stats WHERE `date` = '$hoy'");
+if ($rF) { $fin_hoy = (float)$rF->fetch_assoc()['t']; }
+$rF = $conn->query("SELECT COALESCE(SUM(cash+bank_card+transfer),0) t FROM revenu_stats WHERE `date` BETWEEN '$mesIni' AND '$mesFin'");
+if ($rF) { $fin_mes = (float)$rF->fetch_assoc()['t']; }
+$rF = $conn->query("SELECT COALESCE(SUM(amount),0) t FROM expenses WHERE expense_date BETWEEN '$mesIni' AND '$mesFin'");
+if ($rF) { $fin_gastos = (float)$rF->fetch_assoc()['t']; }
+$fin_ganancia = $fin_mes - $fin_gastos;
 $sqlUserCount = "SELECT COUNT(*) as count FROM users";
 $resultUserCount = $conn->query($sqlUserCount);
 
@@ -378,6 +388,19 @@ if ($countryCode !== '') {
                             <i class="bi bi-receipt"></i> <?php echo $translations["invoicepage"]; ?>
                         </a>
                     </li>
+                    <li class="sidebar-header">Finanzas</li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="../boss/finance">
+                            <i class="bi bi-cash-stack"></i>
+                            <span>Reportes financieros</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="../boss/expenses">
+                            <i class="bi bi-wallet2"></i>
+                            <span>Gastos</span>
+                        </a>
+                    </li>
                     <?php
                     if ($is_boss === 1) {
                         ?>
@@ -552,10 +575,10 @@ if ($countryCode !== '') {
                         </div>
                     </div>
                     <div class="col-sm-3">
-                        <div class="card">
+                        <div class="card" style="border-top:3px solid #16a34a;">
                             <div class="card-body">
-                                <h5 class="card-title mb-0 fw-semibold"><?php echo $translations["users"]; ?></h5>
-                                <h1><strong><?php echo $userCount; ?></strong></h1>
+                                <h5 class="card-title mb-0 fw-semibold">Ingresos hoy</h5>
+                                <h1><strong><?php echo number_format($fin_hoy, 0, ",", "."); ?></strong> <small style="font-size:.4em;color:#71717a;">COP</small></h1>
                             </div>
                         </div>
                     </div>
@@ -569,6 +592,32 @@ if ($countryCode !== '') {
                                         <h4><?= $translations["logginer"]; ?></h4>
                                     </a>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="card" style="border-top:3px solid #0e7490;">
+                            <div class="card-body">
+                                <h5 class="card-title mb-0 fw-semibold">Ingresos del mes</h5>
+                                <h1><strong><?php echo number_format($fin_mes, 0, ",", "."); ?></strong> <small style="font-size:.4em;color:#71717a;">COP</small></h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="card" style="border-top:3px solid #dc2626;">
+                            <div class="card-body">
+                                <h5 class="card-title mb-0 fw-semibold">Gastos del mes</h5>
+                                <h1><strong><?php echo number_format($fin_gastos, 0, ",", "."); ?></strong> <small style="font-size:.4em;color:#71717a;">COP</small></h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="card" style="border-top:3px solid <?php echo $fin_ganancia >= 0 ? '#16a34a' : '#dc2626'; ?>;">
+                            <div class="card-body">
+                                <h5 class="card-title mb-0 fw-semibold">Ganancia del mes</h5>
+                                <h1 style="color:<?php echo $fin_ganancia >= 0 ? 'inherit' : '#dc2626'; ?>;"><strong><?php echo number_format($fin_ganancia, 0, ",", "."); ?></strong> <small style="font-size:.4em;color:#71717a;">COP</small></h1>
                             </div>
                         </div>
                     </div>
@@ -660,21 +709,7 @@ if ($countryCode !== '') {
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="card text-center support-card">
-                            <h3 class="card-title"><strong>💙 <?= $translations["gymonesupport_header"]; ?></strong>
-                            </h3>
-                            <p class="text-muted mb-4"><?= $translations["gymonesupport_text_one"]; ?></p>
-                            <p class="text-muted mb-4"><?= $translations["gymonesupport_text_two"]; ?></p>
-                            <a href="https://github.com/sponsors/mayerbalintdev" target="_blank"
-                                class="btn btn-github btn-lg">
-                                💚 <?= $translations["sponsor-btn"]; ?>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                
         </div>
     </div>
 
@@ -756,6 +791,13 @@ if ($countryCode !== '') {
                         <div class="scan-frame"><span></span><span></span><span></span><span></span></div>
                         <div id="checkmark">✔</div>
                         <div id="error">✘</div>
+                    </div>
+                    <div id="companionsBox" style="display:flex;align-items:center;justify-content:center;gap:10px;margin:8px 0 12px;">
+                        <span style="font-weight:600;">Acompa&ntilde;antes:</span>
+                        <button type="button" id="compMinus" class="btn btn-danger btn-sm" style="width:34px;">-</button>
+                        <span id="compCount" style="font-size:1.3em;font-weight:800;min-width:24px;text-align:center;">0</span>
+                        <button type="button" id="compPlus" class="btn btn-success btn-sm" style="width:34px;">+</button>
+                        <small style="color:#71717a;">(solo tiqueteras)</small>
                     </div>
                     <p id="result"><?php echo $translations["qrscann"]; ?></p>
 

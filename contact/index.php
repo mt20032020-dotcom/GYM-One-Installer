@@ -118,30 +118,17 @@ $months = [
   12 => $translations["Dec"],
 ];
 
-require_once '../vendor/autoload.php';
-
-
+require_once __DIR__ . '/../../includes/mailer.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $name = $_POST['name'];
   $userEmail = $_POST['email'];
   $userMessage = $_POST['message'];
 
-  $transport = (new Swift_SmtpTransport($smtp_host, $smtp_port, $smtp_encryption))
-    ->setUsername($smtp_username)
-    ->setPassword($smtp_password);
+  
 
-  $mailer = new Swift_Mailer($transport);
-
-  $adminMessage = (new Swift_Message($translations["newmessagefromwebsite"]))
-    ->setFrom([$userEmail => $name])
-    ->setTo([$smtp_username])
-    ->setBody(
-      $translations["fullname"] . ": " . $name . "\n" .
-      $translations["email"] . ": " . $userEmail . "\n" .
-      $translations["message"] . ": " . $userMessage . "\n"
-    );
-
-  $result = $mailer->send($adminMessage);
+  $env_data = ['MAIL_HOST'=>$smtp_host,'MAIL_PORT'=>$smtp_port,'MAIL_USERNAME'=>$smtp_username,'MAIL_PASSWORD'=>$smtp_password,'MAIL_ENCRYPTION'=>$smtp_encryption];
+  $adminBody = $translations["fullname"] . ": " . $name . "\n" . $translations["email"] . ": " . $userEmail . "\n" . $translations["message"] . ": " . $userMessage . "\n";
+  $result = send_mail($env_data, $smtp_username, $translations["newmessagefromwebsite"], $adminBody, $name);
   $editedcontent = <<<EOD
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html data-editor-version="2" class="sg-campaigns" xmlns="http://www.w3.org/1999/xhtml">
@@ -366,12 +353,7 @@ ol ol ol ol {
 </html>
 EOD;
 
-  $userConfirmationMessage = (new Swift_Message($translations["thankyouforyouremail"]))
-    ->setFrom([$smtp_username => $business_name])
-    ->setTo([$userEmail])
-    ->setBody($editedcontent, 'text/html');
-
-  $resultUser = $mailer->send($userConfirmationMessage);
+  $resultUser = send_mail($env_data, $userEmail, $translations["thankyouforyouremail"], $editedcontent, $business_name);
 
   if ($result && $resultUser) {
     $alerts_html .= '<div class="alert alert-success" role="alert">

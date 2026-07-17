@@ -210,7 +210,7 @@ if ($capacityPercent >= 0 && $capacityPercent < 70) {
     </div>
     <div class="container-fluid">
         <div class="row">
-            <div class="col bg-imageback">
+            <div class="col bg-imageback"><div class="hero-content"><p class="hero-kicker">Adrenaline Gym &middot; Pasto</p><h1 class="hero-title">La versi&oacute;n m&aacute;s <span>fuerte</span> de ti</h1><p class="hero-sub">Entrena sin excusas. Tu mejor momento empieza hoy.</p><a href="register/" class="btn btn-adr me-2">Inscr&iacute;bete ya</a><a href="prices/" class="btn btn-outline-adr">Ver planes</a></div>
             </div>
         </div>
         <div class="row text-center justify-content-center">

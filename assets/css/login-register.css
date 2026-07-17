@@ -1,0 +1,65 @@
+/* ===== Login/Registro Adrenaline v2 ===== */
+body, .lg-bg, .reg-bg{ background: linear-gradient(160deg,#0b0b0d 0%,#141418 60%,#2b0b0d 100%) !important; }
+
+.lg-blob, .reg-blob{ opacity:.22 !important; filter:blur(60px); }
+.lg-blob-1, .reg-blob-1{ background:#e31e24 !important; }
+.lg-blob-2, .reg-blob-2{ background:#b3151a !important; }
+.lg-blob-3, .reg-blob-3{ background:#3a3a42 !important; }
+
+/* Tarjeta blanca con techo rojo */
+.card.reg-card{
+    border:1px solid #e5e5e8 !important;
+    border-top:4px solid #e31e24 !important;
+    border-radius:16px;
+    box-shadow:0 18px 50px rgba(0,0,0,.45) !important;
+}
+
+.lg-logo{ background:#0b0b0d; border-radius:14px; padding:10px 16px; display:inline-block; }
+
+.lg-title, .reg-title{
+    font-family:'Anton','Arial Black',sans-serif;
+    text-transform:uppercase; letter-spacing:1px; color:#0b0b0d !important;
+}
+
+label, .form-label, .form-check-label{ color:#3f3f46 !important; font-weight:600; }
+
+.form-control, .form-select, textarea.form-control{
+    background:#f7f7f8 !important; border:1px solid #d4d4d8 !important;
+    color:#18181b !important; border-radius:8px;
+}
+.form-control:focus, .form-select:focus{
+    border-color:#e31e24 !important;
+    box-shadow:0 0 0 3px rgba(227,30,36,.18) !important;
+    background:#fff !important;
+}
+.form-control::placeholder{ color:#a1a1aa !important; }
+.form-check-input:checked{ background-color:#e31e24 !important; border-color:#e31e24 !important; }
+
+.btn-primary{
+    background:#e31e24 !important; border-color:#e31e24 !important;
+    font-weight:800; text-transform:uppercase; letter-spacing:1px; border-radius:8px;
+}
+.btn-primary:hover, .btn-primary:focus{ background:#b3151a !important; border-color:#b3151a !important; }
+
+/* Enlaces dentro de la tarjeta */
+.card.reg-card a{ color:#e31e24 !important; font-weight:700; }
+.card.reg-card a:hover{ color:#b3151a !important; }
+
+/* Crédito discreto sobre el fondo oscuro */
+.lg-copyright, .reg-copyright{ color:#6b6b73 !important; font-size:.75rem !important; opacity:.75; }
+.lg-copyright a, .reg-copyright a{ color:#8a8a92 !important; font-weight:400 !important; }
+.lg-heart, .reg-heart{ color:#6b6b73 !important; }
+
+/* Pastilla para el logo blanco de Adrenaline */
+.reg-logo{
+    background:#0b0b0d; border-radius:14px; padding:12px 18px;
+}
+
+/* ===== Webcam en registro ===== */
+.btn-webcam{ background:transparent; border:2px solid #e31e24; color:#e31e24; font-weight:700; border-radius:8px; padding:8px 16px; margin-top:10px; cursor:pointer; }
+.btn-webcam:hover{ background:#e31e24; color:#fff; }
+.webcam-panel{ margin-top:12px; text-align:center; }
+.webcam-panel video{ width:100%; max-width:320px; border-radius:12px; border:2px solid #e31e24; background:#000; transform:scaleX(-1); }
+.webcam-actions{ margin-top:10px; display:flex; gap:10px; justify-content:center; }
+.btn-webcam-cancel{ background:#3f3f46; color:#fff; border:none; border-radius:8px; padding:8px 16px; cursor:pointer; font-weight:700; }
+#btnCapture{ background:#e31e24 !important; border-color:#e31e24 !important; }

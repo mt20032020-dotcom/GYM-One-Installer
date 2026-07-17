@@ -1,6 +1,5 @@
 <?php
-require_once '../vendor/autoload.php'; 
-
+require_once __DIR__ . '/../../includes/mailer.php';
 // GYM ONE - HEARTBEAT API CALL
 $wait = rand(1,10);
 sleep($wait);
@@ -91,11 +90,7 @@ if ($result->num_rows === 0) {
     exit;
 }
 
-$transport = (new Swift_SmtpTransport($smtp_host, $smtp_port, $smtp_encryption))
-    ->setUsername($smtp_username)
-    ->setPassword($smtp_password);
 
-$mailer = new Swift_Mailer($transport);
 
 while ($row = $result->fetch_assoc()) {
     $to      = $row['email'];
@@ -216,16 +211,13 @@ while ($row = $result->fetch_assoc()) {
 EOD;
 
 
-    $message = (new Swift_Message($subject))
-        ->setFrom([$smtp_username => $business_name])
-        ->setTo([$to => $name])
-        ->setBody($body, 'text/html');
-
-    try {
-        $mailer->send($message);
+    $env_data = ['MAIL_HOST'=>$smtp_host,'MAIL_PORT'=>$smtp_port,'MAIL_USERNAME'=>$smtp_username,'MAIL_PASSWORD'=>$smtp_password,'MAIL_ENCRYPTION'=>$smtp_encryption];
+    $result = send_mail($env_data, $to, $subject, $body, $business_name);
+    if ($result === true) {
         echo "Email sent: $to\n";
-    } catch (Exception $e) {
-        echo "Error sending email ($to): " . $e->getMessage() . "\n";
+    } else {
+        echo "Error sending email ($to): " . $result . "\n";
+    }
     }
 }
 

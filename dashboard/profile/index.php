@@ -1,7 +1,8 @@
 <?php
 session_start();
 
-require_once '../../vendor/autoload.php'; // COMPOSER!
+require_once __DIR__ . '/../../../includes/mailer.php';
+// COMPOSER!
 
 
 if (!isset($_SESSION['userid'])) {
@@ -170,11 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['userid'])) {
           $alerts_html .= '<div class="alert alert-success" role="alert">
                                     ' . $translations["success-new-password"] . '
                                 </div>';
-          $transport = (new Swift_SmtpTransport($smtp_host, $smtp_port, $smtp_encryption))
-            ->setUsername($smtp_username)
-            ->setPassword($smtp_password);
-
-          $mailer = new Swift_Mailer($transport);
+          
 
           $editedcontent = <<<EOD
 <!DOCTYPE html>
@@ -276,12 +273,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['userid'])) {
 EOD;
 
 
-          $message = (new Swift_Message($translations["passwordedited"]))
-            ->setFrom(["{$smtp_username}" => "$PasswordEmailHeaderTwo_PLACEHOLDER"])
-            ->setTo([$mail => '{$firstname}'])
-            ->setBody($editedcontent, 'text/html');
-
-          $result = $mailer->send($message);
+          $result = send_mail($env_data ?? [], $mail => '{$firstname}', $translations["passwordedited"], $editedcontent, $business_name ?? '');
           header("Refresh:2");
         } else {
           $alerts_html .= '<div class="alert alert-danger" role="alert">

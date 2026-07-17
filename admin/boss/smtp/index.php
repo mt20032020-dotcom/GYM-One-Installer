@@ -93,28 +93,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Refresh:2");
         }
     } elseif (isset($_POST['test_email_address'])) {
-        require_once '../../../vendor/autoload.php';
-
-        $transport = (new Swift_SmtpTransport($env_data['MAIL_HOST'], $env_data['MAIL_PORT']))
-            ->setUsername($env_data['MAIL_USERNAME'])
-            ->setPassword($env_data['MAIL_PASSWORD'])
-            ->setEncryption($env_data['MAIL_ENCRYPTION']);
-
-        $mailer = new Swift_Mailer($transport);
-
-        $message = (new Swift_Message($translations['test-mail-header']))
-            ->setFrom([$env_data['MAIL_USERNAME'] => $business_name])
-            ->setTo([$_POST['test_email_address']])
-            ->setBody($translations["test-mail-body"]);
-
-        try {
-            $result = $mailer->send($message);
+        require_once '../../../includes/mailer.php';
+        $result = send_mail($env_data, $_POST['test_email_address'], $translations['test-mail-header'], $translations["test-mail-body"], $business_name);
+        if ($result === true) {
             $alerts_html .= "<div class='alert alert-success'>{$translations["testemail-sented"]}</div>";
-            header("Refresh:2");
-        } catch (Exception $e) {
-            $alerts_html .= "<div class='alert alert-danger'>Failed to send test email: " . $e->getMessage() . "</div>";
-            header("Refresh:2");
+        } else {
+            $alerts_html .= "<div class='alert alert-danger'>Error: " . $result . "</div>";
         }
+        header("Refresh:2");
     }
 }
 

@@ -500,27 +500,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['userid'])) {
       </div>
       <br>
       <div class="col-sm-10">
-        <div class="d-none topnav d-sm-inline-block">
-          <a href="https://gymoneglobal.com/discord" class="btn btn-primary mx-1" target="_blank"
-            rel="noopener noreferrer">
-            <i class="bi bi-question-circle"></i>
-            <?php echo $translations["support"]; ?>
-          </a>
-
-          <a href="https://gymoneglobal.com/docs" class="btn btn-danger" target="_blank" rel="noopener noreferrer">
-            <i class="bi bi-journals"></i>
-            <?php echo $translations["docs"]; ?>
-          </a>
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#logoutModal">
-            <?php echo $translations["logout"]; ?>
-          </button>
-          <h5 id="clock" style="display: inline-block; margin-bottom: 0;"></h5>
-        </div>
-        <div class="row">
-          <div class="col-sm-12">
-            <?php echo $alerts_html; ?>
-          </div>
-        </div>
+        
         <div class="row">
           <div class="col-sm-6">
             <div class="card shadow">
@@ -779,8 +759,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['userid'])) {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+        <div class="row" style="margin-top:6px;">
+          <div class="col-md-12">
+            <div class="card" style="border-radius:12px; padding:20px;">
+              <h4 style="font-weight:800; margin-bottom:4px;"><i class="bi bi-clock-history"></i> Historial de accesos</h4>
+              <?php
+              $visitas_mes = 0;
+              $rVm = $conn->query("SELECT COUNT(*) t FROM access_log WHERE userid = " . (int)$useridgymuser . " AND is_companion = 0 AND entry_time >= '" . date('Y-m-01') . "'");
+              if ($rVm) { $visitas_mes = (int)$rVm->fetch_assoc()['t']; }
+              echo '<p style="color:#71717a; margin-bottom:12px;">Visitas del titular este mes: <strong>' . $visitas_mes . '</strong></p>';
+              $rH = $conn->query("SELECT display_name, is_companion, entry_time FROM access_log WHERE userid = " . (int)$useridgymuser . " ORDER BY id DESC LIMIT 15");
+              if ($rH && $rH->num_rows > 0) {
+                  echo '<table class="table table-striped" style="margin-bottom:0;"><thead><tr><th>Fecha y hora</th><th>Qui&eacute;n ingres&oacute;</th></tr></thead><tbody>';
+                  while ($h = $rH->fetch_assoc()) {
+                      $badge = $h['is_companion'] ? ' <span style="background:#f4f4f5;color:#71717a;border-radius:6px;padding:2px 8px;font-size:.8em;">acompa&ntilde;ante</span>' : ' <span style="background:#fee2e2;color:#b91c1c;border-radius:6px;padding:2px 8px;font-size:.8em;">titular</span>';
+                      echo '<tr><td style="white-space:nowrap;">' . date('d/m/Y H:i', strtotime($h['entry_time'])) . '</td><td>' . htmlspecialchars($h['display_name']) . $badge . '</td></tr>';
+                  }
+                  echo '</tbody></table>';
+              } else {
+                  echo '<p style="color:#a1a1aa;">A&uacute;n no hay accesos registrados.</p>';
+              }
+              ?>
+            </div>
+          </div>
+        </div>
+        
   </div>
 
   <!-- EXIT MODAL -->

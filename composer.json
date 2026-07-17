@@ -3,6 +3,7 @@
         "swiftmailer/swiftmailer": "^6.3",
         "endroid/qr-code": "4.0",
         "mpdf/mpdf": "^8.2",
-        "pkpass/pkpass": "^2.4"
+        "pkpass/pkpass": "^2.4",
+        "phpmailer/phpmailer": "^7.1"
     }
 }

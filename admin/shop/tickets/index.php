@@ -58,6 +58,16 @@ if ($conn->connect_error) {
     die("Kapcsolódási hiba: " . $conn->connect_error);
 }
 
+// Toggle visibilidad
+if (isset($_GET["hide"]) && is_numeric($_GET["hide"])) {
+    $conn->query("UPDATE tickets SET visible=0 WHERE id=" . intval($_GET["hide"]));
+    header("Location: ?"); exit();
+}
+if (isset($_GET["show"]) && is_numeric($_GET["show"])) {
+    $conn->query("UPDATE tickets SET visible=1 WHERE id=" . intval($_GET["show"]));
+    header("Location: ?"); exit();
+}
+
 $sql = "SELECT is_boss FROM workers WHERE userid = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $userid);
@@ -121,6 +131,32 @@ if (isset($_POST['add_ticket'])) {
     $stmt->close();
 }
 
+if (isset($_POST['update_ticket'])) {
+    $uid = (int)$_POST['ticket_id'];
+    $uname = $_POST['name'];
+    $uexpire = ($_POST['expire_days'] === '' || strtolower($_POST['expire_days']) === 'unlimited') ? NULL : (int)$_POST['expire_days'];
+    $uprice = $_POST['price'];
+    $uocc = ($_POST['occasions'] === '') ? NULL : (int)$_POST['occasions'];
+    $stmt_u = $conn->prepare("UPDATE tickets SET name=?, expire_days=?, price=?, occasions=? WHERE id=?");
+    $stmt_u->bind_param("sidii", $uname, $uexpire, $uprice, $uocc, $uid);
+    if ($stmt_u->execute()) { $alerts_html .= "<div class='alert alert-success'>Plan actualizado</div>"; }
+    else { $alerts_html .= "<div class='alert alert-danger'>Error al actualizar</div>"; }
+    $stmt_u->close();
+    header("Location: " . strtok($_SERVER["REQUEST_URI"], "?"));
+    exit;
+}
+
+$editData = null;
+if (isset($_GET['edit'])) {
+    $eid = (int)$_GET['edit'];
+    $stmt_e = $conn->prepare("SELECT id, name, expire_days, price, occasions FROM tickets WHERE id=?");
+    $stmt_e->bind_param("i", $eid);
+    $stmt_e->execute();
+    $res_e = $stmt_e->get_result();
+    if ($res_e->num_rows > 0) { $editData = $res_e->fetch_assoc(); }
+    $stmt_e->close();
+}
+
 if (isset($_GET['delete'])) {
     $id = $_GET['delete'];
 
@@ -162,6 +198,9 @@ if (isset($_GET['delete'])) {
 
         $stmt_delete->close();
     }
+
+    header("Location: " . strtok($_SERVER["REQUEST_URI"], "?"));
+    exit;
 
     $stmt_get->close();
     header("Refresh:1");
@@ -426,13 +465,13 @@ $conn->close();
                                     <h2 class="card-title"><?php echo $translations["ticketsandpassesadd"]; ?></h2>
                                 </div>
                                 <div class="card-body">
-                                    <form method="post">
+                                    <form method="post"><?php if ($editData): ?><input type="hidden" name="ticket_id" value="<?= $editData['id'] ?>"><?php endif; ?>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="name"
                                                         class="form-label"><?php echo $translations["ticketspassname"]; ?></label>
-                                                    <input type="text" class="form-control" id="name" name="name" required>
+                                                    <input type="text" class="form-control" id="name" name="name" value="<?= $editData ? htmlspecialchars($editData['name']) : '' ?>" required>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -440,7 +479,7 @@ $conn->close();
                                                     <label for="expire_days"
                                                         class="form-label"><?php echo $translations["tickettableexpiry"]; ?></label>
                                                     <input type="text" class="form-control" id="expire_days"
-                                                        name="expire_days"
+                                                        name="expire_days" value="<?= $editData ? ($editData['expire_days'] ?? '') : '' ?>"
                                                         placeholder="<?php echo $translations["expiredatetext"]; ?>">
                                                 </div>
                                             </div>
@@ -449,7 +488,7 @@ $conn->close();
                                                     <label for="price"
                                                         class="form-label"><?php echo $translations["price"]; ?>
                                                         (<?php echo $currency_env; ?>)</label>
-                                                    <input type="number" class="form-control" id="price" name="price"
+                                                    <input type="number" class="form-control" id="price" name="price" value="<?= $editData ? $editData['price'] : '' ?>"
                                                         required>
                                                 </div>
                                             </div>
@@ -458,12 +497,12 @@ $conn->close();
                                                     <label for="occasions"
                                                         class="form-label"><?php echo $translations["tickettableoccassion"]; ?></label>
                                                     <input type="number" class="form-control" id="occasions"
-                                                        name="occasions"
+                                                        name="occasions" value="<?= $editData ? ($editData['occasions'] ?? '') : '' ?>"
                                                         placeholder="<?php echo $translations["onlyfordaily"]; ?>">
                                                 </div>
                                             </div>
                                         </div>
-                                        <button type="submit" class="btn btn-primary mt-3" name="add_ticket"><i
+                                        <button type="submit" class="btn btn-primary mt-3" name="<?= $editData ? 'update_ticket' : 'add_ticket' ?>"><i
                                                 class="bi bi-plus-circle"></i>
                                             <?php echo $translations["ticketsandpassesadd"]; ?></button>
                                     </form>
@@ -498,6 +537,7 @@ $conn->close();
                                                     <th><?php echo $translations["price"]; ?> (<?php echo $currency_env; ?>)
                                                     </th>
                                                     <th><?php echo $translations["tickettableoccassion"]; ?></th>
+                                                    <th>Visible</th>
                                                     <th><?php echo $translations["interact"]; ?></th>
                                                 </tr>
                                             </thead>
@@ -511,7 +551,16 @@ $conn->close();
                                                         <td><?= $row['price'] ?></td>
                                                         <td><?= is_null($row['occasions']) ? '-' : $row['occasions'] ?></td>
                                                         <td>
-                                                            <a href="?delete=<?= $row['id'] ?>" class="btn btn-danger btn-sm"><i
+                                                            <?php if($row['visible']): ?>
+                                                                <span class="badge" style="background:#22c55e;color:#fff;padding:4px 10px;">Visible</span>
+                                                                <a href="?hide=<?= $row['id'] ?>" class="btn btn-sm btn-warning" style="padding:2px 8px;"><i class="bi bi-eye-slash"></i> Ocultar</a>
+                                                            <?php else: ?>
+                                                                <span class="badge" style="background:#ef4444;color:#fff;padding:4px 10px;">Oculto</span>
+                                                                <a href="?show=<?= $row['id'] ?>" class="btn btn-sm btn-success" style="padding:2px 8px;"><i class="bi bi-eye"></i> Mostrar</a>
+                                                            <?php endif; ?>
+                                                        </td>
+                                                        <td>
+                                                            <a href="?edit=<?= $row['id'] ?>" class="btn btn-primary btn-sm me-1"><i class="bi bi-pencil"></i></a> <a href="?delete=<?= $row['id'] ?>" class="btn btn-danger btn-sm"><i
                                                                     class="bi bi-x-circle"></i>
                                                                 <?php echo $translations["delete"]; ?></a>
                                                         </td>

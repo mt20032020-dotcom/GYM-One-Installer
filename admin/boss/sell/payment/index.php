@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../../../../includes/mailer.php';
 session_start();
 
 if (!isset($_SESSION['adminuser'])) {
@@ -137,7 +138,7 @@ $stmt->close();
 $currentDate = new DateTime();
 
 if (is_null($expire_day) || $expire_day == 0) {
-    $expire_date = $translations["unlimited"];
+    $expire_date = '9999-12-31';
 } else {
     $currentDate = new DateTime();
     $currentDate->add(new DateInterval('P' . $expire_day . 'D'));
@@ -159,7 +160,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $method = $paymentMethod;
 
     if ($paymentMethod !== 'profile') {
-        $field = ($method === 'card') ? 'bank_card' : 'cash';
+        if ($paymentMethod === 'mixed') {
+            $mx_cash = max(0, (float)($_POST['mix_cash'] ?? 0));
+            $mx_card = max(0, (float)($_POST['mix_card'] ?? 0));
+            $mx_tr = max(0, (float)($_POST['mix_transfer'] ?? 0));
+            if (abs(($mx_cash + $mx_card + $mx_tr) - (float)$ticketprice) > 0.01) {
+                die("Pago mixto no cuadra con el total.");
+            }
+            $sqlM = "SELECT id FROM revenu_stats WHERE date = ?";
+            $stmtM = $conn->prepare($sqlM);
+            $stmtM->bind_param("s", $date);
+            $stmtM->execute();
+            $resM = $stmtM->get_result();
+            if ($resM->num_rows > 0) {
+                $rowM = $resM->fetch_assoc();
+                $stmtM2 = $conn->prepare("UPDATE revenu_stats SET cash = cash + ?, bank_card = bank_card + ?, transfer = transfer + ? WHERE id = ?");
+                $stmtM2->bind_param("dddi", $mx_cash, $mx_card, $mx_tr, $rowM['id']);
+                $stmtM2->execute(); $stmtM2->close();
+            } else {
+                $stmtM2 = $conn->prepare("INSERT INTO revenu_stats (date, bank_card, cash, transfer) VALUES (?, ?, ?, ?)");
+                $stmtM2->bind_param("sddd", $date, $mx_card, $mx_cash, $mx_tr);
+                $stmtM2->execute(); $stmtM2->close();
+            }
+            $stmtM->close();
+        } else {
+        $field = ($method === 'card') ? 'bank_card' : (($method === 'transfer') ? 'transfer' : 'cash');
 
         $sql = "SELECT id FROM revenu_stats WHERE date = ?";
         $stmt = $conn->prepare($sql);
@@ -176,16 +201,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $updateStmt->execute();
             $updateStmt->close();
         } else {
-            $insertSql = "INSERT INTO revenu_stats (date, bank_card, cash) VALUES (?, ?, ?)";
+            $insertSql = "INSERT INTO revenu_stats (date, bank_card, cash, transfer) VALUES (?, ?, ?, ?)";
             $insertStmt = $conn->prepare($insertSql);
 
             $bank_card = ($method === 'card') ? $amount : 0;
             $cash = ($method === 'cash') ? $amount : 0;
+            $transfer = ($method === 'transfer') ? $amount : 0;
 
-            $insertStmt->bind_param("sdd", $date, $bank_card, $cash);
+            $insertStmt->bind_param("sddd", $date, $bank_card, $cash, $transfer);
             $insertStmt->execute();
             $insertId = $insertStmt->insert_id;
             $insertStmt->close();
+        }
         }
     }
 
@@ -193,7 +220,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $translatedPaymentMethod = '';
 
-    if ($paymentMethod == 'cash') {
+    if ($paymentMethod == 'mixed') {
+        $translatedPaymentMethod = 'Pago mixto (Efectivo $' . number_format($mx_cash,0,',','.') . ' + Tarjeta $' . number_format($mx_card,0,',','.') . ' + Transf. $' . number_format($mx_tr,0,',','.') . ')';
+    } else if ($paymentMethod == 'transfer') {
+        $translatedPaymentMethod = 'Transferencia';
+    } else if ($paymentMethod == 'cash') {
         $translatedPaymentMethod = $translations["cash"];
     } elseif ($paymentMethod == 'card') {
         $translatedPaymentMethod = $translations["card"];
@@ -218,7 +249,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     require_once __DIR__ . '/_invoice.php';
 
-$inv_pm = ($method == 'profile') ? $translations["profilebalancepay"] : (($method == 'cash') ? $translations["cash"] : $translations["card"]);
+$inv_pm = ($method == 'profile') ? $translations["profilebalancepay"] : (($method == 'cash') ? $translations["cash"] : (($method == 'transfer') ? 'Transferencia' : $translations["card"]));
 
     $inv_items = "
         <table class='inv-table'>
@@ -300,6 +331,8 @@ $inv_pm = ($method == 'profile') ? $translations["profilebalancepay"] : (($metho
         $alerts_html .= '<div class="alert alert-success" role="alert">
                         ' . $translations["ticketadded"] . '
                     </div>';
+        require_once __DIR__ . '/../../../../iclock/lib/endtime.php';
+        @sincronizar_acceso_speedface($userid);
 
         $action = $translations['log_ticketbuy'] . ' ID: ' . $tickerbuyerid . ' - ' . $ticketname . ' - ' . $translatedPaymentMethod . ' - ' . $userid . '-' . $invoiceNumber . '.pdf';
         $actioncolor = 'success';
@@ -316,12 +349,6 @@ $inv_pm = ($method == 'profile') ? $translations["profilebalancepay"] : (($metho
         $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
         $host = $_SERVER['HTTP_HOST'];
         $domain_url = $protocol . $host;
-
-        $transport = (new Swift_SmtpTransport($smtp_host, $smtp_port, $smtp_encryption))
-            ->setUsername($smtp_username)
-            ->setPassword($smtp_password);
-
-        $mailer = new Swift_Mailer($transport);
         $PayEmailHero_PLACEHOLDER = str_replace("{first_name}", $firstname, $translations["payemailhero"]);
         $PayEmailFooterWhy_PLACEHOLDER = str_replace("{business_name}", $business_name, $translations["payemailfooterwhy"]);
 
@@ -526,6 +553,66 @@ $inv_pm = ($method == 'profile') ? $translations["profilebalancepay"] : (($metho
             </td>
         </tr>
     </table>
+<script>
+(function(){
+  var radios = document.querySelectorAll('input[name="paymentMethod"]');
+  var panel = document.getElementById('mixedPanel');
+  if (!panel) return;
+  var total = <?php
+<?php echo (float)$ticketprice; ?>;
+  var inCash = document.getElementById('mixCash'),
+      inCard = document.getElementById('mixCard'),
+      inTr = document.getElementById('mixTransfer'),
+      status = document.getElementById('mixStatus');
+  var btn = document.querySelector('.pc-btn.pc-btn-success');
+  function fmt(v){ return '$' + v.toLocaleString('es-CO'); }
+  function refresh(){
+    var mixed = document.querySelector('input[name="paymentMethod"]:checked');
+    var esMixto = mixed && mixed.value === 'mixed';
+    panel.style.display = esMixto ? 'block' : 'none';
+    if (!esMixto) { if(btn) btn.disabled = false; return; }
+    var s = (parseFloat(inCash.value)||0) + (parseFloat(inCard.value)||0) + (parseFloat(inTr.value)||0);
+    if (Math.abs(s - total) < 0.01 && s > 0) {
+      status.style.color = '#16a34a';
+      status.innerHTML = '&#10003; Completo: ' + fmt(s) + ' de ' + fmt(total);
+      if(btn) btn.disabled = false;
+    } else if (s < total) {
+      status.style.color = '#dc2626';
+      status.textContent = 'Ingresado: ' + fmt(s) + ' de ' + fmt(total) + ' — faltan ' + fmt(total - s);
+      if(btn) btn.disabled = true;
+    } else {
+      status.style.color = '#dc2626';
+      status.textContent = 'Ingresado: ' + fmt(s) + ' — sobran ' + fmt(s - total);
+      if(btn) btn.disabled = true;
+    }
+  }
+  radios.forEach(function(r){ r.addEventListener('change', refresh); });
+  [inCash, inCard, inTr].forEach(function(i){ i.addEventListener('input', refresh); });
+  refresh();
+})();
+</script>
+<style>
+#mixedPanel{
+    display:none;
+    position:relative;
+    width:calc(100% + 0px) !important;
+    min-width:100% !important;
+    margin:14px 0 0 0 !important;
+    padding:16px !important;
+    background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px;
+    box-sizing:border-box;
+    grid-column:1 / -1;
+    flex:1 1 100% !important;
+}
+#mixedPanel .mix-grid{
+    display:grid !important;
+    grid-template-columns:repeat(3, minmax(0,1fr)) !important;
+    gap:12px !important;
+    width:100% !important;
+}
+#mixedPanel input[type=number]{ width:100% !important; box-sizing:border-box; }
+#mixedPanel label{ white-space:nowrap; display:block; margin-bottom:4px; }
+</style>
 </body>
 
 </html>
@@ -534,12 +621,9 @@ EOD;
         $recipientEmail = $email;
         $subject = $translations["payemailsubject"];
 
-        $message = (new Swift_Message($subject))
-            ->setFrom(["{$smtp_username}" => "{$business_name}"])
-            ->setTo([$recipientEmail])
-            ->setBody($emailHtml, 'text/html');
-
-        $mailer->send($message);
+        try { if (!empty($smtp_username) && $mailer) {
+        $result = send_mail($env_data ?? [], $recipientEmail, $subject, $emailHtml, $business_name ?? ''); }
+        } catch (\Exception $e) { /* correo de cortesia: si falla, la venta no se afecta */ }
 
         header("Location: ../../../dashboard");
     } else {
@@ -567,11 +651,13 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
 
 
 <!DOCTYPE html>
-<html lang="<?php echo $lang_code; ?>">
+<html lang="<?php
+<?php echo $lang_code; ?>">
 
 <head>
     <meta charset="UTF-8">
-    <title><?php echo $translations["dashboard"]; ?></title>
+    <title><?php
+<?php echo $translations["dashboard"]; ?></title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -598,47 +684,71 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
                     <li><a href="../../../dashboard"><i class="bi bi-speedometer"></i>
-                            <?php echo $translations["mainpage"]; ?></a></li>
-                    <li><a href="../../../users"><i class="bi bi-people"></i> <?php echo $translations["users"]; ?></a>
+                            <?php
+<?php echo $translations["mainpage"]; ?></a></li>
+                    <li><a href="../../../users"><i class="bi bi-people"></i> <?php
+<?php echo $translations["users"]; ?></a>
                     </li>
                     <li><a href="../../../statistics"><i class="bi bi-bar-chart"></i>
-                            <?php echo $translations["statspage"]; ?></a></li>
+                            <?php
+<?php echo $translations["statspage"]; ?></a></li>
                     <li class="active"><a href="../"><i class="bi bi-shop"></i>
-                            <?php echo $translations["sellpage"]; ?></a></li>
+                            <?php
+<?php echo $translations["sellpage"]; ?></a></li>
                     <li><a href="../../../invoices"><i class="bi bi-receipt"></i>
-                            <?php echo $translations["invoicepage"]; ?></a></li>
-                    <?php if ($is_boss === 1) { ?>
+                            <?php
+<?php echo $translations["invoicepage"]; ?></a></li>
+                    <?php
+<?php if ($is_boss === 1) { ?>
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="bi bi-gear"></i>
-                                <?php echo $translations["settings"]; ?> <span class="caret"></span></a>
+                                <?php
+<?php echo $translations["settings"]; ?> <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="../../../boss/mainsettings"><?php echo $translations["businesspage"]; ?></a>
+                                <li><a href="../../../boss/mainsettings"><?php
+<?php echo $translations["businesspage"]; ?></a>
                                 </li>
-                                <li><a href="../../../boss/workers"><?php echo $translations["workers"]; ?></a></li>
-                                <li><a href="../../../boss/packages"><?php echo $translations["packagepage"]; ?></a></li>
-                                <li><a href="../../../boss/hours"><?php echo $translations["openhourspage"]; ?></a></li>
-                                <li><a href="../../../boss/smtp"><?php echo $translations["mailpage"]; ?></a></li>
-                                <li><a href="../../../boss/chroom"><?php echo $translations["chroompage"]; ?></a></li>
-                                <li><a href="../../../boss/rule"><?php echo $translations["rulepage"]; ?></a></li>
+                                <li><a href="../../../boss/workers"><?php
+<?php echo $translations["workers"]; ?></a></li>
+                                <li><a href="../../../boss/packages"><?php
+<?php echo $translations["packagepage"]; ?></a></li>
+                                <li><a href="../../../boss/hours"><?php
+<?php echo $translations["openhourspage"]; ?></a></li>
+                                <li><a href="../../../boss/smtp"><?php
+<?php echo $translations["mailpage"]; ?></a></li>
+                                <li><a href="../../../boss/chroom"><?php
+<?php echo $translations["chroompage"]; ?></a></li>
+                                <li><a href="../../../boss/rule"><?php
+<?php echo $translations["rulepage"]; ?></a></li>
                             </ul>
                         </li>
-                    <?php } ?>
+                    <?php
+<?php } ?>
                     <li><a href="../../../shop/tickets"><i class="bi bi-ticket"></i>
-                            <?php echo $translations["ticketspage"]; ?></a></li>
+                            <?php
+<?php echo $translations["ticketspage"]; ?></a></li>
                     <li><a href="../../../trainers/timetable"><i class="bi bi-calendar-event"></i>
-                            <?php echo $translations["timetable"]; ?></a></li>
+                            <?php
+<?php echo $translations["timetable"]; ?></a></li>
                     <li><a href="../../../trainers/personal"><i class="bi bi-award"></i>
-                            <?php echo $translations["trainers"]; ?></a></li>
-                    <?php if ($is_boss === 1) { ?>
+                            <?php
+<?php echo $translations["trainers"]; ?></a></li>
+                    <?php
+<?php if ($is_boss === 1) { ?>
                         <li><a href="../../../updater"><i class="bi bi-cloud-download"></i>
-                                <?php echo $translations["updatepage"]; ?>
-                                <?php if ($is_new_version_available): ?>
+                                <?php
+<?php echo $translations["updatepage"]; ?>
+                                <?php
+<?php if ($is_new_version_available): ?>
                                     <span class="badge badge-warning"><i class="bi bi-exclamation-circle"></i></span>
-                                <?php endif; ?>
+                                <?php
+<?php endif; ?>
                             </a></li>
-                    <?php } ?>
+                    <?php
+<?php } ?>
                     <li><a href="../../../log"><i class="bi bi-clock-history"></i>
-                            <?php echo $translations["logpage"]; ?></a></li>
+                            <?php
+<?php echo $translations["logpage"]; ?></a></li>
                 </ul>
             </div>
         </div>
@@ -648,121 +758,146 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
         <div class="row content">
             <div class="col-sm-2 sidenav hidden-xs text-center">
                 <h2><img src="../../../../assets/img/logo.png" width="105px" alt="Logo"></h2>
-                <p class="lead mb-4 fs-4"><?php echo $business_name ?> - <?php echo $version; ?></p>
+                <p class="lead mb-4 fs-4"><?php
+<?php echo $business_name ?> - <?php
+<?php echo $version; ?></p>
                 <ul class="nav nav-pills nav-stacked">
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="../../../dashboard/">
-                            <i class="bi bi-speedometer"></i> <?php echo $translations["mainpage"]; ?>
+                            <i class="bi bi-speedometer"></i> <?php
+<?php echo $translations["mainpage"]; ?>
                         </a>
                     </li>
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="../../../users/">
-                            <i class="bi bi-people"></i> <?php echo $translations["users"]; ?>
+                            <i class="bi bi-people"></i> <?php
+<?php echo $translations["users"]; ?>
                         </a>
                     </li>
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="../../../statistics">
-                            <i class="bi bi-bar-chart"></i> <?php echo $translations["statspage"]; ?>
+                            <i class="bi bi-bar-chart"></i> <?php
+<?php echo $translations["statspage"]; ?>
                         </a>
                     </li>
                     <li class="sidebar-item active">
                         <a class="sidebar-link" href="#">
-                            <i class="bi bi-shop"></i> <?php echo $translations["sellpage"]; ?>
+                            <i class="bi bi-shop"></i> <?php
+<?php echo $translations["sellpage"]; ?>
                         </a>
                     </li>
                     <li class="sidebar-item">
                         <a href="../../../invoices/" class="sidebar-link">
-                            <i class="bi bi-receipt"></i> <?php echo $translations["invoicepage"]; ?>
+                            <i class="bi bi-receipt"></i> <?php
+<?php echo $translations["invoicepage"]; ?>
                         </a>
                     </li>
                     <?php
                     if ($is_boss === 1) {
                         ?>
                         <li class="sidebar-header">
-                            <?php echo $translations["settings"]; ?>
+                            <?php
+<?php echo $translations["settings"]; ?>
                         </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="../../../boss/mainsettings">
                                 <i class="bi bi-gear"></i>
-                                <span><?php echo $translations["businesspage"]; ?></span>
+                                <span><?php
+<?php echo $translations["businesspage"]; ?></span>
                             </a>
                         </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="../../../boss/workers">
                                 <i class="bi bi-people"></i>
-                                <span><?php echo $translations["workers"]; ?></span>
+                                <span><?php
+<?php echo $translations["workers"]; ?></span>
                             </a>
                         </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="../../../boss/packages">
                                 <i class="bi bi-box-seam"></i>
-                                <span><?php echo $translations["packagepage"]; ?></span>
+                                <span><?php
+<?php echo $translations["packagepage"]; ?></span>
                             </a>
                         </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="../../../boss/hours">
                                 <i class="bi bi-clock"></i>
-                                <span><?php echo $translations["openhourspage"]; ?></span>
+                                <span><?php
+<?php echo $translations["openhourspage"]; ?></span>
                             </a>
                         </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="../../../boss/smtp">
                                 <i class="bi bi-envelope-at"></i>
-                                <span><?php echo $translations["mailpage"]; ?></span>
+                                <span><?php
+<?php echo $translations["mailpage"]; ?></span>
                             </a>
                         </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="../../../boss/chroom">
                                 <i class="bi bi-duffle"></i>
-                                <span><?php echo $translations["chroompage"]; ?></span>
+                                <span><?php
+<?php echo $translations["chroompage"]; ?></span>
                             </a>
                         </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="../../../boss/rule">
                                 <i class="bi bi-file-ruled"></i>
-                                <span><?php echo $translations["rulepage"]; ?></span>
+                                <span><?php
+<?php echo $translations["rulepage"]; ?></span>
                             </a>
                         </li>
                         <?php
                     }
                     ?>
                     <li class="sidebar-header">
-                        <?php echo $translations["shopcategory"]; ?>
+                        <?php
+<?php echo $translations["shopcategory"]; ?>
                     </li>
                     <li class="sidebar-item">
                         <!-- <a class="sidebar-ling" href="../shop/gateway">
                             <i class="bi bi-shield-lock"></i>
-                            <span><?php echo $translations["gatewaypage"]; ?></span>
+                            <span><?php
+<?php echo $translations["gatewaypage"]; ?></span>
                         </a> -->
                         <a class="sidebar-ling" href="../../../shop/tickets">
                             <i class="bi bi-ticket"></i>
-                            <span><?php echo $translations["ticketspage"]; ?></span>
+                            <span><?php
+<?php echo $translations["ticketspage"]; ?></span>
                         </a>
                     </li>
                     <li class="sidebar-header">
-                        <?php echo $translations["trainersclass"]; ?>
+                        <?php
+<?php echo $translations["trainersclass"]; ?>
                     </li>
                     <li><a class="sidebar-link" href="../../../trainers/timetable">
                             <i class="bi bi-calendar-event"></i>
-                            <span><?php echo $translations["timetable"]; ?></span>
+                            <span><?php
+<?php echo $translations["timetable"]; ?></span>
                         </a></li>
                     <li><a class="sidebar-link" href="../../../trainers/personal">
                             <i class="bi bi-award"></i>
-                            <span><?php echo $translations["trainers"]; ?></span>
+                            <span><?php
+<?php echo $translations["trainers"]; ?></span>
                         </a></li>
-                    <li class="sidebar-header"><?php echo $translations["other-header"]; ?></li>
+                    <li class="sidebar-header"><?php
+<?php echo $translations["other-header"]; ?></li>
                     <?php
                     if ($is_boss === 1) {
                         ?>
                         <li class="sidebar-item">
                             <a class="sidebar-ling" href="../../../updater">
                                 <i class="bi bi-cloud-download"></i>
-                                <span><?php echo $translations["updatepage"]; ?></span>
-                                <?php if ($is_new_version_available): ?>
+                                <span><?php
+<?php echo $translations["updatepage"]; ?></span>
+                                <?php
+<?php if ($is_new_version_available): ?>
                                     <span class="sidebar-badge badge">
                                         <i class="bi bi-exclamation-circle"></i>
                                     </span>
-                                <?php endif; ?>
+                                <?php
+<?php endif; ?>
                             </a>
                         </li>
                         <?php
@@ -771,7 +906,8 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
                     <li class="sidebar-item">
                         <a class="sidebar-ling" href="../../../log">
                             <i class="bi bi-clock-history"></i>
-                            <span><?php echo $translations["logpage"]; ?></span>
+                            <span><?php
+<?php echo $translations["logpage"]; ?></span>
                         </a>
                     </li>
                 </ul><br>
@@ -782,16 +918,19 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
                     <a href="https://gymoneglobal.com/discord" class="btn btn-primary mx-1" target="_blank"
                         rel="noopener noreferrer">
                         <i class="bi bi-question-circle"></i>
-                        <?php echo $translations["support"]; ?>
+                        <?php
+<?php echo $translations["support"]; ?>
                     </a>
 
                     <a href="https://gymoneglobal.com/docs" class="btn btn-danger" target="_blank"
                         rel="noopener noreferrer">
                         <i class="bi bi-journals"></i>
-                        <?php echo $translations["docs"]; ?>
+                        <?php
+<?php echo $translations["docs"]; ?>
                     </a>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#logoutModal">
-                        <?php echo $translations["logout"]; ?>
+                        <?php
+<?php echo $translations["logout"]; ?>
                     </button>
                     <h5 id="clock" style="display: inline-block; margin-bottom: 0;"></h5>
 
@@ -805,12 +944,15 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
                 ?>
                 <div class="pc">
                     <div class="pc-head">
-                        <a href="../ticket/?userid=<?php echo urlencode($tickerbuyerid); ?>" class="pc-back">
-                            <i class="bi bi-arrow-left"></i> <?php echo $translations['sell-change'] ?? 'Vissza'; ?>
+                        <a href="../ticket/?userid=<?php
+<?php echo urlencode($tickerbuyerid); ?>" class="pc-back">
+                            <i class="bi bi-arrow-left"></i> <?php
+<?php echo $translations['sell-change'] ?? 'Vissza'; ?>
                         </a>
                         <div class="pc-head-title">
                             <span class="pc-head-icon"><i class="bi bi-ticket-perforated-fill"></i></span>
-                            <h3><?php echo $translations['payment'] ?? 'Fizetés'; ?></h3>
+                            <h3><?php
+<?php echo $translations['payment'] ?? 'Fizetés'; ?></h3>
                         </div>
                     </div>
 
@@ -821,24 +963,32 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
                         <div class="pc-card">
                             <div class="pc-card-head">
                                 <span class="pc-card-icon"><i class="bi bi-person"></i></span>
-                                <h5><?php echo $translations['selected-member'] ?? 'Vásárló'; ?></h5>
+                                <h5><?php
+<?php echo $translations['selected-member'] ?? 'Vásárló'; ?></h5>
                             </div>
                             <div class="pc-buyer">
                                 <div class="pc-avatar">
-                                    <span class="pc-ava-ini"><?php echo htmlspecialchars($pc_ini($firstname, $lastname)); ?></span>
-                                    <img class="pc-ava-img" src="../../../../assets/img/profiles/<?php echo htmlspecialchars($tickerbuyerid); ?>.png" alt="" onerror="this.remove()">
+                                    <span class="pc-ava-ini"><?php
+<?php echo htmlspecialchars($pc_ini($firstname, $lastname)); ?></span>
+                                    <img class="pc-ava-img" src="../../../../assets/img/profiles/<?php
+<?php echo htmlspecialchars($tickerbuyerid); ?>.png" alt="" onerror="this.remove()">
                                 </div>
                                 <div>
-                                    <div class="pc-buyer-name"><?php echo htmlspecialchars($firstname . ' ' . $lastname); ?></div>
-                                    <div class="pc-buyer-id"><i class="bi bi-person-badge"></i> <?php echo htmlspecialchars($tickerbuyerid); ?></div>
+                                    <div class="pc-buyer-name"><?php
+<?php echo htmlspecialchars($firstname . ' ' . $lastname); ?></div>
+                                    <div class="pc-buyer-id"><i class="bi bi-person-badge"></i> <?php
+<?php echo htmlspecialchars($tickerbuyerid); ?></div>
                                 </div>
                             </div>
                             <ul class="pc-meta">
-                                <li><i class="bi bi-envelope"></i> <span><?php echo htmlspecialchars($email); ?></span></li>
-                                <li><i class="bi bi-geo-alt"></i> <span><?php echo htmlspecialchars(trim($city . ' ' . $street . ' ' . $house_number)); ?></span></li>
+                                <li><i class="bi bi-envelope"></i> <span><?php
+<?php echo htmlspecialchars($email); ?></span></li>
+                                <li><i class="bi bi-geo-alt"></i> <span><?php
+<?php echo htmlspecialchars(trim($city . ' ' . $street . ' ' . $house_number)); ?></span></li>
                             </ul>
                             <button type="button" class="pc-btn pc-btn-primary pc-block" data-toggle="modal" data-target="#paymentModal">
-                                <i class="bi bi-wallet2"></i> <?php echo $translations["paybutton"]; ?>
+                                <i class="bi bi-wallet2"></i> <?php
+<?php echo $translations["paybutton"]; ?>
                             </button>
                         </div>
 
@@ -846,29 +996,45 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
                         <div class="pc-card pc-summary">
                             <div class="pc-card-head">
                                 <span class="pc-card-icon"><i class="bi bi-receipt"></i></span>
-                                <h5><?php echo $translations["ticketinfo"]; ?></h5>
+                                <h5><?php
+<?php echo $translations["ticketinfo"]; ?></h5>
                             </div>
                             <div class="pc-line">
-                                <span><?php echo $translations["ticketspassname"]; ?></span>
-                                <b><?php echo htmlspecialchars($ticketname); ?></b>
+                                <span><?php
+<?php echo $translations["ticketspassname"]; ?></span>
+                                <b><?php
+<?php echo htmlspecialchars($ticketname); ?></b>
                             </div>
                             <div class="pc-line">
-                                <span><?php echo $translations["expiredate"]; ?></span>
+                                <span><?php
+<?php echo $translations["expiredate"]; ?></span>
                                 <b>
-                                    <?php if ($pc_unlimited): ?>
-                                        <span class="pc-chip pc-chip-gold"><i class="bi bi-infinity"></i> <?php echo $translations["unlimited"]; ?></span>
-                                    <?php else: ?>
-                                        <?php echo htmlspecialchars($expire_date); ?> <span class="pc-muted">(<?php echo (int) $expire_day; ?> <?php echo $translations["day"]; ?>)</span>
-                                    <?php endif; ?>
+                                    <?php
+<?php if ($pc_unlimited): ?>
+                                        <span class="pc-chip pc-chip-gold"><i class="bi bi-infinity"></i> <?php
+<?php echo $translations["unlimited"]; ?></span>
+                                    <?php
+<?php else: ?>
+                                        <?php
+<?php echo htmlspecialchars($expire_date); ?> <span class="pc-muted">(<?php
+<?php echo (int) $expire_day; ?> <?php
+<?php echo $translations["day"]; ?>)</span>
+                                    <?php
+<?php endif; ?>
                                 </b>
                             </div>
                             <div class="pc-line">
-                                <span><?php echo $translations["occasions"]; ?></span>
-                                <b><?php echo $occasions ? htmlspecialchars($occasions) : '—'; ?></b>
+                                <span><?php
+<?php echo $translations["occasions"]; ?></span>
+                                <b><?php
+<?php echo $occasions ? htmlspecialchars($occasions) : '—'; ?></b>
                             </div>
                             <div class="pc-total">
-                                <span><?php echo $translations["invoiceamount"]; ?></span>
-                                <span class="pc-total-val"><?php echo number_format((float) $ticketprice, 0, ',', '.'); ?> <?php echo $currency; ?></span>
+                                <span><?php
+<?php echo $translations["invoiceamount"]; ?></span>
+                                <span class="pc-total-val"><?php
+<?php echo number_format((float) $ticketprice, 0, ',', '.'); ?> <?php
+<?php echo $currency; ?></span>
                             </div>
                         </div>
                     </div>
@@ -893,19 +1059,22 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
                     </div>
 
                     <h4 style="font-weight: bold; margin-bottom: 15px;">
-                        <p><?php echo $translations["exit-modal"]; ?></p>
+                        <p><?php
+<?php echo $translations["exit-modal"]; ?></p>
                     </h4>
 
                     <div class="text-center">
                         <a type="button" class="btn btn-default" data-dismiss="modal"
                             style="padding: 8px 25px; margin-right: 10px;">
                             <i class="bi bi-x-circle" style="margin-right: 5px;"></i>
-                            <?php echo $translations["not-yet"]; ?>
+                            <?php
+<?php echo $translations["not-yet"]; ?>
                         </a>
 
                         <a href="../../../logout.php" type="button" class="btn btn-danger" style="padding: 8px 25px;">
                             <i class="bi bi-check-circle" style="margin-right: 5px;"></i>
-                            <?php echo $translations["confirm"]; ?>
+                            <?php
+<?php echo $translations["confirm"]; ?>
                         </a>
                     </div>
                 </div>
@@ -924,7 +1093,9 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
                     </div>
                     <div class="pc-modal-amount">
                         <span><?= $translations["invoiceamount"]; ?></span>
-                        <b><?php echo number_format((float) $ticketprice, 0, ',', '.'); ?> <?php echo $currency; ?></b>
+                        <b><?php
+<?php echo number_format((float) $ticketprice, 0, ',', '.'); ?> <?php
+<?php echo $currency; ?></b>
                     </div>
                     <form method="post">
                         <div class="pc-methods">
@@ -936,12 +1107,39 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
                                 <input type="radio" name="paymentMethod" value="card">
                                 <span class="pc-method-box"><i class="bi bi-credit-card-2-front"></i><span><?= $translations["card"]; ?></span></span>
                             </label>
-                            <?php if ($profile_balance_odd >= $ticketprice): ?>
+                            <label class="pc-method">
+                                <input type="radio" name="paymentMethod" value="transfer">
+                                <span class="pc-method-box"><i class="bi bi-bank"></i><span>Transferencia</span></span>
+                            </label>
+                            <label class="pc-method">
+                                <input type="radio" name="paymentMethod" value="mixed">
+                                <span class="pc-method-box"><i class="bi bi-pie-chart"></i><span>Pago mixto</span></span>
+                            </label>
+                            <div id="mixedPanel" style="display:none; flex-basis:100%; width:100%; margin-top:14px; padding:16px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; box-sizing:border-box;">
+                                <div class="mix-grid">
+                                    <div>
+                                        <label style="font-size:.85em; font-weight:700;"><i class="bi bi-cash-coin"></i> Efectivo</label>
+                                        <input type="number" min="0" step="100" id="mixCash" name="mix_cash" class="form-control" value="0">
+                                    </div>
+                                    <div>
+                                        <label style="font-size:.85em; font-weight:700;"><i class="bi bi-credit-card-2-front"></i> Tarjeta</label>
+                                        <input type="number" min="0" step="100" id="mixCard" name="mix_card" class="form-control" value="0">
+                                    </div>
+                                    <div>
+                                        <label style="font-size:.85em; font-weight:700;"><i class="bi bi-bank"></i> Transferencia</label>
+                                        <input type="number" min="0" step="100" id="mixTransfer" name="mix_transfer" class="form-control" value="0">
+                                    </div>
+                                </div>
+                                <div id="mixStatus" style="margin-top:12px; font-weight:800; color:#dc2626; text-align:center; font-size:1.05em;"></div>
+                            </div>
+                            <?php
+<?php if ($profile_balance_odd >= $ticketprice): ?>
                                 <label class="pc-method">
                                     <input type="radio" name="paymentMethod" value="profile">
                                     <span class="pc-method-box"><i class="bi bi-person-badge"></i><span><?= $translations["profilebalancepay"]; ?></span></span>
                                 </label>
-                            <?php endif; ?>
+                            <?php
+<?php endif; ?>
                         </div>
                         <div class="pc-modal-actions">
                             <button type="button" class="pc-btn pc-btn-ghost" data-dismiss="modal"><?= $translations["not-yet"] ?? 'Mégse'; ?></button>
@@ -953,7 +1151,8 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
         </div>
     </div>
 
-    <?php include __DIR__ . '/_pc_assets.php'; ?>
+    <?php
+<?php include __DIR__ . '/_pc_assets.php'; ?>
 
     <?php
     $conn->close();
@@ -961,6 +1160,66 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
     <!-- SCRIPTS! -->
     <script src="../../../../assets/js/date-time.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script>
+(function(){
+  var radios = document.querySelectorAll('input[name="paymentMethod"]');
+  var panel = document.getElementById('mixedPanel');
+  if (!panel) return;
+  var total = <?php
+<?php echo (float)$ticketprice; ?>;
+  var inCash = document.getElementById('mixCash'),
+      inCard = document.getElementById('mixCard'),
+      inTr = document.getElementById('mixTransfer'),
+      status = document.getElementById('mixStatus');
+  var btn = document.querySelector('.pc-btn.pc-btn-success');
+  function fmt(v){ return '$' + v.toLocaleString('es-CO'); }
+  function refresh(){
+    var mixed = document.querySelector('input[name="paymentMethod"]:checked');
+    var esMixto = mixed && mixed.value === 'mixed';
+    panel.style.display = esMixto ? 'block' : 'none';
+    if (!esMixto) { if(btn) btn.disabled = false; return; }
+    var s = (parseFloat(inCash.value)||0) + (parseFloat(inCard.value)||0) + (parseFloat(inTr.value)||0);
+    if (Math.abs(s - total) < 0.01 && s > 0) {
+      status.style.color = '#16a34a';
+      status.innerHTML = '&#10003; Completo: ' + fmt(s) + ' de ' + fmt(total);
+      if(btn) btn.disabled = false;
+    } else if (s < total) {
+      status.style.color = '#dc2626';
+      status.textContent = 'Ingresado: ' + fmt(s) + ' de ' + fmt(total) + ' — faltan ' + fmt(total - s);
+      if(btn) btn.disabled = true;
+    } else {
+      status.style.color = '#dc2626';
+      status.textContent = 'Ingresado: ' + fmt(s) + ' — sobran ' + fmt(s - total);
+      if(btn) btn.disabled = true;
+    }
+  }
+  radios.forEach(function(r){ r.addEventListener('change', refresh); });
+  [inCash, inCard, inTr].forEach(function(i){ i.addEventListener('input', refresh); });
+  refresh();
+})();
+</script>
+<style>
+#mixedPanel{
+    display:none;
+    position:relative;
+    width:calc(100% + 0px) !important;
+    min-width:100% !important;
+    margin:14px 0 0 0 !important;
+    padding:16px !important;
+    background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px;
+    box-sizing:border-box;
+    grid-column:1 / -1;
+    flex:1 1 100% !important;
+}
+#mixedPanel .mix-grid{
+    display:grid !important;
+    grid-template-columns:repeat(3, minmax(0,1fr)) !important;
+    gap:12px !important;
+    width:100% !important;
+}
+#mixedPanel input[type=number]{ width:100% !important; box-sizing:border-box; }
+#mixedPanel label{ white-space:nowrap; display:block; margin-bottom:4px; }
+</style>
 </body>
 
 </html>

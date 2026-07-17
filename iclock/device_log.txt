@@ -1,0 +1,2884 @@
+2026-07-13 17:45:55 CDATA-GET SN=NCK2243600079 QS=SN=NCK2243600079&options=all&pushver=3.1.2&DeviceType=acc&PushOptionsFlag=1
+2026-07-13 17:45:55 REGISTRY SN=NCK2243600079
+DeviceType=acc,~DeviceName=SpeedFace-V5L-RFID,FirmVer=ZAM180-NF50VA-Ver3.4.9,PushVersion=Ver 2.0.33S-20220623,CommType=ethernet,MaxPackageSize=2048000,LockCount=1,ReaderCount=2,AuxInCount=1,AuxOutCount=0,MachineType=101,~IsOnlyRFMachine=0,~MaxUserCount=100,~MaxAttLogCount=20,~MaxUserFingerCount=10,MThreshold=35,IPAddress=192.168.1.201,GATEIPAddress=0.0.0.0,NetMask=255.255.255.0,~ZKFPVersion=10,IclockSvrFun=1,OverallAntiFunOn=0,~REXInputFunOn=0,~CardFormatFunOn=0,~SupAuthrizeFunOn=0,~ReaderCFGFunOn=0,~ReaderLinkageFunOn=0,~RelayStateFunOn=1,~Ext485ReaderFunOn=0,~TimeAPBFunOn=0,~CtlAllRelayFunOn=0,~LossCardFunOn=0,SimpleEventType=1,VerifyStyles=9d88060e,EventTypes=FF0FF03DBA26018033060000F00000000000000000000000007703F007860100,NewNormalEventTypes=,NewErrorEventTypes=,NewWarningEventTypes=,DisableUserFunOn=0,DeleteAndFunOn=0,LogIDFunOn=1,DateFmtFunOn=0,DelAllLossCardFunOn=0,AutoClearDay=0,FirstDelayDay=0,DelayDay=0,StopAllVerify=0,FvFunOn=0,FaceFunOn=1,FingerFunOn=0,CameraOpen=1,SubcontractingUpgradeFunOn=1,UserPicURLFunOn=1,VMSUserName=admin,VMSPasswd=zktecoKSDJ,~SerialNumber=NCK2243600079,IsSupportNFC=0,~MaxFingerCount=60,AccSupportFunList=001000001010100000000000100000000010001110100000000000000000000000000000000000000000000000000000,~DSTF=1,Reader1IOState=1,MultiCardInterTimeFunOn=1,MachineTZFunOn=1,BioPhotoFun=1,VisilightFun=1,~MaxFvCount=10,~MaxBioPhotoCount=6000,AutoServerFunOn=1,MultiBioDataSupport=0:0:0:0:0:0:0:0:1:1,MultiBioPhotoSupport=0:0:0:0:0:0:0:0:0:1,MultiBioVersion=0:0:0:0:0:0:0:0:12.0:39.3,MaxMultiBioPhotoCount=0:0:0:0:0:0:0:0:0:6000,MaxMultiBioDataCount=0:0:0:0:0:0:0:0:3000:6000,IRTempDetectionFunOn=0,MaskDetectionFunOn=1,VisualIntercomFunOn=1,VideoProtocol=4
+---
+2026-07-13 17:45:55 PUSH SN=NCK2243600079 METHOD=POST
+
+---
+2026-07-13 17:45:55 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=options
+~DeviceName=SpeedFace-V5L-RFID,MAC=00:17:61:12:70:b8,TransactionCount=0,~MaxAttLogCount=20,UserCount=181,~MaxUserCount=100,PhotoFunOn=1,~MaxUserPhotoCount=2500,FingerFunOn=0,FPVersion=10,~MaxFingerCount=60,FPCount=0,FaceFunOn=1,FaceVersion=39,~MaxFaceCount=6000,FaceCount=178,FvFunOn=0,FvVersion=3,~MaxFvCount=10,FvCount=0,PvFunOn=1,PvVersion=12,~MaxPvCount=3000,PvCount=0,Language=101,IPAddress=192.168.1.201,~Platform=ZAM180_TFT,~OEMVendor=ZKTECO CO., LTD.,FWVersion=ZAM180-NF50VA-Ver3.4.9,PushVersion=Ver 2.0.33S-20220623,RegDeviceType=,VisilightFun=1,IRTempDetectionFunOn=0,MaskDetectionFunOn=1,UserPicURLFunOn=1,VisualIntercomFunOn=1,VideoTID=,QRCodeDecryptFunList=,VideoProtocol=4,IsSupportQRcode=,QRCodeEnable=,SubcontractingUpgradeFunOn=1,RoomStatus=0,BioPhotoFun=1,BioDataFun=,~LockFunOn=15
+---
+2026-07-13 17:45:59 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-13 12:46:50	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-13 17:46:00 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-13 12:46:50	pin=12990532	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37104	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-13 17:46:01 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-13 12:46:53	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-13 17:46:03 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-13 12:46:53	pin=12990532	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37105	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-13 18:21:38 CDATA-GET SN=TEST QS=SN=TEST
+2026-07-16 03:04:25 CDATA-GET SN=NCK2243600079 QS=SN=NCK2243600079&options=all&pushver=3.1.2&DeviceType=acc&PushOptionsFlag=1
+2026-07-16 03:04:25 REGISTRY SN=NCK2243600079
+DeviceType=acc,~DeviceName=SpeedFace-V5L-RFID,FirmVer=ZAM180-NF50VA-Ver3.4.9,PushVersion=Ver 2.0.33S-20220623,CommType=ethernet,MaxPackageSize=2048000,LockCount=1,ReaderCount=2,AuxInCount=1,AuxOutCount=0,MachineType=101,~IsOnlyRFMachine=0,~MaxUserCount=100,~MaxAttLogCount=20,~MaxUserFingerCount=10,MThreshold=35,IPAddress=192.168.1.201,GATEIPAddress=0.0.0.0,NetMask=255.255.255.0,~ZKFPVersion=10,IclockSvrFun=1,OverallAntiFunOn=0,~REXInputFunOn=0,~CardFormatFunOn=0,~SupAuthrizeFunOn=0,~ReaderCFGFunOn=0,~ReaderLinkageFunOn=0,~RelayStateFunOn=1,~Ext485ReaderFunOn=0,~TimeAPBFunOn=0,~CtlAllRelayFunOn=0,~LossCardFunOn=0,SimpleEventType=1,VerifyStyles=9d88060e,EventTypes=FF0FF03DBA26018033060000F00000000000000000000000007703F007860100,NewNormalEventTypes=,NewErrorEventTypes=,NewWarningEventTypes=,DisableUserFunOn=0,DeleteAndFunOn=0,LogIDFunOn=1,DateFmtFunOn=0,DelAllLossCardFunOn=0,AutoClearDay=0,FirstDelayDay=0,DelayDay=0,StopAllVerify=0,FvFunOn=0,FaceFunOn=1,FingerFunOn=0,CameraOpen=1,SubcontractingUpgradeFunOn=1,UserPicURLFunOn=1,VMSUserName=admin,VMSPasswd=zktecoKSDJ,~SerialNumber=NCK2243600079,IsSupportNFC=0,~MaxFingerCount=60,AccSupportFunList=001000001010100000000000100000000010001110100000000000000000000000000000000000000000000000000000,~DSTF=1,Reader1IOState=1,MultiCardInterTimeFunOn=1,MachineTZFunOn=1,BioPhotoFun=1,VisilightFun=1,~MaxFvCount=10,~MaxBioPhotoCount=6000,AutoServerFunOn=1,MultiBioDataSupport=0:0:0:0:0:0:0:0:1:1,MultiBioPhotoSupport=0:0:0:0:0:0:0:0:0:1,MultiBioVersion=0:0:0:0:0:0:0:0:12.0:39.3,MaxMultiBioPhotoCount=0:0:0:0:0:0:0:0:0:6000,MaxMultiBioDataCount=0:0:0:0:0:0:0:0:3000:6000,IRTempDetectionFunOn=0,MaskDetectionFunOn=1,VisualIntercomFunOn=1,VideoProtocol=4
+---
+2026-07-16 03:04:26 PUSH SN=NCK2243600079 METHOD=POST
+
+---
+2026-07-16 03:04:26 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=options
+~DeviceName=SpeedFace-V5L-RFID,MAC=00:17:61:12:70:b8,TransactionCount=0,~MaxAttLogCount=20,UserCount=189,~MaxUserCount=100,PhotoFunOn=1,~MaxUserPhotoCount=2500,FingerFunOn=0,FPVersion=10,~MaxFingerCount=60,FPCount=0,FaceFunOn=1,FaceVersion=39,~MaxFaceCount=6000,FaceCount=187,FvFunOn=0,FvVersion=3,~MaxFvCount=10,FvCount=0,PvFunOn=1,PvVersion=12,~MaxPvCount=3000,PvCount=0,Language=101,IPAddress=192.168.1.201,~Platform=ZAM180_TFT,~OEMVendor=ZKTECO CO., LTD.,FWVersion=ZAM180-NF50VA-Ver3.4.9,PushVersion=Ver 2.0.33S-20220623,RegDeviceType=,VisilightFun=1,IRTempDetectionFunOn=0,MaskDetectionFunOn=1,UserPicURLFunOn=1,VisualIntercomFunOn=1,VideoTID=,QRCodeDecryptFunList=,VideoProtocol=4,IsSupportQRcode=,QRCodeEnable=,SubcontractingUpgradeFunOn=1,RoomStatus=0,BioPhotoFun=1,BioDataFun=,~LockFunOn=15
+---
+2026-07-16 03:04:27 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 09:21:29	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:04:29 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 09:21:29	pin=59313443	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37320	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:04:30 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 09:26:12	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:04:31 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 09:26:11	pin=1085327991	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37321	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:04:32 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 09:26:28	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:04:33 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 09:26:28	pin=1085314186	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37322	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:04:34 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 09:26:35	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:04:36 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 09:26:35	pin=1080692293	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37323	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:04:37 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 09:37:44	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:04:38 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 09:37:44	pin=1233189205	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37324	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:04:39 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 09:53:30	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:04:40 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 09:53:29	pin=1086019275	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37325	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:04:41 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 10:08:38	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:04:42 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 10:08:38	pin=1004190924	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37326	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:04:44 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 10:37:41	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:04:45 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 10:37:41	pin=1085311003	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37327	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:04:46 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 10:51:41	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:04:47 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 10:51:41	pin=27397306	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37328	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:04:48 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 10:54:49	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:04:49 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 10:54:49	pin=1085930094	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37329	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:04:51 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 11:05:32	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:04:52 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 11:05:32	pin=1085896041	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37330	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:04:53 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 11:12:01	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:04:54 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 11:12:01	pin=41116495	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37331	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:04:55 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 11:12:05	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:04:57 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 11:12:05	pin=1085320495	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37332	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:04:58 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 11:12:07	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:00 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 11:12:07	pin=1085320495	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37333	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:01 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 11:12:12	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:02 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 11:12:12	pin=1085320495	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37334	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:03 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 11:27:55	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:04 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 11:27:55	pin=1085896041	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37335	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:05 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 11:31:00	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:06 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 11:31:00	pin=1004236156	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37336	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:08 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 11:31:07	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:09 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 11:31:07	pin=1081054729	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37337	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:10 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 11:47:19	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:11 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 11:47:19	pin=1080691610	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37338	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:12 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 11:56:23	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:13 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 11:56:23	pin=1085320495	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37339	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:14 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 11:59:08	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:16 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 11:59:08	pin=1085252541	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37340	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:17 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 11:59:13	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:18 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 11:59:13	pin=1192920472	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37341	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:19 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 11:59:16	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:20 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 11:59:16	pin=1082747988	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37342	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:21 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 11:59:17	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:22 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 11:59:17	pin=1082747988	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37343	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:23 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 11:59:18	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:25 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 11:59:18	pin=1082747988	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37344	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:26 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 11:59:19	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:27 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 11:59:19	pin=1082747988	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37345	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:28 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 11:59:24	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:29 CDATA-GET SN=TEST QS=SN=TEST
+2026-07-16 03:05:29 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 11:59:24	pin=1082747988	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37346	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:30 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 12:11:53	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:31 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 12:11:53	pin=1085310641	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37347	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:33 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 12:14:39	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:34 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 12:14:39	pin=1085250794	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37348	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:35 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 12:18:37	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:36 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 12:18:37	pin=1085310641	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37349	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:37 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 12:24:53	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:38 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 12:24:53	pin=1085277495	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37350	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:39 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 12:24:54	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:41 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 12:24:54	pin=1085277495	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37351	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:42 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 12:37:47	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:43 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 12:37:47	pin=27091464	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37352	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:44 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 13:17:15	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:45 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 13:17:15	pin=1004234941	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37353	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:46 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 13:38:34	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:47 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 13:38:34	pin=27091464	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37354	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:49 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 14:03:47	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:50 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 14:03:47	pin=1081272059	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37355	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:51 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 14:13:13	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:52 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 14:13:13	pin=1080692293	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37356	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:53 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 14:42:16	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:54 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 14:42:15	pin=1080695232	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37357	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:55 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 14:58:11	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:57 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 14:58:11	pin=1179963259	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37358	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:05:58 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 15:11:01	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:05:59 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 15:11:01	pin=1004691067	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37359	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:00 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 15:25:54	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:02 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 15:25:53	pin=1125270718	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37360	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:03 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 15:28:36	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:04 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 15:28:36	pin=1085326594	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37361	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:06 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 15:28:37	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:07 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 15:28:37	pin=1085326594	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37362	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:08 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 15:36:27	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:09 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 15:36:26	pin=1080692293	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37363	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:10 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 15:50:47	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:11 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 15:50:47	pin=59806364	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37364	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:12 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 16:12:00	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:14 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 16:12:00	pin=1004234941	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37365	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:15 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 16:42:59	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:16 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 16:42:59	pin=1081054454	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37366	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:17 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 16:46:06	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:18 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 16:46:06	pin=1004216420	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37367	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:19 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 16:46:09	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:20 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 16:46:09	pin=1081052573	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37368	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:22 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 16:46:14	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:23 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 16:46:14	pin=1081052573	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37369	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:24 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 16:46:15	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:25 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 16:46:15	pin=1081052573	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37370	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:26 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 16:55:41	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:27 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 16:55:41	pin=36952520	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37371	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:29 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 16:55:43	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:30 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 16:55:42	pin=36952520	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37372	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:31 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 17:03:53	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:32 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 17:03:53	pin=1087422630	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37373	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:33 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 17:07:28	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:34 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 17:07:28	pin=1004234941	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37374	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:35 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 17:09:33	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:36 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 17:09:33	pin=1087644151	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37375	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:38 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 17:18:19	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:39 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 17:18:19	pin=1085332916	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37376	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:40 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 17:18:47	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:41 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 17:18:47	pin=87062622	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37377	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:42 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 17:21:05	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:43 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 17:21:05	pin=1084194198	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37378	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:44 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 17:33:49	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:46 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 17:33:49	pin=1085292595	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37379	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:47 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 17:40:00	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:48 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 17:40:00	pin=1085266870	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37380	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:49 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 17:40:04	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:50 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 17:40:04	pin=59310664	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37381	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:51 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 17:40:06	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:52 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 17:40:06	pin=59310664	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37382	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:54 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 17:40:11	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:55 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 17:40:11	pin=59310664	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37383	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:56 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 17:40:15	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:57 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 17:40:15	pin=1004234941	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37384	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:06:58 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 17:40:16	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:06:59 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 17:40:16	pin=1004234941	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37385	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:00 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 17:40:17	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:02 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 17:40:17	pin=1004234941	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37386	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:03 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 17:40:24	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:04 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 17:40:24	pin=1004234941	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37387	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:05 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 17:46:43	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:06 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 17:46:42	pin=1004234941	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37388	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:07 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 17:48:38	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:08 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 17:48:38	pin=1004234941	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37389	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:10 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 17:49:02	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:11 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 17:49:02	pin=1080692293	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37390	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:12 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 17:52:54	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:13 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 17:52:54	pin=1085276373	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37391	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:14 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 17:55:56	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:15 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 17:55:56	pin=1080692293	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37392	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:16 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 17:55:57	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:18 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 17:55:57	pin=1080692293	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37393	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:19 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:10:06	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:20 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:10:05	pin=1085310641	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37394	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:21 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:13:09	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:22 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:13:08	pin=1080692293	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37395	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:23 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:13:13	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:24 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:13:13	pin=1088729504	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37396	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:26 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:17:41	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:27 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:17:41	pin=12990532	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37397	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:28 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:19:00	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:29 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:19:00	pin=52796988	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37398	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:30 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:21:08	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:31 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:21:08	pin=1214745386	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37399	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:32 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:21:09	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:34 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:21:09	pin=1214745386	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37400	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:35 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:26:54	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:36 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:26:54	pin=1086328664	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37401	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:37 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:27:09	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:38 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:27:09	pin=1085257003	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37402	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:39 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:28:07	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:40 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:28:07	pin=36753803	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37403	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:42 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:28:12	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:43 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:28:12	pin=1004214697	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37404	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:44 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:31:44	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:45 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:31:44	pin=1085297522	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37405	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:46 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:31:55	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:47 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:31:55	pin=108069563	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37406	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:48 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:33:52	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:50 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:33:52	pin=1085332916	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37407	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:51 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:37:55	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:52 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:37:55	pin=1085339979	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37408	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:53 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:40:14	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:54 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:40:14	pin=1066184435	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37409	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:55 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:40:15	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:57 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:40:15	pin=1066184435	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37410	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:07:58 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:42:46	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:07:59 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:42:46	pin=1080040799	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37411	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:00 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:42:47	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:01 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:42:47	pin=1080040799	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37412	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:02 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:43:21	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:03 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:43:21	pin=1085340268	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37413	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:05 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:48:52	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:06 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:48:52	pin=22493582	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37414	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:07 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:48:54	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:08 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:48:54	pin=1081277310	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37415	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:09 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:48:56	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:10 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:48:56	pin=1081277310	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37416	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:12 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:48:57	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:13 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:48:57	pin=1081277310	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37417	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:14 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:48:58	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:15 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:48:58	pin=1081277310	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37418	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:16 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:49:02	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:17 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:49:01	pin=1081277310	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37419	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:18 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:49:03	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:20 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:49:03	pin=1081277310	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37420	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:21 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:49:06	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:22 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:49:06	pin=1084228448	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37421	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:23 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:49:09	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:24 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:49:09	pin=1084228448	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37422	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:25 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:49:10	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:26 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:49:10	pin=1084228448	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37423	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:28 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:49:18	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:29 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:49:18	pin=1084228448	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37424	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:30 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:49:19	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:31 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:49:19	pin=1084228448	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37425	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:32 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:58:52	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:33 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:58:52	pin=1088738406	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37426	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:34 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 18:58:54	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:36 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 18:58:54	pin=1088738406	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37427	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:37 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 19:03:51	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:38 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 19:03:51	pin=701271	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37428	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:39 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 19:03:52	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:40 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 19:03:52	pin=701271	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37429	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:41 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 19:05:47	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:42 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 19:05:47	pin=1080042014	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37430	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:43 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 19:07:22	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:45 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 19:07:21	pin=1005875224	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37431	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:46 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 19:07:28	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:47 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 19:07:28	pin=1005875224	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37432	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:48 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 19:07:48	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:49 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 19:07:48	pin=1081272059	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37433	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:50 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 19:07:49	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:52 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 19:07:49	pin=1081272059	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37434	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:53 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 19:08:07	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:54 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 19:08:07	pin=1128279375	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37435	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:55 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 19:08:09	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:56 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 19:08:08	pin=1128279375	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37436	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:08:57 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 19:08:10	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:08:58 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 19:08:10	pin=1128279375	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37437	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:00 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 19:11:32	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:01 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 19:11:32	pin=1080040799	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37438	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:02 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 19:11:33	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:03 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 19:11:33	pin=1080040799	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37439	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:04 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 19:13:28	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:05 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 19:13:28	pin=1087750028	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37440	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:06 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 19:13:29	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:07 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 19:13:29	pin=1087750028	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37441	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:10 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 19:13:30	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:11 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 19:13:30	pin=1087750028	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37442	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:12 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 19:16:19	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:13 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 19:16:19	pin=1061750467	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37443	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:14 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 19:23:34	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:15 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 19:23:34	pin=1087426206	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37444	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:16 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 19:23:35	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:17 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 19:23:35	pin=1087426206	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37445	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:19 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 19:39:58	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:20 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 19:39:58	pin=1085265244	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37446	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:21 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 19:51:09	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:22 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 19:51:09	pin=1138524134	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37447	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:23 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 19:51:10	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:24 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 19:51:10	pin=1138524134	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37448	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:25 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 19:56:10	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:27 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 19:56:10	pin=1006947773	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37449	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:28 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 19:56:11	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:29 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 19:56:11	pin=1006947773	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37450	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:30 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 19:56:20	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:31 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 19:56:20	pin=1085310603	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37451	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:32 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 19:56:22	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:33 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 19:56:22	pin=1085310603	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37452	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:34 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 20:04:49	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:36 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 20:04:49	pin=1004234941	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37453	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:37 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 20:05:15	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:38 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 20:05:15	pin=1005875224	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37454	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:39 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 20:11:34	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:40 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 20:11:34	pin=10888728523	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37455	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:41 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 20:42:49	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:42 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 20:42:48	pin=5217240	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37456	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:43 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 21:03:07	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:44 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 21:03:07	pin=1004234941	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37457	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:46 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 21:03:56	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:47 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 21:03:56	pin=1080040799	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37458	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:48 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 21:04:43	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:49 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 21:04:43	pin=1004234941	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37459	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:50 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 21:28:53	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:51 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 21:28:53	pin=1085346388	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37460	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:52 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 21:28:54	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:53 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 21:28:54	pin=1000459	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37461	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:55 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 21:29:13	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:56 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 21:29:12	pin=12990532	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37462	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:57 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 21:47:10	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:09:58 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 21:47:10	pin=1085346388	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37463	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:09:59 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 21:47:42	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:10:00 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 21:47:41	pin=1085346388	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37464	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:10:01 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 21:48:19	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:10:02 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 21:48:18	pin=1085346388	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37465	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:10:04 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 21:51:28	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:10:05 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 21:51:28	pin=1085346388	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37466	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:10:06 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:01:32	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:10:07 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:07 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:01:32	pin=1085346388	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37467	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:10:07 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:07 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:07 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:08 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:08 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:08 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:08 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:08 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:09 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:09 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:09 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:09 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:09 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:10 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:10 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:10 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:10 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:10 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:11 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:11 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:11 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:11 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:11 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:12 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:12 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:12 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:12 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:12 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:13 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:13 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:13 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:13 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:13 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:14 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:14 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:14 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:14 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:14 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:15 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:15 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:15 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:15 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:15 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:15 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:16 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:16 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:16 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:16 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:16 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:17 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:17 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:17 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:17 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:17 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:18 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:18 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:18 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:18 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:18 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:19 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:19 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:19 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:19 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:19 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:20 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:20 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:20 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:20 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:20 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:21 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:21 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:21 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:21 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:21 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:22 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:22 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:22 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:22 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:22 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:22 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:23 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:23 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:23 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:23 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:23 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:24 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:24 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:24 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:24 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:24 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:25 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:25 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:25 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:25 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:25 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:26 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:26 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:26 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:26 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:26 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:27 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:27 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:27 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:27 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:27 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:28 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:28 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:28 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:28 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:28 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:29 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:29 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:29 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:29 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:29 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:30 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:30 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:30 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:30 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:30 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:31 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:31 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:31 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:31 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:31 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:32 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:32 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:32 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:32 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:32 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:33 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:33 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:33 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:33 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:34 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:34 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:34 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:34 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:34 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:34 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:35 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:35 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:35 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:35 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:36 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:36 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:36 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:36 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:36 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:36 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:37 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:37 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:37 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:37 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:38 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:38 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:38 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:38 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:38 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:38 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:39 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:39 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:39 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:39 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:39 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:40 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:40 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:40 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:40 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:40 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:41 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:41 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:41 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:41 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:41 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:42 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:42 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:42 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:42 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:42 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:43 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:43 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:43 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:43 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:44 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:44 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:44 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:45 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:45 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:45 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:45 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:46 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:46 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:46 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:46 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:47 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:47 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:47 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:47 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:47 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:48 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:48 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:48 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:48 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:49 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:49 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:49 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:49 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:50 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:50 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:50 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:50 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:51 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:51 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:51 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:51 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:52 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:52 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:52 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:52 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:53 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:53 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:53 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:54 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:54 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:54 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:54 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:55 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:55 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:55 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:55 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:56 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:56 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:56 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:56 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:57 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:57 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:57 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:57 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:57 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:58 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:58 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:58 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:59 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:59 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:10:59 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:10:59 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:00 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:00 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:00 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:00 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:01 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:01 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:01 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:01 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:01 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:02 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:02 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:02 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:02 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:03 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:03 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:03 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:03 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:04 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:04 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:04 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:05 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:05 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:05 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:05 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:06 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:06 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:06 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:06 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:07 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:07 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:07 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:07 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:08 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:08 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:08 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:08 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:08 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:09 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:09 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:09 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:09 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:10 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:10 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:10 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:10 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:11 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:11 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:11 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:11 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:11 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:12 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:12 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:12 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:12 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:13 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:13 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:13 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:13 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:13 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:14 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:14 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:14 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:15 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:15 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:15 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:15 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:15 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:16 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:16 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:16 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:16 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:17 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:17 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:17 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:17 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:18 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:18 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:18 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:18 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:18 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:19 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:19 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:19 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:19 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:20 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:20 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:20 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:20 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:21 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:21 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:21 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:21 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:22 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:22 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:22 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:22 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:23 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:23 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:23 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:23 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:24 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:24 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:24 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:24 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:24 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:25 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:25 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:25 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:25 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:26 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:26 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:26 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:26 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:27 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:27 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:27 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:27 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:27 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:28 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:28 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:28 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:28 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:28 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:29 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:29 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:29 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:29 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:29 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:30 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:30 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:30 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:30 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:30 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:31 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:31 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:31 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:31 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:31 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:32 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:32 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:32 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:32 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:32 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:33 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:33 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:33 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:33 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:33 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:34 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:34 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:34 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:34 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:34 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:35 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:35 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:35 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:35 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:35 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:36 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:36 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:36 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:36 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:36 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:37 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:37 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:37 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:37 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:37 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:38 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:38 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:11:38 GETREQUEST >>> COMANDO: C:714051:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:11:38 DEVICECMD SN=NCK2243600079
+ID=714051&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:12:07 GETREQUEST >>> COMANDO: C:715251:DATA UPDATE user CardNo=	Pin=1004216912	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:12:07 DEVICECMD SN=NCK2243600079
+ID=715251&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:12:07 GETREQUEST >>> COMANDO: C:715252:DATA UPDATE biophoto PIN=1004216912	Type=9	Size=19455	Content=/9j/4AAQS... (quedan 1)
+2026-07-16 03:12:08 DEVICECMD SN=NCK2243600079
+ID=715252&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:12:08 GETREQUEST >>> COMANDO: C:715253:DATA UPDATE userauthorize Pin=1004216912	AuthorizeTimezoneId=1	Authoriz... (quedan 0)
+2026-07-16 03:12:08 DEVICECMD SN=NCK2243600079
+ID=715253&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:12:09 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=options
+~DeviceName=SpeedFace-V5L-RFID,MAC=00:17:61:12:70:b8,TransactionCount=0,~MaxAttLogCount=20,UserCount=190,~MaxUserCount=100,PhotoFunOn=1,~MaxUserPhotoCount=2500,FingerFunOn=0,FPVersion=10,~MaxFingerCount=60,FPCount=0,FaceFunOn=1,FaceVersion=39,~MaxFaceCount=6000,FaceCount=188,FvFunOn=0,FvVersion=3,~MaxFvCount=10,FvCount=0,PvFunOn=1,PvVersion=12,~MaxPvCount=3000,PvCount=0,Language=101,IPAddress=192.168.1.201,~Platform=ZAM180_TFT,~OEMVendor=ZKTECO CO., LTD.,FWVersion=ZAM180-NF50VA-Ver3.4.9,PushVersion=Ver 2.0.33S-20220623,RegDeviceType=,VisilightFun=1,IRTempDetectionFunOn=0,MaskDetectionFunOn=1,UserPicURLFunOn=1,VisualIntercomFunOn=1,VideoTID=,QRCodeDecryptFunList=,VideoProtocol=4,IsSupportQRcode=,QRCodeEnable=,SubcontractingUpgradeFunOn=1,RoomStatus=0,BioPhotoFun=1,BioDataFun=,~LockFunOn=15
+---
+2026-07-16 03:13:14 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:14:04	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:13:15 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:14:04	pin=12990532	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37468	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:13:16 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:14:06	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:13:17 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:14:05	pin=12990532	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37469	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:13:18 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:14:07	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:13:19 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:14:07	pin=12990532	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37470	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:14:01 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:14:52	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:14:02 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:14:52	pin=1004216911	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37471	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:14:03 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:14:53	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:14:04 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:14:53	pin=1004216911	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37472	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:14:05 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:14:54	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:14:07 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:14:54	pin=1004216911	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37473	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:14:08 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:14:55	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:14:09 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:14:54	pin=1004216912	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37474	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:14:42 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:15:33	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:14:43 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:15:33	pin=1004216912	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37475	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:14:44 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:15:34	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:14:45 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:15:34	pin=1004216912	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37476	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:20:26 GETREQUEST >>> COMANDO: C:720251:DATA UPDATE user CardNo=	Pin=1085346399	Password=	Group=1	StartTime=0	E... (quedan 2)
+2026-07-16 03:20:26 DEVICECMD SN=NCK2243600079
+ID=720251&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:20:26 GETREQUEST >>> COMANDO: C:720252:DATA UPDATE biophoto PIN=1085346399	Type=9	Size=18728	Content=/9j/4AAQS... (quedan 1)
+2026-07-16 03:20:27 DEVICECMD SN=NCK2243600079
+ID=720252&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:20:27 GETREQUEST >>> COMANDO: C:720253:DATA UPDATE userauthorize Pin=1085346399	AuthorizeTimezoneId=1	Authoriz... (quedan 0)
+2026-07-16 03:20:27 DEVICECMD SN=NCK2243600079
+ID=720253&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:20:29 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=options
+~DeviceName=SpeedFace-V5L-RFID,MAC=00:17:61:12:70:b8,TransactionCount=0,~MaxAttLogCount=20,UserCount=191,~MaxUserCount=100,PhotoFunOn=1,~MaxUserPhotoCount=2500,FingerFunOn=0,FPVersion=10,~MaxFingerCount=60,FPCount=0,FaceFunOn=1,FaceVersion=39,~MaxFaceCount=6000,FaceCount=186,FvFunOn=0,FvVersion=3,~MaxFvCount=10,FvCount=0,PvFunOn=1,PvVersion=12,~MaxPvCount=3000,PvCount=0,Language=101,IPAddress=192.168.1.201,~Platform=ZAM180_TFT,~OEMVendor=ZKTECO CO., LTD.,FWVersion=ZAM180-NF50VA-Ver3.4.9,PushVersion=Ver 2.0.33S-20220623,RegDeviceType=,VisilightFun=1,IRTempDetectionFunOn=0,MaskDetectionFunOn=1,UserPicURLFunOn=1,VisualIntercomFunOn=1,VideoTID=,QRCodeDecryptFunList=,VideoProtocol=4,IsSupportQRcode=,QRCodeEnable=,SubcontractingUpgradeFunOn=1,RoomStatus=0,BioPhotoFun=1,BioDataFun=,~LockFunOn=15
+---
+2026-07-16 03:21:38 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:22:29	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:21:39 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:22:29	pin=1004216912	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37477	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:25:02 GETREQUEST >>> COMANDO: C:723019:DATA UPDATE user CardNo=	Pin=1085346399	Password=	Group=1	StartTime=202... (quedan 0)
+2026-07-16 03:25:02 DEVICECMD SN=NCK2243600079
+ID=723019&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:28:28 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:29:18	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:28:29 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:29:18	pin=1000459	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37478	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:28:30 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:29:19	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:28:31 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:29:19	pin=1000459	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37479	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:28:32 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:29:21	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:28:34 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:29:21	pin=1000459	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37480	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:28:38 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:29:29	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:28:39 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:29:29	pin=1000459	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37481	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:28:40 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:29:30	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:28:41 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:29:30	pin=1000459	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37482	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:28:42 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:29:31	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:28:43 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:29:31	pin=1000459	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37483	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:28:45 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:29:32	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:28:46 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:29:32	pin=1085346399	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37484	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:28:47 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:29:32	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:28:48 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:29:32	pin=1000459	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37485	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:28:49 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:29:35	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:28:51 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:29:35	pin=1000459	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37486	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:28:52 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:29:37	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:28:53 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:29:36	pin=1000459	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37487	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:28:54 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:29:40	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:28:55 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:29:39	pin=1085346399	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37488	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:28:57 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:29:40	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:28:58 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:29:40	pin=1000459	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37489	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:28:59 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:29:41	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:29:00 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:29:41	pin=1085346399	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37490	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:29:01 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:29:42	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:29:02 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:29:42	pin=1000459	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37491	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:29:03 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:29:44	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:29:05 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:29:44	pin=1085346399	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37492	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:29:06 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:29:44	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:29:07 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:29:44	pin=1000459	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37493	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:29:08 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:29:45	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:29:09 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:29:45	pin=1085346399	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37494	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:29:10 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:29:46	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:29:11 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:29:46	pin=1000459	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37495	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:29:13 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:29:46	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:29:14 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:29:46	pin=1085346399	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37496	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:29:15 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:29:47	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:29:16 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:29:47	pin=1000459	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37497	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:29:17 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:29:48	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:29:19 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:29:48	pin=1000459	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37498	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:29:20 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:29:49	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:29:21 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:29:49	pin=1000459	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37499	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:29:25 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:30:16	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:29:26 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:30:16	pin=1000459	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37500	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:29:27 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:30:17	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:29:29 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:30:17	pin=1000459	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37501	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:29:31 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:30:22	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:29:32 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:30:22	pin=1004216912	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37502	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:33:57 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:34:47	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:33:58 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:34:47	pin=1004216912	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37503	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:34:35 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:35:26	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:34:36 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:35:26	pin=1085346399	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37504	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:34:37 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:35:27	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:34:38 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:35:27	pin=1085346399	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37505	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:34:40 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:35:28	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:34:41 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:35:28	pin=1085346399	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37506	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:34:42 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:35:29	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:34:43 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:35:29	pin=1085346399	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37507	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:35:46 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:36:38	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:35:48 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:36:38	pin=1085346399	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37508	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:35:49 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:36:39	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:35:50 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:36:39	pin=1085346399	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37509	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:37:32 GETREQUEST >>> COMANDO: C:730498:DATA UPDATE userauthorize Pin=1085346399	AuthorizeTimezoneId=0	Authoriz... (quedan 0)
+2026-07-16 03:37:32 DEVICECMD SN=NCK2243600079
+ID=730498&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:37:35 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:38:26	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:37:36 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:38:26	pin=1085346399	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37510	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:40:20 GETREQUEST >>> COMANDO: C:732166:DATA DELETE userauthorize Pin=1085346399... (quedan 0)
+2026-07-16 03:40:20 DEVICECMD SN=NCK2243600079
+ID=732166&Return=0&CMD=DATA DELETE
+
+---
+2026-07-16 03:40:27 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:41:18	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:40:28 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:41:18	pin=1085346399	cardno=0	eventaddr=1	event=23	inoutstatus=0	verifytype=15	index=37511	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:40:29 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:41:19	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:40:30 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:41:19	pin=1085346399	cardno=0	eventaddr=1	event=23	inoutstatus=0	verifytype=15	index=37512	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:40:32 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:41:20	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:40:33 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:41:20	pin=1085346399	cardno=0	eventaddr=1	event=23	inoutstatus=0	verifytype=15	index=37513	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:40:34 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:41:22	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:40:35 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:41:21	pin=1085346399	cardno=0	eventaddr=1	event=23	inoutstatus=0	verifytype=15	index=37514	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:40:36 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:41:23	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:40:37 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:41:23	pin=1085346399	cardno=0	eventaddr=1	event=23	inoutstatus=0	verifytype=15	index=37515	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:40:39 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:41:24	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:40:40 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:41:24	pin=1085346399	cardno=0	eventaddr=1	event=23	inoutstatus=0	verifytype=15	index=37516	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:42:20 GETREQUEST >>> COMANDO: C:733377:DATA DELETE userauthorize Pin=1085346399... (quedan 1)
+2026-07-16 03:42:20 DEVICECMD SN=NCK2243600079
+ID=733377&Return=0&CMD=DATA DELETE
+
+---
+2026-07-16 03:42:20 GETREQUEST >>> COMANDO: C:733377:DATA UPDATE userauthorize Pin=1004216912	AuthorizeTimezoneId=1	Authoriz... (quedan 0)
+2026-07-16 03:42:20 DEVICECMD SN=NCK2243600079
+ID=733377&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:42:26 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:43:18	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:42:27 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:43:17	pin=1004216912	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37517	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:43:40 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:44:31	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:43:41 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:44:31	pin=1085346399	cardno=0	eventaddr=1	event=23	inoutstatus=0	verifytype=15	index=37518	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:43:42 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:44:32	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:43:43 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:44:32	pin=1085346399	cardno=0	eventaddr=1	event=23	inoutstatus=0	verifytype=15	index=37519	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:46:14 GETREQUEST >>> COMANDO: C:735717:DATA UPDATE userauthorize Pin=1085346399	AuthorizeTimezoneId=1	Authoriz... (quedan 0)
+2026-07-16 03:46:14 DEVICECMD SN=NCK2243600079
+ID=735717&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:47:02 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:47:53	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:47:04 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:47:53	pin=1085346399	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37520	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:50:53 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:51:43	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:50:54 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:51:43	pin=1085346399	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37521	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:50:55 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:51:44	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:50:56 GETREQUEST >>> COMANDO: C:738547:DATA DELETE userauthorize Pin=1085346399... (quedan 0)
+2026-07-16 03:50:56 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:51:44	pin=1085346399	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37522	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:50:56 DEVICECMD SN=NCK2243600079
+ID=738547&Return=0&CMD=DATA DELETE
+
+---
+2026-07-16 03:51:53 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:52:44	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:51:54 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:52:44	pin=1085346399	cardno=0	eventaddr=1	event=23	inoutstatus=0	verifytype=15	index=37523	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:51:55 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:52:45	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:51:56 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:52:45	pin=1085346399	cardno=0	eventaddr=1	event=23	inoutstatus=0	verifytype=15	index=37524	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:52:37 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 22:53:28	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 03:52:38 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 22:53:28	pin=1085346399	cardno=0	eventaddr=1	event=23	inoutstatus=0	verifytype=15	index=37525	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 03:56:32 GETREQUEST >>> COMANDO: C:741887:DATA UPDATE userauthorize Pin=1004216912	AuthorizeTimezoneId=1	Authoriz... (quedan 1)
+2026-07-16 03:56:32 DEVICECMD SN=NCK2243600079
+ID=741887&Return=0&CMD=DATA UPDATE
+
+---
+2026-07-16 03:56:32 GETREQUEST >>> COMANDO: C:741887:DATA DELETE userauthorize Pin=1085346399... (quedan 0)
+2026-07-16 03:56:32 DEVICECMD SN=NCK2243600079
+ID=741887&Return=0&CMD=DATA DELETE
+
+---
+2026-07-16 04:13:18 CDATA-GET SN=NCK2243600079 QS=SN=NCK2243600079&options=all&pushver=3.1.2&DeviceType=acc&PushOptionsFlag=1
+2026-07-16 04:13:18 REGISTRY SN=NCK2243600079
+DeviceType=acc,~DeviceName=SpeedFace-V5L-RFID,FirmVer=ZAM180-NF50VA-Ver3.4.9,PushVersion=Ver 2.0.33S-20220623,CommType=ethernet,MaxPackageSize=2048000,LockCount=1,ReaderCount=2,AuxInCount=1,AuxOutCount=0,MachineType=101,~IsOnlyRFMachine=0,~MaxUserCount=100,~MaxAttLogCount=20,~MaxUserFingerCount=10,MThreshold=35,IPAddress=192.168.1.201,GATEIPAddress=192.168.1.254,NetMask=255.255.255.0,~ZKFPVersion=10,IclockSvrFun=1,OverallAntiFunOn=0,~REXInputFunOn=0,~CardFormatFunOn=0,~SupAuthrizeFunOn=0,~ReaderCFGFunOn=0,~ReaderLinkageFunOn=0,~RelayStateFunOn=1,~Ext485ReaderFunOn=0,~TimeAPBFunOn=0,~CtlAllRelayFunOn=0,~LossCardFunOn=0,SimpleEventType=1,VerifyStyles=9d88060e,EventTypes=FF0FF03DBA26018033060000F00000000000000000000000007703F007860100,NewNormalEventTypes=,NewErrorEventTypes=,NewWarningEventTypes=,DisableUserFunOn=0,DeleteAndFunOn=0,LogIDFunOn=1,DateFmtFunOn=0,DelAllLossCardFunOn=0,AutoClearDay=0,FirstDelayDay=0,DelayDay=0,StopAllVerify=0,FvFunOn=0,FaceFunOn=1,FingerFunOn=0,CameraOpen=1,SubcontractingUpgradeFunOn=1,UserPicURLFunOn=1,VMSUserName=admin,VMSPasswd=zktecoKSDJ,~SerialNumber=NCK2243600079,IsSupportNFC=0,~MaxFingerCount=60,AccSupportFunList=001000001010100000000000100000000010001110100000000000000000000000000000000000000000000000000000,~DSTF=1,Reader1IOState=1,MultiCardInterTimeFunOn=1,MachineTZFunOn=1,BioPhotoFun=1,VisilightFun=1,~MaxFvCount=10,~MaxBioPhotoCount=6000,AutoServerFunOn=1,MultiBioDataSupport=0:0:0:0:0:0:0:0:1:1,MultiBioPhotoSupport=0:0:0:0:0:0:0:0:0:1,MultiBioVersion=0:0:0:0:0:0:0:0:12.0:39.3,MaxMultiBioPhotoCount=0:0:0:0:0:0:0:0:0:6000,MaxMultiBioDataCount=0:0:0:0:0:0:0:0:3000:6000,IRTempDetectionFunOn=0,MaskDetectionFunOn=1,VisualIntercomFunOn=1,VideoProtocol=4
+---
+2026-07-16 04:13:18 PUSH SN=NCK2243600079 METHOD=POST
+
+---
+2026-07-16 04:13:18 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=options
+~DeviceName=SpeedFace-V5L-RFID,MAC=00:17:61:12:70:b8,TransactionCount=0,~MaxAttLogCount=20,UserCount=190,~MaxUserCount=100,PhotoFunOn=1,~MaxUserPhotoCount=2500,FingerFunOn=0,FPVersion=10,~MaxFingerCount=60,FPCount=0,FaceFunOn=1,FaceVersion=39,~MaxFaceCount=6000,FaceCount=185,FvFunOn=0,FvVersion=3,~MaxFvCount=10,FvCount=0,PvFunOn=1,PvVersion=12,~MaxPvCount=3000,PvCount=0,Language=101,IPAddress=192.168.1.201,~Platform=ZAM180_TFT,~OEMVendor=ZKTECO CO., LTD.,FWVersion=ZAM180-NF50VA-Ver3.4.9,PushVersion=Ver 2.0.33S-20220623,RegDeviceType=,VisilightFun=1,IRTempDetectionFunOn=0,MaskDetectionFunOn=1,UserPicURLFunOn=1,VisualIntercomFunOn=1,VideoTID=,QRCodeDecryptFunList=,VideoProtocol=4,IsSupportQRcode=,QRCodeEnable=,SubcontractingUpgradeFunOn=1,RoomStatus=0
+---
+2026-07-16 04:13:19 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 23:05:42	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 04:13:21 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 23:05:42	pin=1004216912	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37528	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 04:13:22 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 23:05:43	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 04:13:23 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 23:05:43	pin=1004216912	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37529	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 04:13:24 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 23:05:44	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 04:13:25 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 23:05:44	pin=1004216912	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37530	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 04:13:26 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 23:05:45	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 04:13:27 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 23:05:45	pin=1004216912	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37531	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 04:13:28 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 23:06:09	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 04:13:30 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 23:06:09	pin=1004216912	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37532	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 04:13:31 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 23:07:10	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 04:13:32 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 23:07:09	pin=1004216912	cardno=0	eventaddr=1	event=3	inoutstatus=0	verifytype=15	index=37533	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 04:13:33 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtstate
+time=2026-07-15 23:08:26	sensor=02	relay=00	alarm=0100000000000000	door=01
+
+---
+2026-07-16 04:13:34 CDATA-POST SN=NCK2243600079 QS=SN=NCK2243600079&table=rtlog
+time=2026-07-15 23:08:26	pin=1085346399	cardno=0	eventaddr=1	event=23	inoutstatus=0	verifytype=15	index=37534	sitecode=0	linkid=0	maskflag=255	temperature=255	convtemperature=255
+
+---
+2026-07-16 23:39:32 GETREQUEST >>> COMANDO: C:605267:DATA UPDATE userauthorize Pin=1004216912	AuthorizeTimezoneId=1	Authoriz... (quedan 2)

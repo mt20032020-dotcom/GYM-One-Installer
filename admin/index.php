@@ -237,7 +237,7 @@ $conn->close();
 
         .brand-side {
             flex: 1;
-            background: linear-gradient(135deg, #0950dc 0%, #096ed2 50%, #0960dc 100%);
+            background: linear-gradient(135deg, #0b0b0d 0%, #141418 55%, #2b0b0d 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -264,7 +264,7 @@ $conn->close();
             position: absolute;
             width: 400px;
             height: 400px;
-            background: radial-gradient(circle, rgba(78, 205, 196, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(227, 30, 36, 0.1) 0%, transparent 70%);
             border-radius: 50%;
             bottom: -50px;
             left: -50px;
@@ -342,7 +342,7 @@ $conn->close();
         }
 
         .feature-item:hover {
-            background: rgba(9, 110, 210, 0.08);
+            background: rgba(227, 30, 36, 0.08);
             transform: translateY(-3px);
         }
 
@@ -400,7 +400,7 @@ $conn->close();
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: linear-gradient(135deg, #0950dc 0%, #096ed2 100%);
+            background: linear-gradient(135deg, #e31e24 0%, #b3151a 100%);
             color: #fff;
             padding: 8px 20px;
             border-radius: 50px;
@@ -473,9 +473,9 @@ $conn->close();
 
         .form-control:focus {
             outline: none;
-            border-color: #096ed2;
+            border-color: #b3151a;
             background: #fff;
-            box-shadow: 0 0 0 4px rgba(9, 110, 210, 0.1);
+            box-shadow: 0 0 0 4px rgba(227, 30, 36, 0.1);
         }
 
         .form-control::placeholder {
@@ -485,7 +485,7 @@ $conn->close();
         .btn-login {
             width: 100%;
             padding: 16px;
-            background: linear-gradient(135deg, #0950dc 0%, #096ed2 100%);
+            background: linear-gradient(135deg, #e31e24 0%, #b3151a 100%);
             color: #fff;
             border: none;
             border-radius: 12px;
@@ -496,12 +496,12 @@ $conn->close();
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-top: 10px;
-            box-shadow: 0 4px 15px rgba(9, 110, 210, 0.3);
+            box-shadow: 0 4px 15px rgba(227, 30, 36, 0.3);
         }
 
         .btn-login:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(9, 110, 210, 0.4);
+            box-shadow: 0 8px 25px rgba(227, 30, 36, 0.4);
         }
 
         .btn-login:active {
@@ -547,7 +547,7 @@ $conn->close();
             padding: 20px;
             background: #f1f5f9;
             border-radius: 12px;
-            border-left: 4px solid #096ed2;
+            border-left: 4px solid #b3151a;
         }
 
         .security-note h5 {

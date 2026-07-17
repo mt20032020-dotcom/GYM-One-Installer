@@ -1,0 +1,1 @@
+docker build /etc/easypanel/projects/gym/gymone-installer/code/ -f /etc/easypanel/projects/gym/gymone-installer/code/.nixpacks/Dockerfile -t easypanel/gym/gymone-installer --build-arg GIT_SHA=2dae2e9075c68eafc42f53a982ab32b54769c287 --build-arg NIXPACKS_METADATA=php --build-arg PORT=80 --label keep=true

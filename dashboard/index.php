@@ -219,7 +219,7 @@ use Endroid\QrCode\Logo\Logo;
 use Endroid\QrCode\Label\Font\NotoSans;
 
 $filename = __DIR__ . "/../assets/img/logincard/{$userid}.png";
-$logoPath = 'https://gymoneglobal.com/assets/img/logo.png';
+$logoPath = __DIR__ . '/../assets/img/brand/qr_logo.png';
 
 if (!file_exists($filename)) {
     try {
@@ -231,7 +231,7 @@ if (!file_exists($filename)) {
             ->size(300)
             ->margin(5)
             ->logoPath($logoPath)
-            ->logoResizeToWidth(100)
+            ->logoResizeToWidth(70)
             ->labelText($firstname . ' ' . $lastname)
             ->labelFont(new NotoSans(20))
             ->labelAlignment(new LabelAlignmentCenter())
