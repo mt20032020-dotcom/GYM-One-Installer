@@ -10,3 +10,4 @@ admin/shop/gateway/PAYPALCHECK.php
 /\!\!\!SHOWCASE
 .log_FIX
 vendor/
+uploads/
