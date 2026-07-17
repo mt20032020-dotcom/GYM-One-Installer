@@ -537,10 +537,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['userid'])) {
                 </div>
                 <div class="mb-3">
                   <div class="form-group">
-                    <label for="email"><?php echo $translations["email"]; ?></label>
+                    <label for="cedula">Cédula</label>
                     <input type="text" class="form-control" id="cedula" name="cedula" value="<?php echo htmlspecialchars($cedula, ENT_QUOTES, 'UTF-8'); ?>" placeholder="Cédula">
                     <br>
+                    <label for="celular">Celular</label>
+                    <br>
                     <input type="tel" class="form-control" id="celular" name="celular" value="<?php echo htmlspecialchars($celular, ENT_QUOTES, 'UTF-8'); ?>" placeholder="Celular">
+                    <br>
+                    <label for="email"><?php echo $translations["email"]; ?></label>
                     <br>
                     <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($email, ENT_QUOTES, 'UTF-8'); ?>"
                       required>
