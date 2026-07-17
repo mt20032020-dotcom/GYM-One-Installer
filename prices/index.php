@@ -218,7 +218,7 @@ $result = $conn->query($sql);
                 echo "<div class='price-amount'>$precio <small>COP</small></div>";
                 echo "<p class='price-meta mt-3'><i class='bi bi-calendar-check'></i>$vigencia</p>";
                 echo "<p class='price-meta'><i class='bi bi-lightning-charge-fill'></i>$occasions</p>";
-                echo "<div class='price-cta'><a href='../register/' class='btn btn-adr'>Inscribete</a></div>";
+                echo "<div class='price-cta'><a href='../checkout/?ticket=" . $row['id'] . "' class='btn btn-adr'>Inscribete</a></div>";
                 echo "</div>";
                 echo "</div>";
                 echo "</div>";
