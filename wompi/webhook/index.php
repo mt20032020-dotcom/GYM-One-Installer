@@ -93,7 +93,18 @@ $occasions = $ticket['occasions'];
 
 // Asignar plan
 $ticketname = $ticket["name"];
-$plan_result = add_plan($db, $userid, $ticketname, $expire_days, $occasions, null);
+// Extraer fecha de inicio de la referencia (5to segmento: YYYYMMDD o T)
+$custom_start = null;
+if (isset($parts[4]) && $parts[4] !== "T" && strlen($parts[4]) === 8) {
+    $custom_start = substr($parts[4], 0, 4) . "-" . substr($parts[4], 4, 2) . "-" . substr($parts[4], 6, 2);
+}
+$plan_result = add_plan($db, $userid, $ticketname, $expire_days, $occasions, $custom_start);
+
+// Enrolar en SpeedFace si tiene foto y el plan quedo activo
+if ($plan_result && $plan_result["type"] === "active" && file_exists("/app/assets/img/profiles/{$userid}.png")) {
+    require_once "/app/iclock/lib/enroll.php";
+    @enrolar_en_speedface($userid);
+}
 
 // Log
 $db->query("INSERT INTO logs (userid, action, actioncolor, time) VALUES ($userid, 'Plan asignado via Wompi: {$ticket['name']}', 'success', NOW())");

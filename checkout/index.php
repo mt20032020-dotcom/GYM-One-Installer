@@ -47,6 +47,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && ($_POST["action"] ?? "") === "regis
             $confirmed = "Yes";
             $stmt_ins->bind_param("issssssssss", $new_userid, $ced, $fn, $ln, $em, $hashed, $gender, $birth, $cel, $now, $confirmed);
             if ($stmt_ins->execute()) {
+                // Guardar foto de perfil para reconocimiento facial
+                if (!empty($_POST["face_photo"]) && strpos($_POST["face_photo"], "data:image") === 0) {
+                    $img_data = explode(",", $_POST["face_photo"], 2);
+                    if (count($img_data) === 2) {
+                        $binary = base64_decode($img_data[1]);
+                        if ($binary !== false) {
+                            @mkdir("/app/assets/img/profiles", 0777, true);
+                            @file_put_contents("/app/assets/img/profiles/" . $new_userid . ".png", $binary);
+                        }
+                    }
+                }
+                // Guardar fecha de inicio elegida en sesion para el checkout
+                $_SESSION["checkout_start_option"] = $_POST["start_option"] ?? "today";
+                $_SESSION["checkout_custom_start"] = $_POST["custom_start_date"] ?? null;
                 $_SESSION["userid"] = $new_userid;
                 header("Location: /checkout/?ticket=" . $tid);
                 exit();
@@ -106,7 +120,8 @@ $wompi_pub = $env['WOMPI_PUBLIC_KEY'];
 $integrity_secret = $env['WOMPI_INTEGRITY_SECRET'];
 
 // Generar referencia única
-$reference = 'GYM-' . $ticket_id . '-' . time() . '-' . rand(100, 999);
+$start_pref = ($_SESSION["checkout_start_option"] ?? "today") === "custom" && !empty($_SESSION["checkout_custom_start"]) ? str_replace("-", "", $_SESSION["checkout_custom_start"]) : "T";
+$reference = 'GYM-' . $ticket_id . '-' . time() . '-' . rand(100, 999) . '-' . $start_pref;
 $amount_cents = intval($ticket['price'] * 100);
 $currency = 'COP';
 
@@ -222,6 +237,37 @@ $redirect_url = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER
                 <input type="date" name="birthdate" class="form-control" required style="font-size:0.9em;">
             </div>
             <div style="margin-bottom:10px;font-size:0.85em;">
+            <div style="margin-bottom:8px;">
+                <label style="font-size:0.85em;color:#555;margin-bottom:3px;">Fecha de inicio del plan</label>
+                <div style="font-size:0.85em;">
+                    <label style="font-weight:normal;cursor:pointer;margin-right:14px;"><input type="radio" name="start_option" value="today" checked onchange="document.getElementById('customStartCk').style.display='none';"> Inicia hoy</label>
+                    <label style="font-weight:normal;cursor:pointer;"><input type="radio" name="start_option" value="custom" onchange="document.getElementById('customStartCk').style.display='block';"> Elegir fecha</label>
+                </div>
+                <div id="customStartCk" style="display:none;margin-top:6px;">
+                    <input type="date" name="custom_start_date" class="form-control" min="<?php echo date('Y-m-d'); ?>" style="font-size:0.9em;">
+                </div>
+            </div>
+            <div style="margin-bottom:10px;">
+                <label style="font-size:0.85em;color:#555;margin-bottom:3px;">Foto para reconocimiento facial</label>
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <button type="button" id="btnTomarFoto" class="btn btn-default btn-sm" onclick="abrirCamara()" style="font-size:0.85em;">
+                        <i class="bi bi-camera"></i> Tomar foto
+                    </button>
+                    <span id="fotoStatus" style="font-size:0.8em;color:#999;">Sin foto</span>
+                </div>
+                <small style="color:#888;font-size:0.75em;display:block;margin-top:3px;">
+                    <i class="bi bi-info-circle"></i> Esta foto se usa para que puedas ingresar al gimnasio con reconocimiento facial.
+                </small>
+                <input type="hidden" name="face_photo" id="facePhotoInput">
+                <div id="camaraModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:9999;justify-content:center;align-items:center;flex-direction:column;">
+                    <video id="camVideo" autoplay playsinline style="max-width:90%;max-height:60vh;border-radius:12px;"></video>
+                    <canvas id="camCanvas" style="display:none;"></canvas>
+                    <div style="margin-top:16px;display:flex;gap:12px;">
+                        <button type="button" class="btn btn-danger" onclick="capturarFoto()" style="padding:10px 24px;"><i class="bi bi-camera-fill"></i> Capturar</button>
+                        <button type="button" class="btn btn-default" onclick="cerrarCamara()">Cancelar</button>
+                    </div>
+                </div>
+            </div>
                 <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;">
                     <input type="checkbox" name="accept_policies" required style="margin-top:3px;">
                     <span>Acepto las <a href="/policies/" target="_blank">políticas y términos</a> de Adrenaline Gym</span>
@@ -234,6 +280,7 @@ $redirect_url = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER
     </div>
     <?php endif; ?>
 
+    <?php if ($user): ?>
     <div class="divider"></div>
     <p class="text-muted text-center"><small>Pago seguro procesado por Wompi</small></p>
 
@@ -253,6 +300,63 @@ $redirect_url = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER
             <?php endif; ?>
         ></script>
     </form>
+    <?php else: ?>
+    <div style="text-align:center;padding:14px;background:#fef2f2;border:1px solid #fecaca;border-radius:10px;color:#991b1b;font-size:0.9em;">
+        <i class="bi bi-lock"></i> Completa tu registro o inicia sesión para continuar al pago
+    </div>
+    <?php endif; ?>
 </div>
+<script>
+let camStream = null;
+
+function abrirCamara() {
+    const modal = document.getElementById("camaraModal");
+    modal.style.display = "flex";
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
+        .then(function(stream) {
+            camStream = stream;
+            document.getElementById("camVideo").srcObject = stream;
+        })
+        .catch(function(err) {
+            alert("No se pudo acceder a la cámara: " + err.message);
+            modal.style.display = "none";
+        });
+}
+
+function capturarFoto() {
+    const video = document.getElementById("camVideo");
+    const canvas = document.getElementById("camCanvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext("2d").drawImage(video, 0, 0);
+    const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+    document.getElementById("facePhotoInput").value = dataUrl;
+    document.getElementById("fotoStatus").innerHTML = "<span style=\"color:#16a34a;\"><i class=\"bi bi-check-circle\"></i> Foto capturada</span>";
+    cerrarCamara();
+}
+
+function cerrarCamara() {
+    if (camStream) {
+        camStream.getTracks().forEach(t => t.stop());
+        camStream = null;
+    }
+    document.getElementById("camaraModal").style.display = "none";
+}
+
+// Validar foto antes de enviar el registro
+document.addEventListener("DOMContentLoaded", function() {
+    const forms = document.querySelectorAll("form[method=POST]");
+    forms.forEach(function(f) {
+        if (f.querySelector("input[name=action][value=register]")) {
+            f.addEventListener("submit", function(e) {
+                if (!document.getElementById("facePhotoInput").value) {
+                    e.preventDefault();
+                    alert("Por favor toma tu foto para el reconocimiento facial antes de continuar.");
+                }
+            });
+        }
+    });
+});
+</script>
 </body>
 </html>
