@@ -358,7 +358,7 @@ EOD;
       $isRegistrationSuccessful = true;
 
       $result = 1;
-      if ($isRegistrationSuccessful && !empty($smtp_username) && $mailer) {
+      if ($isRegistrationSuccessful && !empty($smtp_username)) {
         try {
           $result = send_mail($env_data ?? [], $recipientEmail, $subject, $successEmailContent, $business_name ?? '');
         } catch (\Exception $e) { /* correo de cortesia: no bloquea el registro */ }

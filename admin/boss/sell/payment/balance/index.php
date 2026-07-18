@@ -482,7 +482,7 @@ EOD;
         $recipientEmail = $email;
         $subject = $translations["payemailsubject"];
 
-        try { if (!empty($smtp_username) && $mailer) {
+        try { if (!empty($smtp_username)) {
         $result = send_mail($env_data ?? [], $recipientEmail, $subject, $emailHtml, $business_name ?? ''); }
         } catch (\Exception $e) { /* correo de cortesia: si falla, la venta no se afecta */ }
         header("Location: ../../../../dashboard");
