@@ -415,6 +415,7 @@ if ($validTicketFound && !empty($buydate) && !empty($expiredate)) {
                             <?php echo $translations["profilepage"]; ?></a></li>
                     <li><a href="invoices/"><i class="bi bi-receipt"></i>
                             <?php echo $translations["invoicepage"]; ?></a></li>
+                    <li><a href="beneficiarios/"><i class="bi bi-people"></i> Beneficiarios</a></li>
                 </ul>
             </div>
         </div>
@@ -444,6 +445,11 @@ if ($validTicketFound && !empty($buydate) && !empty($expiredate)) {
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="invoices/">
                             <i class="bi bi-receipt"></i> <?php echo $translations["invoicepage"]; ?>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="beneficiarios/">
+                            <i class="bi bi-people"></i> Beneficiarios
                         </a>
                     </li>
                 </ul><br>
