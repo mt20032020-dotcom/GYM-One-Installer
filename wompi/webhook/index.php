@@ -109,5 +109,38 @@ if ($plan_result && $plan_result["type"] === "active" && file_exists("/app/asset
 // Log
 $db->query("INSERT INTO logs (userid, action, actioncolor, time) VALUES ($userid, 'Plan asignado via Wompi: {$ticket['name']}', 'success', NOW())");
 
+// Correo de confirmacion al cliente
+$stmtM = $db->prepare("SELECT firstname FROM users WHERE userid = ?");
+$stmtM->bind_param("i", $userid);
+$stmtM->execute();
+$uM = $stmtM->get_result()->fetch_assoc();
+if ($uM && !empty($email) && strpos($email, "@") !== false) {
+    if (!empty($env["MAIL_HOST"])) {
+        require_once "/app/includes/mailer.php";
+        require_once "/app/includes/email_templates.php";
+        $monto = number_format($transaction["amount_in_cents"] / 100, 0, ",", ".");
+        $filasM = [
+            "Plan" => htmlspecialchars($ticket["name"]),
+            "Valor pagado" => "$" . $monto . " COP",
+            "Referencia" => htmlspecialchars($reference),
+        ];
+        if ($plan_result && $plan_result["type"] === "active") {
+            $filasM["Inicia"] = date("d/m/Y", strtotime($plan_result["start_date"]));
+            $filasM["Vence"] = date("d/m/Y", strtotime($plan_result["end_date"]));
+            $subM = "Tu pago fue confirmado y tu plan ya está activo. ¡Nos vemos en el gym!";
+        } else {
+            $filasM["Inicia aprox."] = $plan_result && $plan_result["start_date"] ? date("d/m/Y", strtotime($plan_result["start_date"])) : "Al vencer tu plan actual";
+            $subM = "Tu pago fue confirmado. Como ya tienes un plan activo, este quedó en cola y se activará automáticamente.";
+        }
+        $bodyM = adrenaline_email(
+            "✓ PAGO EXITOSO",
+            "¡Gracias, " . htmlspecialchars($uM["firstname"]) . "!",
+            $subM,
+            $filasM
+        );
+        @send_mail($env, $email, "Pago confirmado — Adrenaline Gym", $bodyM, $env["BUSINESS_NAME"] ?? "Adrenaline Gym", true);
+    }
+}
+
 http_response_code(200);
 echo 'OK';

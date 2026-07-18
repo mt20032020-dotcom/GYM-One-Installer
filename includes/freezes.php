@@ -94,6 +94,33 @@ function freeze_plan($db, $userid, $freeze_start, $freeze_end, $reason, $has_med
     // Log
     $db->query("INSERT INTO logs (userid, action, actioncolor, time) VALUES ($userid, 'Plan congelado del $freeze_start al $freeze_end ($days dias). Nuevo vencimiento: $new_expire', 'warning', NOW())");
     
+    // Enviar correo al cliente
+    $stmtM = $db->prepare("SELECT firstname, email FROM users WHERE userid = ?");
+    $stmtM->bind_param("i", $userid);
+    $stmtM->execute();
+    $uM = $stmtM->get_result()->fetch_assoc();
+    if ($uM && !empty($uM["email"]) && strpos($uM["email"], "@") !== false) {
+        $envM = [];
+        foreach (file("/app/.env") as $lM) { if (strpos($lM, "=") !== false) { [$kM, $vM] = explode("=", trim($lM), 2); $envM[$kM] = $vM; } }
+        if (!empty($envM["MAIL_HOST"])) {
+            require_once "/app/includes/mailer.php";
+            require_once "/app/includes/email_templates.php";
+            $bodyM = adrenaline_email(
+                "❄ PLAN CONGELADO",
+                "Hola, " . htmlspecialchars($uM["firstname"]) . "!",
+                "Tu plan ha sido congelado. Durante este periodo no podrás ingresar al gimnasio, pero no pierdes ni un día: tu vencimiento se extendió automáticamente.",
+                [
+                    "Congelado desde" => date("d/m/Y", strtotime($freeze_start)),
+                    "Congelado hasta" => date("d/m/Y", strtotime($freeze_end)),
+                    "Días congelados" => $days,
+                    "Motivo" => htmlspecialchars($reason),
+                    "Nuevo vencimiento" => date("d/m/Y", strtotime($new_expire)),
+                ]
+            );
+            @send_mail($envM, $uM["email"], "Tu plan fue congelado — Adrenaline Gym", $bodyM, $envM["BUSINESS_NAME"] ?? "Adrenaline Gym", true);
+        }
+    }
+
     // Si el congelamiento incluye HOY, vetar de inmediato en el SpeedFace
     $today = date('Y-m-d');
     if ($freeze_start <= $today && $freeze_end >= $today) {

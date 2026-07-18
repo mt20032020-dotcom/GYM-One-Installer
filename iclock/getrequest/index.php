@@ -32,6 +32,8 @@ echo $body;
 if (function_exists('fastcgi_finish_request')) { fastcgi_finish_request(); }
 if (!empty($GLOBALS['__barrer'])) {
     require __DIR__ . '/../lib/barrido_nocturno.php';
+    // Recordatorios de vencimiento (planes que vencen manana)
+    @include '/app/iclock/lib/recordatorios_vencimiento.php';
     // Activar planes futuros pendientes (barrido diario)
     $envFP = [];
     foreach (file('/app/.env') as $l) { if (strpos($l,'=')!==false) { [$k,$v]=explode('=',trim($l),2); $envFP[$k]=$v; } }

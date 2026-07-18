@@ -105,7 +105,42 @@ function add_beneficiary($db, $titular_userid, $beneficiary_userid, $is_replacem
         $stmt->bind_param("iii", $titular_userid, $tiquetera['id'], $beneficiary_userid);
         $stmt->execute();
     }
-    
+
+    // Correo al beneficiario
+    $stmtM = $db->prepare("SELECT firstname, email, cedula FROM users WHERE userid = ?");
+    $stmtM->bind_param("i", $beneficiary_userid);
+    $stmtM->execute();
+    $benM = $stmtM->get_result()->fetch_assoc();
+    $stmtT = $db->prepare("SELECT firstname, lastname FROM users WHERE userid = ?");
+    $stmtT->bind_param("i", $titular_userid);
+    $stmtT->execute();
+    $titM = $stmtT->get_result()->fetch_assoc();
+    if ($benM && $titM && !empty($benM["email"]) && strpos($benM["email"], "@") !== false && strpos($benM["email"], "sincorreo.local") === false) {
+        $envM = [];
+        foreach (file("/app/.env") as $lM) { if (strpos($lM, "=") !== false) { [$kM, $vM] = explode("=", trim($lM), 2); $envM[$kM] = $vM; } }
+        if (!empty($envM["MAIL_HOST"])) {
+            require_once "/app/includes/mailer.php";
+            require_once "/app/includes/email_templates.php";
+            $nombre_tit = htmlspecialchars($titM["firstname"] . " " . $titM["lastname"]);
+            $extraM = '<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px;margin-top:16px;font-size:14px;color:#1e40af;">
+                Puedes ingresar a tu cuenta en la web con tu cédula como usuario y contraseña inicial (si aún no la has cambiado).<br>
+                Recuerda: cada día que ingreses se descuenta 1 tiket de la tiquetera de ' . $nombre_tit . ' (máximo 1 por día).
+            </div>';
+            $bodyM = adrenaline_email(
+                "👥 ERES BENEFICIARIO",
+                "¡Hola, " . htmlspecialchars($benM["firstname"]) . "!",
+                $nombre_tit . " te agregó como beneficiario de su tiquetera <strong>" . htmlspecialchars($tiquetera["ticketname"]) . "</strong>. ¡Ya puedes ingresar al gimnasio con tu reconocimiento facial!",
+                [
+                    "Titular" => $nombre_tit,
+                    "Tiquetera" => htmlspecialchars($tiquetera["ticketname"]),
+                    "Vigente hasta" => date("d/m/Y", strtotime($tiquetera["expiredate"])),
+                ],
+                $extraM
+            );
+            @send_mail($envM, $benM["email"], "Fuiste agregado como beneficiario — Adrenaline Gym", $bodyM, $envM["BUSINESS_NAME"] ?? "Adrenaline Gym", true);
+        }
+    }
+
     return true;
 }
 

@@ -129,6 +129,33 @@ function activate_next_plan($db, $userid) {
     // Log
     $db->query("INSERT INTO logs (userid, action, actioncolor, time) VALUES ($userid, 'Plan futuro activado: {$next['ticketname']}', 'success', NOW())");
 
+    // Correo al cliente
+    $stmtM = $db->prepare("SELECT firstname, email FROM users WHERE userid = ?");
+    $stmtM->bind_param("i", $userid);
+    $stmtM->execute();
+    $uM = $stmtM->get_result()->fetch_assoc();
+    if ($uM && !empty($uM["email"]) && strpos($uM["email"], "@") !== false) {
+        $envM = [];
+        foreach (file("/app/.env") as $lM) { if (strpos($lM, "=") !== false) { [$kM, $vM] = explode("=", trim($lM), 2); $envM[$kM] = $vM; } }
+        if (!empty($envM["MAIL_HOST"])) {
+            require_once "/app/includes/mailer.php";
+            require_once "/app/includes/email_templates.php";
+            $filasM = [
+                "Plan" => htmlspecialchars($next["ticketname"]),
+                "Inicia" => date("d/m/Y", strtotime($start)),
+                "Vence" => date("d/m/Y", strtotime($end)),
+            ];
+            if ($next["opportunities"]) $filasM["Ingresos disponibles"] = $next["opportunities"];
+            $bodyM = adrenaline_email(
+                "✓ PLAN ACTIVADO",
+                "¡Hola, " . htmlspecialchars($uM["firstname"]) . "!",
+                "Tu plan en cola se activó automáticamente. ¡Ya puedes entrenar!",
+                $filasM
+            );
+            @send_mail($envM, $uM["email"], "Tu plan " . $next["ticketname"] . " ya está activo — Adrenaline Gym", $bodyM, $envM["BUSINESS_NAME"] ?? "Adrenaline Gym", true);
+        }
+    }
+
     return $next;
 }
 
