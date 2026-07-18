@@ -353,7 +353,7 @@ ol ol ol ol {
 </html>
 EOD;
 
-  $resultUser = send_mail($env_data, $userEmail, $translations["thankyouforyouremail"], $editedcontent, $business_name);
+  $resultUser = send_mail($env_data, $userEmail, $translations["thankyouforyouremail"], $editedcontent, $business_name, true);
 
   if ($result && $resultUser) {
     $alerts_html .= '<div class="alert alert-success" role="alert">

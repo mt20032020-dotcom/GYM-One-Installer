@@ -380,8 +380,10 @@ $inv_pm = ($method == 'profile') ? $translations["profilebalancepay"] : (($metho
         }
 
         .header {
-            padding: 40px 30px 20px;
+            background: #111111;
+            padding: 32px 30px;
             text-align: center;
+            border-bottom: 4px solid #e53935;
         }
 
         .logo {
@@ -394,8 +396,8 @@ $inv_pm = ($method == 'profile') ? $translations["profilebalancepay"] : (($metho
         }
 
         .success-badge {
-            background: #ECFDF5;
-            color: #059669;
+            background: #FEF2F2;
+            color: #DC2626;
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 12px;
@@ -452,7 +454,7 @@ $inv_pm = ($method == 'profile') ? $translations["profilebalancepay"] : (($metho
 
         .cta-button {
             display: inline-block;
-            background: linear-gradient(135deg, #0950DC, #0742B8);
+            background: linear-gradient(135deg, #e53935, #c62828);
             color: white;
             text-decoration: none;
             padding: 16px 32px;
@@ -460,7 +462,7 @@ $inv_pm = ($method == 'profile') ? $translations["profilebalancepay"] : (($metho
             font-weight: 600;
             font-size: 16px;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(9, 80, 220, 0.3);
+            box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);
         }
 
         .cta-container {
@@ -491,7 +493,7 @@ $inv_pm = ($method == 'profile') ? $translations["profilebalancepay"] : (($metho
         }
 
         .footer a {
-            color: #0950DC;
+            color: #e53935;
             text-decoration: none;
         }
     </style>
@@ -620,7 +622,7 @@ EOD;
         $subject = $translations["payemailsubject"];
 
         try { if (!empty($smtp_username)) {
-        $result = send_mail($env_data ?? [], $recipientEmail, $subject, $emailHtml, $business_name ?? ''); }
+        $result = send_mail($env_data ?? [], $recipientEmail, $subject, $emailHtml, $business_name ?? '', true); }
         } catch (\Exception $e) { /* correo de cortesia: si falla, la venta no se afecta */ }
 
         header("Location: ../../../dashboard");

@@ -212,12 +212,11 @@ EOD;
 
 
     $env_data = ['MAIL_HOST'=>$smtp_host,'MAIL_PORT'=>$smtp_port,'MAIL_USERNAME'=>$smtp_username,'MAIL_PASSWORD'=>$smtp_password,'MAIL_ENCRYPTION'=>$smtp_encryption];
-    $result = send_mail($env_data, $to, $subject, $body, $business_name);
+    $result = send_mail($env_data, $to, $subject, $body, $business_name, true);
     if ($result === true) {
         echo "Email sent: $to\n";
     } else {
         echo "Error sending email ($to): " . $result . "\n";
-    }
     }
 }
 
