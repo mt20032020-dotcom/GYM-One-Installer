@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && ($_POST["action"] ?? "") === "regis
         $reg_error = "Las contraseñas no coinciden.";
     } elseif (strlen($pw) < 6) {
         $reg_error = "La contraseña debe tener al menos 6 caracteres.";
-    } elseif (empty($fn) || empty($ln) || empty($ced) || empty($em)) {
+    } elseif (empty($fn) || empty($ln) || empty($ced) || empty($em) || empty(trim($_POST["barrio"] ?? ""))) {
         $reg_error = "Completa todos los campos obligatorios.";
     } else {
         // Leer env para conectar
@@ -41,11 +41,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && ($_POST["action"] ?? "") === "regis
             $new_userid = rand(pow(10, 9), pow(10, 10) - 1);
             $hashed = password_hash($pw, PASSWORD_DEFAULT);
             $now = date("Y-m-d H:i:s");
-            $stmt_ins = $db_tmp->prepare("INSERT INTO users (userid, cedula, firstname, lastname, email, password, gender, birthdate, celular, registration_date, confirmed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt_ins = $db_tmp->prepare("INSERT INTO users (userid, cedula, firstname, lastname, email, password, gender, birthdate, celular, city, registration_date, confirmed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             $gender = in_array($_POST["gender"] ?? "", ["Male","Female","Other"]) ? $_POST["gender"] : "Male";
             $birth = "1990-01-01";
             $confirmed = "Yes";
-            $stmt_ins->bind_param("issssssssss", $new_userid, $ced, $fn, $ln, $em, $hashed, $gender, $birth, $cel, $now, $confirmed);
+            $barrio_ck = trim($_POST["barrio"] ?? "");
+            $stmt_ins->bind_param("isssssssssss", $new_userid, $ced, $fn, $ln, $em, $hashed, $gender, $birth, $cel, $barrio_ck, $now, $confirmed);
             if ($stmt_ins->execute()) {
                 // Guardar foto de perfil para reconocimiento facial
                 if (!empty($_POST["face_photo"]) && strpos($_POST["face_photo"], "data:image") === 0) {
@@ -227,6 +228,7 @@ $redirect_url = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER
                 <input type="text" name="cedula" class="form-control" placeholder="Cédula" required style="font-size:0.9em;">
                 <input type="tel" name="celular" class="form-control" placeholder="Celular" style="font-size:0.9em;">
             </div>
+            <input type="text" name="barrio" class="form-control" placeholder="Barrio" required style="font-size:0.9em;margin-bottom:8px;">
             <input type="email" name="email" class="form-control" placeholder="Correo electrónico" required style="font-size:0.9em;margin-bottom:8px;">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
                 <input type="password" name="password" class="form-control" placeholder="Contraseña" required style="font-size:0.9em;">

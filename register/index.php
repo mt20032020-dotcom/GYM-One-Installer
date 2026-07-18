@@ -181,6 +181,7 @@ $translations = json_decode(file_get_contents($langFile), true);
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $cedula = trim($_POST['cedula'] ?? '');
   $celular = trim($_POST['celular'] ?? '');
+  $barrio = trim($_POST['barrio'] ?? '');
   $firstname = $_POST['firstname'];
   $lastname = $_POST['lastname'];
   $email = $_POST['email'];
@@ -230,13 +231,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       die("Kapcsolódási hiba: " . $conn->connect_error);
     }
 
-    $stmt = $conn->prepare("INSERT INTO users (userid, cedula, firstname, lastname, email, password, gender, birthdate, celular, registration_date, confirmed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO users (userid, cedula, firstname, lastname, email, password, gender, birthdate, celular, city, registration_date, confirmed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
     if ($stmt === false) {
       die("Hiba az előkészített állítás létrehozása során: " . $conn->error);
     }
 
-    $stmt->bind_param("issssssssss", $userid, $cedula, $firstname, $lastname, $email, $hashed_password, $gender, $birthdate, $celular, $registration_date, $confirmed);
+    $stmt->bind_param("isssssssssss", $userid, $cedula, $firstname, $lastname, $email, $hashed_password, $gender, $birthdate, $celular, $barrio, $registration_date, $confirmed);
 
     $ConfirmEmailPage_PLACEHOLDER = str_replace("{business_name}", $business_name, $translations["confirmemailpage"]);
     $replacements = [
@@ -671,6 +672,10 @@ EOD;
                 <div class="form-group">
                   <label for="celular">Número de celular</label>
                   <input type="tel" class="form-control" id="celular" name="celular" required maxlength="20">
+                </div>
+                <div class="form-group">
+                  <label for="barrio">Barrio</label>
+                  <input type="text" class="form-control" id="barrio" name="barrio" required maxlength="60">
                 </div>
                 <span class="reg-rules-cap"><?php echo $translations["rulepage"] ?? 'Szabályzat'; ?></span>
                 <div class="reg-rules">

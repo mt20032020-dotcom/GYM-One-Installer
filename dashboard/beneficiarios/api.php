@@ -36,6 +36,7 @@ if ($action === 'create') {
     $cel = trim($_POST['celular'] ?? '');
     $em = trim($_POST['email'] ?? '');
     $gender = in_array($_POST['gender'] ?? '', ['Male','Female','Other']) ? $_POST['gender'] : 'Male';
+    $barrio = trim($_POST['barrio'] ?? '');
     $birth = !empty($_POST['birthdate']) ? $_POST['birthdate'] : '1990-01-01';
     
     if (empty($fn) || empty($ln) || empty($ced)) {
@@ -55,8 +56,8 @@ if ($action === 'create') {
     $pw = password_hash($ced, PASSWORD_DEFAULT); // clave inicial = su cédula
     $now = date('Y-m-d H:i:s');
     
-    $stmt = $conn->prepare("INSERT INTO users (userid, cedula, firstname, lastname, email, password, gender, birthdate, celular, registration_date, confirmed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Yes')");
-    $stmt->bind_param("isssssssss", $new_userid, $ced, $fn, $ln, $em, $pw, $gender, $birth, $cel, $now);
+    $stmt = $conn->prepare("INSERT INTO users (userid, cedula, firstname, lastname, email, password, gender, birthdate, celular, city, registration_date, confirmed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Yes')");
+    $stmt->bind_param("issssssssss", $new_userid, $ced, $fn, $ln, $em, $pw, $gender, $birth, $cel, $barrio, $now);
     
     if ($stmt->execute()) {
         // Guardar foto si viene

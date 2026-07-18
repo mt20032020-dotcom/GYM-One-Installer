@@ -167,6 +167,9 @@ $me = $stmt->get_result()->fetch_assoc();
                     <input type="text" id="nbCed" class="form-control" placeholder="Cédula *">
                     <input type="tel" id="nbCel" class="form-control" placeholder="Celular">
                 </div>
+                <div style="margin-bottom:8px;">
+                    <input type="text" id="nbBar" class="form-control" placeholder="Barrio *">
+                </div>
                 <input type="email" id="nbEm" class="form-control" placeholder="Correo (opcional)" style="margin-bottom:8px;">
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
                     <select id="nbGen" class="form-control">
@@ -245,6 +248,7 @@ function nbSave(){
     d.append("lastname",document.getElementById("nbLn").value.trim());
     d.append("cedula",document.getElementById("nbCed").value.trim());
     d.append("celular",document.getElementById("nbCel").value.trim());
+    d.append("barrio",document.getElementById("nbBar").value.trim());
     d.append("email",document.getElementById("nbEm").value.trim());
     d.append("gender",document.getElementById("nbGen").value);
     d.append("birthdate",document.getElementById("nbBd").value);

@@ -159,6 +159,8 @@ if (isset($_GET['user']) && is_numeric($_GET['user'])) {
 
 if (isset($_POST['save'])) {
   $fields = ['firstname', 'lastname', 'email', 'cedula', 'celular'];
+  if (isset($_POST['barrio'])) $_POST['city'] = trim($_POST['barrio']);
+  $fields[] = 'city';
   $new_data = [];
   foreach ($fields as $field) {
     if (empty($_POST[$field])) {
@@ -168,7 +170,7 @@ if (isset($_POST['save'])) {
     $new_data[$field] = $_POST[$field];
   }
 
-  $sql_old = "SELECT firstname, lastname, email, cedula, celular FROM users WHERE userid = ?";
+  $sql_old = "SELECT firstname, lastname, email, cedula, celular, city FROM users WHERE userid = ?";
   $stmt_old = $conn->prepare($sql_old);
   $stmt_old->bind_param("i", $useridgymuser);
   $stmt_old->execute();
@@ -184,9 +186,9 @@ if (isset($_POST['save'])) {
   }
 
   if (!empty($changes)) {
-    $sql_update = "UPDATE users SET firstname = ?, lastname = ?, email = ?, cedula = ?, celular = ? WHERE userid = ?";
+    $sql_update = "UPDATE users SET firstname = ?, lastname = ?, email = ?, cedula = ?, celular = ?, city = ? WHERE userid = ?";
     $stmt_update = $conn->prepare($sql_update);
-    $stmt_update->bind_param("sssssi", $new_data['firstname'], $new_data['lastname'], $new_data['email'], $new_data['cedula'], $new_data['celular'], $useridgymuser);
+    $stmt_update->bind_param("ssssssi", $new_data['firstname'], $new_data['lastname'], $new_data['email'], $new_data['cedula'], $new_data['celular'], $new_data['city'], $useridgymuser);
 
     if ($stmt_update->execute()) {
       $stmt_update->close();
@@ -588,6 +590,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['userid'])) {
                     <br>
                     <input type="tel" class="form-control" id="celular" name="celular" value="<?php echo htmlspecialchars($celular, ENT_QUOTES, 'UTF-8'); ?>" placeholder="Celular">
                     <br>
+                    <label for="barrio">Barrio</label>
+                    <input type="text" class="form-control" id="barrio" name="barrio" value="<?php echo htmlspecialchars($row['city'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" placeholder="Barrio">
+                    <br>
                     <label for="email"><?php echo $translations["email"]; ?></label>
                     <br>
                     <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($email, ENT_QUOTES, 'UTF-8'); ?>"
@@ -967,6 +972,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['userid'])) {
                     <input type="text" id="nbCedula" class="form-control" placeholder="Cédula *">
                     <input type="tel" id="nbCelular" class="form-control" placeholder="Celular">
                   </div>
+                  <div style="margin-bottom:8px;">
+                    <input type="text" id="nbBarrio" class="form-control" placeholder="Barrio *">
+                  </div>
                   <input type="email" id="nbEmail" class="form-control" placeholder="Correo (opcional)" style="margin-bottom:8px;">
                   <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
                     <select id="nbGender" class="form-control">
@@ -1211,6 +1219,7 @@ function nbGuardar() {
   datos.append("lastname", document.getElementById("nbLastname").value.trim());
   datos.append("cedula", document.getElementById("nbCedula").value.trim());
   datos.append("celular", document.getElementById("nbCelular").value.trim());
+  datos.append("barrio", document.getElementById("nbBarrio").value.trim());
   datos.append("email", document.getElementById("nbEmail").value.trim());
   datos.append("gender", document.getElementById("nbGender").value);
   datos.append("birthdate", document.getElementById("nbBirthdate").value);

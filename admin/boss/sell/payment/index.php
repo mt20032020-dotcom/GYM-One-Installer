@@ -241,8 +241,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $date = date('Y-m-d');
     $dueDate = $expire_date;
     $clientName = $firstname . ' ' . $lastname;
-    $clientCity = $city;
-    $clientAddress = $street . ' ' . $hause_no;
+    $clientCity = !empty($city) ? "Barrio: " . $city : "";
+    $clientAddress = "";
     $clientEmail = $email;
 
     $logoPath = __DIR__ . '/../../../../assets/img/brand/logo.png';
