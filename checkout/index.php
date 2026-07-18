@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && ($_POST["action"] ?? "") === "regis
             $hashed = password_hash($pw, PASSWORD_DEFAULT);
             $now = date("Y-m-d H:i:s");
             $stmt_ins = $db_tmp->prepare("INSERT INTO users (userid, cedula, firstname, lastname, email, password, gender, birthdate, celular, registration_date, confirmed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $gender = "Male";
+            $gender = in_array($_POST["gender"] ?? "", ["Male","Female","Other"]) ? $_POST["gender"] : "Male";
             $birth = "1990-01-01";
             $confirmed = "Yes";
             $stmt_ins->bind_param("issssssssss", $new_userid, $ced, $fn, $ln, $em, $hashed, $gender, $birth, $cel, $now, $confirmed);
@@ -238,6 +238,15 @@ $redirect_url = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER
             </div>
             <div style="margin-bottom:10px;font-size:0.85em;">
             <div style="margin-bottom:8px;">
+                <label style="font-size:0.85em;color:#555;margin-bottom:3px;">Género</label>
+                <select name="gender" class="form-control" required style="font-size:0.9em;">
+                    <option value="">Selecciona...</option>
+                    <option value="Male">Masculino</option>
+                    <option value="Female">Femenino</option>
+                    <option value="Other">Otro</option>
+                </select>
+            </div>
+            <div style="margin-bottom:8px;">
                 <label style="font-size:0.85em;color:#555;margin-bottom:3px;">Fecha de inicio del plan</label>
                 <div style="font-size:0.85em;">
                     <label style="font-weight:normal;cursor:pointer;margin-right:14px;"><input type="radio" name="start_option" value="today" checked onchange="document.getElementById('customStartCk').style.display='none';"> Inicia hoy</label>
@@ -270,7 +279,7 @@ $redirect_url = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER
             </div>
                 <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;">
                     <input type="checkbox" name="accept_policies" required style="margin-top:3px;">
-                    <span>Acepto las <a href="/policies/" target="_blank">políticas y términos</a> de Adrenaline Gym</span>
+                    <span>Acepto las <a href="/rule/" target="_blank">políticas y términos</a> de Adrenaline Gym</span>
                 </label>
             </div>
             <button type="submit" class="btn btn-danger" style="width:100%;">

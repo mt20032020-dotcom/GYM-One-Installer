@@ -661,6 +661,7 @@ EOD;
                   <select class="form-control" id="gender" name="gender" required>
                     <option value="Male"><?php echo $translations["boy"]; ?></option>
                     <option value="Female"><?php echo $translations["girl"]; ?></option>
+                    <option value="Other">Otro</option>
                   </select>
                 </div>
                 <div class="form-group">
