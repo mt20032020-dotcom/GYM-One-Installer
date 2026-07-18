@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../includes/mailer.php';
+require_once "/app/includes/mailer.php";
 // GYM ONE - HEARTBEAT API CALL
 $wait = rand(1,10);
 sleep($wait);

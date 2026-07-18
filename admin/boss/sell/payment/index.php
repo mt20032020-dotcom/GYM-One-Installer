@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../../../includes/mailer.php';
+require_once "/app/includes/mailer.php";
 session_start();
 
 if (!isset($_SESSION['adminuser'])) {

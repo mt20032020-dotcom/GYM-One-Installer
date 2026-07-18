@@ -118,7 +118,7 @@ $months = [
   12 => $translations["Dec"],
 ];
 
-require_once __DIR__ . '/../../includes/mailer.php';
+require_once "/app/includes/mailer.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $name = $_POST['name'];
   $userEmail = $_POST['email'];

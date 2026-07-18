@@ -93,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Refresh:2");
         }
     } elseif (isset($_POST['test_email_address'])) {
-        require_once '../../../includes/mailer.php';
+        require_once '/app/includes/mailer.php';
         $result = send_mail($env_data, $_POST['test_email_address'], $translations['test-mail-header'], $translations["test-mail-body"], $business_name);
         if ($result === true) {
             $alerts_html .= "<div class='alert alert-success'>{$translations["testemail-sented"]}</div>";
