@@ -81,7 +81,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $update_stmt->execute();
                 $update_stmt->close();
                 $_SESSION['userid'] = $userid;
-                header("Location: ../dashboard");
+                $redirect = !empty($_POST["redirect"]) ? $_POST["redirect"] : (!empty($_GET["redirect"]) ? $_GET["redirect"] : "../dashboard");
+                header("Location: " . $redirect);
                 exit();
             } else {
                 $login_error = $translations["acceptemailplease"];
@@ -251,6 +252,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <div class="alert alert-danger lg-anim"><?php echo $login_error; ?></div>
                             <?php endif; ?>
                             <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($_GET["redirect"] ?? ""); ?>">
                                 <div class="form-group lg-anim lg-d2">
                                     <label for="email"><?php echo $translations["email"]; ?></label>
                                     <input type="email" class="form-control" id="email" name="email" required>
