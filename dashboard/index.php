@@ -603,6 +603,47 @@ if ($validTicketFound && !empty($buydate) && !empty($expiredate)) {
                                 </div>
                             </div>
                         </div>
+                        <?php
+                        require_once "/app/includes/future_plans.php";
+                        $envFP = []; foreach (file("/app/.env") as $lFP) { if (strpos($lFP,"=")!==false) { [$kFP,$vFP]=explode("=",trim($lFP),2); $envFP[$kFP]=$vFP; } }
+                        $connFP = new mysqli($envFP["DB_SERVER"],$envFP["DB_USERNAME"],$envFP["DB_PASSWORD"],$envFP["DB_NAME"]);
+                        $my_future_plans = $connFP->connect_error ? [] : get_future_plans($connFP, $userid);
+                        if (!empty($my_future_plans)): ?>
+                        <div class="col-lg-12" style="margin-top:20px;">
+                            <div class="dsh-card">
+                                <div class="dsh-card-head">
+                                    <i class="bi bi-calendar-plus"></i>
+                                    <h4>Tus próximos planes <span style="background:#7c3aed;color:#fff;border-radius:12px;padding:2px 10px;font-size:0.55em;vertical-align:middle;"><?php echo count($my_future_plans); ?> en cola</span></h4>
+                                </div>
+                                <div class="dsh-card-body">
+                                    <?php foreach ($my_future_plans as $idx => $fp): ?>
+                                    <div style="display:flex;align-items:center;gap:14px;padding:12px;background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.25);border-radius:10px;margin-bottom:10px;">
+                                        <div style="background:#7c3aed;color:#fff;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-weight:bold;flex-shrink:0;">
+                                            <?php echo $idx + 1; ?>
+                                        </div>
+                                        <div style="flex:1;">
+                                            <div style="font-weight:bold;font-size:1.05em;"><?php echo htmlspecialchars($fp["ticketname"]); ?></div>
+                                            <div style="font-size:0.85em;color:#888;">
+                                                <i class="bi bi-play-circle"></i> Inicia aprox. <strong><?php echo date("d/m/Y", strtotime($fp["estimated_start"])); ?></strong>
+                                                &nbsp;·&nbsp;
+                                                <i class="bi bi-stop-circle"></i> Termina aprox. <strong><?php echo date("d/m/Y", strtotime($fp["estimated_end"])); ?></strong>
+                                                <?php if ($fp["opportunities"]): ?>
+                                                    &nbsp;·&nbsp; <i class="bi bi-lightning"></i> <?php echo $fp["opportunities"]; ?> ingresos
+                                                <?php endif; ?>
+                                            </div>
+                                            <?php if ($fp["desired_start_date"]): ?>
+                                            <div style="font-size:0.8em;color:#7c3aed;margin-top:2px;"><i class="bi bi-pin-angle"></i> Fecha de inicio elegida por ti</div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                    <?php endforeach; ?>
+                                    <div style="font-size:0.8em;color:#999;margin-top:8px;">
+                                        <i class="bi bi-info-circle"></i> Tus planes futuros se activan automáticamente cuando termina el anterior. Las fechas son estimadas.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endif; ?>
                     </div>
 
                     <div class="row">

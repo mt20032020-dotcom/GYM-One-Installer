@@ -102,6 +102,13 @@ if (isset($_GET['user']) && is_numeric($_GET['user'])) {
     $lastlogin = $row['lastlogin'];
     $verify = $row['confirmed'];
     $lastip = $row['lastip'];
+    // Eliminar plan futuro
+    if (isset($_GET['remove_future']) && is_numeric($_GET['remove_future'])) {
+        require_once '/app/includes/future_plans.php';
+        remove_future_plan($conn, intval($_GET['remove_future']), $useridgymuser);
+        header('Location: ?user=' . $useridgymuser);
+        exit();
+    }
     $balance = $row['profile_balance'];
   } else {
     echo "The user does not exist!";
@@ -765,6 +772,56 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['userid'])) {
         </div>
         <div class="row" style="margin-top:6px;">
           <div class="col-md-12">
+            <?php
+            require_once "/app/includes/future_plans.php";
+            $future_plans = get_future_plans($conn, $useridgymuser);
+            ?>
+            <div style="background:#fff;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+              <h4 style="font-weight:800; margin-bottom:12px;"><i class="bi bi-calendar-plus"></i> Planes futuros
+                <span class="badge" style="background:#7c3aed;color:#fff;font-size:0.6em;vertical-align:middle;"><?php echo count($future_plans); ?> en cola</span>
+              </h4>
+              <?php if (empty($future_plans)): ?>
+                <p style="color:#999;margin:0;">No hay planes futuros en cola.</p>
+              <?php else: ?>
+                <table class="table table-striped" style="margin:0;">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Plan</th>
+                      <th>Comprado</th>
+                      <th>Inicio estimado</th>
+                      <th>Fin estimado</th>
+                      <th>Ocasiones</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php foreach ($future_plans as $idx => $fp): ?>
+                    <tr>
+                      <td><?php echo $idx + 1; ?></td>
+                      <td><strong><?php echo htmlspecialchars($fp["ticketname"]); ?></strong></td>
+                      <td><?php echo date("d/m/Y", strtotime($fp["purchase_date"])); ?></td>
+                      <td>
+                        <?php echo date("d/m/Y", strtotime($fp["estimated_start"])); ?>
+                        <?php if ($fp["desired_start_date"]): ?>
+                          <br><small style="color:#7c3aed;"><i class="bi bi-pin"></i> Fecha elegida</small>
+                        <?php endif; ?>
+                      </td>
+                      <td><?php echo date("d/m/Y", strtotime($fp["estimated_end"])); ?></td>
+                      <td><?php echo $fp["opportunities"] ? $fp["opportunities"] : "Ilimitado"; ?></td>
+                      <td>
+                        <a href="?user=<?php echo $useridgymuser; ?>&remove_future=<?php echo $fp["id"]; ?>" 
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('¿Eliminar este plan de la cola?');">
+                          <i class="bi bi-trash"></i>
+                        </a>
+                      </td>
+                    </tr>
+                    <?php endforeach; ?>
+                  </tbody>
+                </table>
+              <?php endif; ?>
+            </div>
             <div class="card" style="border-radius:12px; padding:20px;">
               <h4 style="font-weight:800; margin-bottom:4px;"><i class="bi bi-clock-history"></i> Historial de accesos</h4>
               <?php
