@@ -24,6 +24,15 @@ function sincronizar_acceso_speedface($userid) {
     $stmt->execute();
     $vigente = ((int)$stmt->get_result()->fetch_assoc()['t']) > 0;
     $stmt->close();
+    // Si esta congelado hoy, vetar aunque tenga plan
+    if ($vigente) {
+        $todayF = date('Y-m-d');
+        $stmtF = $conn->prepare("SELECT COUNT(*) t FROM plan_freezes WHERE userid = ? AND freeze_start <= ? AND freeze_end >= ?");
+        $stmtF->bind_param('iss', $userid, $todayF, $todayF);
+        $stmtF->execute();
+        if (((int)$stmtF->get_result()->fetch_assoc()['t']) > 0) $vigente = false;
+        $stmtF->close();
+    }
     $conn->close();
 
     $base = time() % 100000;

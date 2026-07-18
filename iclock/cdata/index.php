@@ -35,6 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         // === LOGICA DE ACCESO CON BENEFICIARIOS Y 1-TIKET-POR-DIA ===
                         require_once '/app/includes/future_plans.php';
                         require_once '/app/includes/beneficiaries.php';
+                        require_once '/app/includes/freezes.php';
+                        // Rechazar si esta congelado
+                        $frz = is_frozen_today($conn, $uid);
+                        if ($frz) {
+                            $conn->query("INSERT INTO logs (userid, action, actioncolor, time) VALUES ($uid, 'Acceso denegado: plan congelado hasta {$frz['freeze_end']}', 'danger', NOW())");
+                            $conn->close();
+                            responder("OK");
+                        }
                         @activate_next_plan($conn, $uid);
                         $acceso = resolve_access($conn, $uid);
                         // Bitacora (siempre se registra el ingreso)

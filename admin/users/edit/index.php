@@ -103,6 +103,20 @@ if (isset($_GET['user']) && is_numeric($_GET['user'])) {
     $verify = $row['confirmed'];
     $lastip = $row['lastip'];
     // Eliminar plan futuro
+    // Congelamiento
+    if (isset($_POST['freeze_action']) && $_POST['freeze_action'] === 'freeze') {
+        require_once '/app/includes/freezes.php';
+        $fz_res = freeze_plan($conn, $useridgymuser, $_POST['freeze_start'] ?? '', $_POST['freeze_end'] ?? '', $_POST['freeze_reason'] ?? '', !empty($_POST['freeze_medical']), $_SESSION['userid'] ?? null);
+        $freeze_msg = ($fz_res === true) ? 'OK' : $fz_res;
+    }
+    if (isset($_GET['unfreeze']) && is_numeric($_GET['unfreeze'])) {
+        require_once '/app/includes/freezes.php';
+        unfreeze_plan($conn, intval($_GET['unfreeze']));
+        require_once '/app/iclock/lib/endtime.php';
+        @sincronizar_acceso_speedface($useridgymuser);
+        header('Location: ?user=' . $useridgymuser);
+        exit();
+    }
     // Beneficiarios: agregar por cedula
     if (isset($_POST['add_beneficiary_cedula'])) {
         require_once '/app/includes/beneficiaries.php';
@@ -799,6 +813,88 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['userid'])) {
             require_once "/app/includes/future_plans.php";
             $future_plans = get_future_plans($conn, $useridgymuser);
             ?>
+            <?php
+            require_once "/app/includes/freezes.php";
+            $fz_plan = freeze_get_active_plan($conn, $useridgymuser);
+            $fz_current = is_frozen_today($conn, $useridgymuser);
+            $fz_history = get_freezes($conn, $useridgymuser);
+            $fz_used = $fz_plan ? has_frozen_this_plan($conn, $fz_plan["id"]) : false;
+            ?>
+            <div style="background:#fff;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+              <h4 style="font-weight:800; margin-bottom:12px;"><i class="bi bi-snow"></i> Congelamiento de plan
+                <?php if ($fz_current): ?>
+                <span class="badge" style="background:#0ea5e9;color:#fff;font-size:0.6em;vertical-align:middle;">CONGELADO</span>
+                <?php endif; ?>
+              </h4>
+              <?php if (!empty($freeze_msg) && $freeze_msg === "OK"): ?>
+                <div class="alert alert-success" style="padding:8px;font-size:0.9em;">Plan congelado correctamente. El vencimiento fue extendido.</div>
+              <?php elseif (!empty($freeze_msg)): ?>
+                <div class="alert alert-warning" style="padding:8px;font-size:0.9em;"><?php echo htmlspecialchars($freeze_msg); ?></div>
+              <?php endif; ?>
+              <?php if ($fz_current): ?>
+                <div style="background:#e0f2fe;border:1px solid #7dd3fc;border-radius:10px;padding:14px;margin-bottom:12px;">
+                  <i class="bi bi-snow2" style="color:#0284c7;"></i>
+                  <strong>Plan congelado</strong> del <?php echo date("d/m/Y", strtotime($fz_current["freeze_start"])); ?>
+                  al <?php echo date("d/m/Y", strtotime($fz_current["freeze_end"])); ?>
+                  (<?php echo $fz_current["days_frozen"]; ?> días)<br>
+                  <small style="color:#666;">Motivo: <?php echo htmlspecialchars($fz_current["reason"]); ?>
+                  <?php if ($fz_current["has_medical"]): ?> — <i class="bi bi-file-medical"></i> Con incapacidad médica<?php endif; ?></small><br>
+                  <a href="?user=<?php echo $useridgymuser; ?>&unfreeze=<?php echo $fz_current["id"]; ?>"
+                     class="btn btn-warning btn-sm" style="margin-top:8px;"
+                     onclick="return confirm('¿Cancelar el congelamiento? Se revertirán los días restantes del vencimiento.');">
+                    <i class="bi bi-sun"></i> Descongelar ahora
+                  </a>
+                </div>
+              <?php elseif ($fz_plan && !$fz_used): ?>
+                <form method="POST">
+                  <input type="hidden" name="freeze_action" value="freeze">
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+                    <div>
+                      <label style="font-size:0.85em;">Desde</label>
+                      <input type="date" name="freeze_start" class="form-control" required min="<?php echo date("Y-m-d"); ?>">
+                    </div>
+                    <div>
+                      <label style="font-size:0.85em;">Hasta</label>
+                      <input type="date" name="freeze_end" class="form-control" required min="<?php echo date("Y-m-d"); ?>">
+                    </div>
+                  </div>
+                  <div style="margin-bottom:10px;">
+                    <label style="font-size:0.85em;">Motivo</label>
+                    <input type="text" name="freeze_reason" class="form-control" placeholder="Ej: Viaje de trabajo, incapacidad médica..." required>
+                  </div>
+                  <div style="margin-bottom:12px;">
+                    <label style="font-weight:normal;font-size:0.9em;cursor:pointer;">
+                      <input type="checkbox" name="freeze_medical" value="1"> Tiene incapacidad médica (sin límite de días)
+                    </label>
+                    <small style="display:block;color:#999;font-size:0.78em;">Sin incapacidad el máximo es 7 días. El plan se extiende por los días congelados.</small>
+                  </div>
+                  <button type="submit" class="btn btn-info"><i class="bi bi-snow"></i> Congelar plan</button>
+                </form>
+              <?php elseif ($fz_plan && $fz_used): ?>
+                <p style="color:#999;margin:0;"><i class="bi bi-info-circle"></i> Este plan ya usó su congelamiento (1 por vigencia). Podrá congelar de nuevo cuando renueve.</p>
+              <?php else: ?>
+                <p style="color:#999;margin:0;"><i class="bi bi-info-circle"></i> El usuario no tiene un plan activo para congelar.</p>
+              <?php endif; ?>
+              <?php if (!empty($fz_history)): ?>
+                <details style="margin-top:12px;">
+                  <summary style="cursor:pointer;font-size:0.85em;color:#666;">Historial de congelamientos (<?php echo count($fz_history); ?>)</summary>
+                  <table class="table table-striped" style="margin-top:8px;font-size:0.85em;">
+                    <thead><tr><th>Desde</th><th>Hasta</th><th>Días</th><th>Motivo</th><th>Médica</th></tr></thead>
+                    <tbody>
+                      <?php foreach ($fz_history as $fh): ?>
+                      <tr>
+                        <td><?php echo date("d/m/Y", strtotime($fh["freeze_start"])); ?></td>
+                        <td><?php echo date("d/m/Y", strtotime($fh["freeze_end"])); ?></td>
+                        <td><?php echo $fh["days_frozen"]; ?></td>
+                        <td><?php echo htmlspecialchars($fh["reason"]); ?></td>
+                        <td><?php echo $fh["has_medical"] ? "Sí" : "No"; ?></td>
+                      </tr>
+                      <?php endforeach; ?>
+                    </tbody>
+                  </table>
+                </details>
+              <?php endif; ?>
+            </div>
             <?php
             require_once "/app/includes/beneficiaries.php";
             $tiq_activa = get_active_tiquetera($conn, $useridgymuser);
