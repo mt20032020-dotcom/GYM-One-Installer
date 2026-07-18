@@ -57,6 +57,7 @@ if (!$ticket_id) {
     exit('OK');
 }
 
+require_once "/app/includes/future_plans.php";
 $db = new mysqli($env['DB_SERVER'], $env['DB_USERNAME'], $env['DB_PASSWORD'], $env['DB_NAME']);
 
 // Buscar ticket
@@ -92,11 +93,7 @@ $occasions = $ticket['occasions'];
 
 // Asignar plan
 $ticketname = $ticket["name"];
-$buydate = date("Y-m-d");
-$expiredate = date("Y-m-d", strtotime("+{$expire_days} days"));
-$stmt3 = $db->prepare("INSERT INTO current_tickets (userid, ticketname, buydate, expiredate, opportunities) VALUES (?, ?, ?, ?, ?)");
-$stmt3->bind_param("isssi", $userid, $ticketname, $buydate, $expiredate, $occasions);
-$stmt3->execute();
+$plan_result = add_plan($db, $userid, $ticketname, $expire_days, $occasions, null);
 
 // Log
 $db->query("INSERT INTO logs (userid, action, actioncolor, time) VALUES ($userid, 'Plan asignado via Wompi: {$ticket['name']}', 'success', NOW())");

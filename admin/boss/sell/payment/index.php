@@ -1,5 +1,6 @@
 <?php
 require_once "/app/includes/mailer.php";
+require_once "/app/includes/future_plans.php";
 session_start();
 
 if (!isset($_SESSION['adminuser'])) {
@@ -320,19 +321,17 @@ $inv_pm = ($method == 'profile') ? $translations["profilebalancepay"] : (($metho
     $stmt->close();
 
 
-    $sql = "INSERT INTO current_tickets (userid, ticketname, buydate, expiredate, opportunities) 
-        VALUES (?, ?, ?, ?, ?)";
-
-    $stmt = $conn->prepare($sql);
-
-    $stmt->bind_param("isssi", $userid, $ticketname, $date, $expire_date, $occasions);
-
-    if ($stmt->execute()) {
-        $alerts_html .= '<div class="alert alert-success" role="alert">
-                        ' . $translations["ticketadded"] . '
-                    </div>';
-        require_once __DIR__ . '/../../../../iclock/lib/endtime.php';
-        @sincronizar_acceso_speedface($userid);
+    $start_option = $_POST['start_option'] ?? 'today';
+    $custom_start = ($start_option === 'custom' && !empty($_POST['custom_start_date'])) ? $_POST['custom_start_date'] : null;
+    $plan_result = add_plan($conn, $userid, $ticketname, $expire_day, $occasions, $custom_start);
+    if ($plan_result) {
+        if ($plan_result['type'] === 'future') {
+            $alerts_html .= '<div class="alert alert-info" role="alert"><i class="bi bi-hourglass-split"></i> Plan agregado a la cola de planes futuros — inicia aprox. el ' . date('d/m/Y', strtotime($plan_result['start_date'])) . '</div>';
+        } else {
+            $alerts_html .= '<div class="alert alert-success" role="alert">' . $translations["ticketadded"] . '</div>';
+            require_once __DIR__ . '/../../../../iclock/lib/endtime.php';
+            @sincronizar_acceso_speedface($userid);
+        }
 
         $action = $translations['log_ticketbuy'] . ' ID: ' . $tickerbuyerid . ' - ' . $ticketname . ' - ' . $translatedPaymentMethod . ' - ' . $userid . '-' . $invoiceNumber . '.pdf';
         $actioncolor = 'success';
@@ -1051,6 +1050,16 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
                                 </label>
                             <?php endif; ?>
                         </div>
+                <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin-top:14px;">
+                    <label style="font-weight:700;font-size:.9em;"><i class="bi bi-calendar-event"></i> Fecha de inicio del plan</label>
+                    <div style="margin-top:6px;">
+                        <label style="font-weight:normal;cursor:pointer;margin-right:16px;"><input type="radio" name="start_option" value="today" checked onchange="document.getElementById('customStartDiv').style.display='none';"> Inicia hoy</label>
+                        <label style="font-weight:normal;cursor:pointer;"><input type="radio" name="start_option" value="custom" onchange="document.getElementById('customStartDiv').style.display='block';"> Elegir fecha de inicio</label>
+                    </div>
+                    <div id="customStartDiv" style="display:none;margin-top:8px;">
+                        <input type="date" name="custom_start_date" class="form-control">
+                    </div>
+                </div>
                         <div class="pc-modal-actions">
                             <button type="button" class="pc-btn pc-btn-ghost" data-dismiss="modal"><?= $translations["not-yet"] ?? 'Mégse'; ?></button>
                             <button type="submit" class="pc-btn pc-btn-success"><i class="bi bi-check-lg"></i> <?= $translations["next"]; ?></button>

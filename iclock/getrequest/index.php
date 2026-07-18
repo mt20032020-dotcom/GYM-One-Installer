@@ -32,5 +32,23 @@ echo $body;
 if (function_exists('fastcgi_finish_request')) { fastcgi_finish_request(); }
 if (!empty($GLOBALS['__barrer'])) {
     require __DIR__ . '/../lib/barrido_nocturno.php';
+    // Activar planes futuros pendientes (barrido diario)
+    $envFP = [];
+    foreach (file('/app/.env') as $l) { if (strpos($l,'=')!==false) { [$k,$v]=explode('=',trim($l),2); $envFP[$k]=$v; } }
+    $connFP = @new mysqli($envFP['DB_SERVER'],$envFP['DB_USERNAME'],$envFP['DB_PASSWORD'],$envFP['DB_NAME']);
+    if (!$connFP->connect_error) {
+        require_once '/app/includes/future_plans.php';
+        $resFP = @$connFP->query("SELECT DISTINCT userid FROM future_tickets WHERE activated = 0");
+        if ($resFP) {
+            while ($rowFP = $resFP->fetch_assoc()) {
+                $actFP = @activate_next_plan($connFP, $rowFP['userid']);
+                if ($actFP) {
+                    require_once '/app/iclock/lib/endtime.php';
+                    @sincronizar_acceso_speedface($rowFP['userid']);
+                }
+            }
+        }
+        $connFP->close();
+    }
 }
 exit;

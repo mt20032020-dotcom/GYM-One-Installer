@@ -36,6 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $stmt = $conn->prepare("INSERT INTO access_log (userid, display_name, is_companion) VALUES (?, ?, 0)");
                         $stmt->bind_param('is', $uid, $nombre);
                         $stmt->execute(); $stmt->close();
+                        // Activar plan futuro si el actual ya murio
+                        require_once '/app/includes/future_plans.php';
+                        @activate_next_plan($conn, $uid);
                         // Descontar ocasion si su pase vigente es por ocasiones
                         $stmt = $conn->prepare("SELECT id, opportunities FROM current_tickets WHERE userid = ? AND expiredate >= CURDATE() AND (opportunities IS NULL OR opportunities > 0) ORDER BY expiredate ASC LIMIT 1");
                         $stmt->bind_param('i', $uid);
@@ -48,6 +51,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             if ($nuevo <= 0) {
                                 require_once __DIR__ . '/../lib/endtime.php';
                                 @sincronizar_acceso_speedface($uid);
+                                // Tiquetera agotada: activar siguiente plan de la cola
+                                if (@activate_next_plan($conn, $uid)) {
+                                    @sincronizar_acceso_speedface($uid);
+                                }
                             }
                         }
                     }
