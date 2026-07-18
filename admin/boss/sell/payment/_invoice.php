@@ -165,7 +165,7 @@ CSS;
 
         $lDate    = $esc($t['date-log'] ?? 'Date');
         $lInvId   = $esc($t['invoiceid'] ?? 'Invoice ID');
-        $lUserId  = $esc($t['userid'] ?? 'User ID');
+        $lUserId  = "Cédula";
         $lAddr    = $esc($t['adressedinvoice'] ?? 'Billed to');
         $lWorker  = $esc($t['workerinvoice'] ?? 'Worker');
         $lPayType = $esc($t['paymenttype'] ?? 'Payment');
