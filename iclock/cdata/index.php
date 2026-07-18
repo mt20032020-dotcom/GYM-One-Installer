@@ -32,32 +32,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $rDup = $conn->query("SELECT COUNT(*) t FROM access_log WHERE userid = $uid AND entry_time >= DATE_SUB(NOW(), INTERVAL 3 MINUTE)");
                     $dup = $rDup ? ((int)$rDup->fetch_assoc()['t']) > 0 : false;
                     if (!$dup) {
-                        // Bitacora
+                        // === LOGICA DE ACCESO CON BENEFICIARIOS Y 1-TIKET-POR-DIA ===
+                        require_once '/app/includes/future_plans.php';
+                        require_once '/app/includes/beneficiaries.php';
+                        @activate_next_plan($conn, $uid);
+                        $acceso = resolve_access($conn, $uid);
+                        // Bitacora (siempre se registra el ingreso)
                         $stmt = $conn->prepare("INSERT INTO access_log (userid, display_name, is_companion) VALUES (?, ?, 0)");
                         $stmt->bind_param('is', $uid, $nombre);
                         $stmt->execute(); $stmt->close();
-                        // Activar plan futuro si el actual ya murio
-                        require_once '/app/includes/future_plans.php';
-                        @activate_next_plan($conn, $uid);
-                        // Descontar ocasion si su pase vigente es por ocasiones
-                        $stmt = $conn->prepare("SELECT id, opportunities FROM current_tickets WHERE userid = ? AND expiredate >= CURDATE() AND (opportunities IS NULL OR opportunities > 0) ORDER BY expiredate ASC LIMIT 1");
-                        $stmt->bind_param('i', $uid);
-                        $stmt->execute();
-                        $tk = $stmt->get_result()->fetch_assoc();
-                        $stmt->close();
-                        if ($tk && $tk['opportunities'] !== null) {
-                            $nuevo = max(0, (int)$tk['opportunities'] - 1);
-                            $conn->query("UPDATE current_tickets SET opportunities = $nuevo WHERE id = " . (int)$tk['id']);
-                            if ($nuevo <= 0) {
+                        // Descontar solo si corresponde (1 por dia, considera beneficiarios)
+                        if ($acceso['allowed'] && !empty($acceso['deduct']) && !empty($acceso['ticket_id'])) {
+                            $conn->query("UPDATE current_tickets SET opportunities = GREATEST(0, opportunities - 1) WHERE id = " . (int)$acceso['ticket_id']);
+                            // Verificar si quedo en 0
+                            $rQ = $conn->query("SELECT opportunities FROM current_tickets WHERE id = " . (int)$acceso['ticket_id']);
+                            $qRow = $rQ ? $rQ->fetch_assoc() : null;
+                            if ($qRow && (int)$qRow['opportunities'] <= 0) {
+                                $dueno = !empty($acceso['titular_userid']) ? (int)$acceso['titular_userid'] : $uid;
                                 require_once __DIR__ . '/../lib/endtime.php';
-                                @sincronizar_acceso_speedface($uid);
-                                // Tiquetera agotada: activar siguiente plan de la cola
-                                if (@activate_next_plan($conn, $uid)) {
-                                    @sincronizar_acceso_speedface($uid);
+                                @sincronizar_acceso_speedface($dueno);
+                                if (@activate_next_plan($conn, $dueno)) {
+                                    @sincronizar_acceso_speedface($dueno);
                                 }
                             }
                         }
-                    }
+                        }
                 }
                 $conn->close();
             }
