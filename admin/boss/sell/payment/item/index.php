@@ -600,13 +600,11 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
 
 
 <!DOCTYPE html>
-<html lang="<?php
-<?php echo $lang_code; ?>">
+<html lang="<?php echo $lang_code; ?>">
 
 <head>
     <meta charset="UTF-8">
-    <title><?php
-<?php echo $translations["dashboard"]; ?></title>
+    <title><?php echo $translations["dashboard"]; ?></title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -632,60 +630,36 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
-                    <li><a href="../../../../dashboard"><i class="bi bi-speedometer"></i> <?php
-<?php echo $translations["mainpage"]; ?></a></li>
-                    <li><a href="../../../../users"><i class="bi bi-people"></i> <?php
-<?php echo $translations["users"]; ?></a></li>
-                    <li><a href="../../../../statistics"><i class="bi bi-bar-chart"></i> <?php
-<?php echo $translations["statspage"]; ?></a></li>
-                    <li class="active"><a href="../../"><i class="bi bi-shop"></i> <?php
-<?php echo $translations["sellpage"]; ?></a></li>
-                    <li><a href="../../../../invoices"><i class="bi bi-receipt"></i> <?php
-<?php echo $translations["invoicepage"]; ?></a></li>
-                    <?php
-<?php if ($is_boss === 1) { ?>
+                    <li><a href="../../../../dashboard"><i class="bi bi-speedometer"></i> <?php echo $translations["mainpage"]; ?></a></li>
+                    <li><a href="../../../../users"><i class="bi bi-people"></i> <?php echo $translations["users"]; ?></a></li>
+                    <li><a href="../../../../statistics"><i class="bi bi-bar-chart"></i> <?php echo $translations["statspage"]; ?></a></li>
+                    <li class="active"><a href="../../"><i class="bi bi-shop"></i> <?php echo $translations["sellpage"]; ?></a></li>
+                    <li><a href="../../../../invoices"><i class="bi bi-receipt"></i> <?php echo $translations["invoicepage"]; ?></a></li>
+                    <?php if ($is_boss === 1) { ?>
                         <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="bi bi-gear"></i> <?php
-<?php echo $translations["settings"]; ?> <span class="caret"></span></a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="bi bi-gear"></i> <?php echo $translations["settings"]; ?> <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="../../../../boss/mainsettings"><?php
-<?php echo $translations["businesspage"]; ?></a></li>
-                                <li><a href="../../../../boss/workers"><?php
-<?php echo $translations["workers"]; ?></a></li>
-                                <li><a href="../../../../boss/packages"><?php
-<?php echo $translations["packagepage"]; ?></a></li>
-                                <li><a href="../../../../boss/hours"><?php
-<?php echo $translations["openhourspage"]; ?></a></li>
-                                <li><a href="../../../../boss/smtp"><?php
-<?php echo $translations["mailpage"]; ?></a></li>
-                                <li><a href="../../../../boss/chroom"><?php
-<?php echo $translations["chroompage"]; ?></a></li>
-                                <li><a href="../../../../boss/rule"><?php
-<?php echo $translations["rulepage"]; ?></a></li>
+                                <li><a href="../../../../boss/mainsettings"><?php echo $translations["businesspage"]; ?></a></li>
+                                <li><a href="../../../../boss/workers"><?php echo $translations["workers"]; ?></a></li>
+                                <li><a href="../../../../boss/packages"><?php echo $translations["packagepage"]; ?></a></li>
+                                <li><a href="../../../../boss/hours"><?php echo $translations["openhourspage"]; ?></a></li>
+                                <li><a href="../../../../boss/smtp"><?php echo $translations["mailpage"]; ?></a></li>
+                                <li><a href="../../../../boss/chroom"><?php echo $translations["chroompage"]; ?></a></li>
+                                <li><a href="../../../../boss/rule"><?php echo $translations["rulepage"]; ?></a></li>
                             </ul>
                         </li>
-                    <?php
-<?php } ?>
-                    <li><a href="../../../../shop/tickets"><i class="bi bi-ticket"></i> <?php
-<?php echo $translations["ticketspage"]; ?></a></li>
-                    <li><a href="../../../../trainers/timetable"><i class="bi bi-calendar-event"></i> <?php
-<?php echo $translations["timetable"]; ?></a></li>
-                    <li><a href="../../../../trainers/personal"><i class="bi bi-award"></i> <?php
-<?php echo $translations["trainers"]; ?></a></li>
-                    <?php
-<?php if ($is_boss === 1) { ?>
-                        <li><a href="../../../../updater"><i class="bi bi-cloud-download"></i> <?php
-<?php echo $translations["updatepage"]; ?>
-                                <?php
-<?php if ($is_new_version_available) : ?>
+                    <?php } ?>
+                    <li><a href="../../../../shop/tickets"><i class="bi bi-ticket"></i> <?php echo $translations["ticketspage"]; ?></a></li>
+                    <li><a href="../../../../trainers/timetable"><i class="bi bi-calendar-event"></i> <?php echo $translations["timetable"]; ?></a></li>
+                    <li><a href="../../../../trainers/personal"><i class="bi bi-award"></i> <?php echo $translations["trainers"]; ?></a></li>
+                    <?php if ($is_boss === 1) { ?>
+                        <li><a href="../../../../updater"><i class="bi bi-cloud-download"></i> <?php echo $translations["updatepage"]; ?>
+                                <?php if ($is_new_version_available) : ?>
                                     <span class="badge badge-warning"><i class="bi bi-exclamation-circle"></i></span>
-                                <?php
-<?php endif; ?>
+                                <?php endif; ?>
                             </a></li>
-                    <?php
-<?php } ?>
-                    <li><a href="../../../../log"><i class="bi bi-clock-history"></i> <?php
-<?php echo $translations["logpage"]; ?></a></li>
+                    <?php } ?>
+                    <li><a href="../../../../log"><i class="bi bi-clock-history"></i> <?php echo $translations["logpage"]; ?></a></li>
                 </ul>
             </div>
         </div>
@@ -695,146 +669,121 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
         <div class="row content">
             <div class="col-sm-2 sidenav hidden-xs text-center">
                 <h2><img src="../../../../../assets/img/logo.png" width="105px" alt="Logo"></h2>
-                <p class="lead mb-4 fs-4"><?php
-<?php echo $business_name ?> - <?php
-<?php echo $version; ?></p>
+                <p class="lead mb-4 fs-4"><?php echo $business_name ?> - <?php echo $version; ?></p>
                 <ul class="nav nav-pills nav-stacked">
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="../../../../dashboard/">
-                            <i class="bi bi-speedometer"></i> <?php
-<?php echo $translations["mainpage"]; ?>
+                            <i class="bi bi-speedometer"></i> <?php echo $translations["mainpage"]; ?>
                         </a>
                     </li>
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="../../../../users/">
-                            <i class="bi bi-people"></i> <?php
-<?php echo $translations["users"]; ?>
+                            <i class="bi bi-people"></i> <?php echo $translations["users"]; ?>
                         </a>
                     </li>
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="../../../../statistics">
-                            <i class="bi bi-bar-chart"></i> <?php
-<?php echo $translations["statspage"]; ?>
+                            <i class="bi bi-bar-chart"></i> <?php echo $translations["statspage"]; ?>
                         </a>
                     </li>
                     <li class="sidebar-item active">
                         <a class="sidebar-link" href="#">
-                            <i class="bi bi-shop"></i> <?php
-<?php echo $translations["sellpage"]; ?>
+                            <i class="bi bi-shop"></i> <?php echo $translations["sellpage"]; ?>
                         </a>
                     </li>
                     <li class="sidebar-item">
                         <a href="../../../../invoices/" class="sidebar-link">
-                            <i class="bi bi-receipt"></i> <?php
-<?php echo $translations["invoicepage"]; ?>
+                            <i class="bi bi-receipt"></i> <?php echo $translations["invoicepage"]; ?>
                         </a>
                     </li>
                     <?php
                     if ($is_boss === 1) {
                     ?>
                         <li class="sidebar-header">
-                            <?php
-<?php echo $translations["settings"]; ?>
+                            <?php echo $translations["settings"]; ?>
                         </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="../../../../boss/mainsettings">
                                 <i class="bi bi-gear"></i>
-                                <span><?php
-<?php echo $translations["businesspage"]; ?></span>
+                                <span><?php echo $translations["businesspage"]; ?></span>
                             </a>
                         </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="../../../../boss/workers">
                                 <i class="bi bi-people"></i>
-                                <span><?php
-<?php echo $translations["workers"]; ?></span>
+                                <span><?php echo $translations["workers"]; ?></span>
                             </a>
                         </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="../../../../boss/packages">
                                 <i class="bi bi-box-seam"></i>
-                                <span><?php
-<?php echo $translations["packagepage"]; ?></span>
+                                <span><?php echo $translations["packagepage"]; ?></span>
                             </a>
                         </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="../../../../boss/hours">
                                 <i class="bi bi-clock"></i>
-                                <span><?php
-<?php echo $translations["openhourspage"]; ?></span>
+                                <span><?php echo $translations["openhourspage"]; ?></span>
                             </a>
                         </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="../../../../boss/smtp">
                                 <i class="bi bi-envelope-at"></i>
-                                <span><?php
-<?php echo $translations["mailpage"]; ?></span>
+                                <span><?php echo $translations["mailpage"]; ?></span>
                             </a>
                         </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="../../../../boss/chroom">
                                 <i class="bi bi-duffle"></i>
-                                <span><?php
-<?php echo $translations["chroompage"]; ?></span>
+                                <span><?php echo $translations["chroompage"]; ?></span>
                             </a>
                         </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="../../../../boss/rule">
                                 <i class="bi bi-file-ruled"></i>
-                                <span><?php
-<?php echo $translations["rulepage"]; ?></span>
+                                <span><?php echo $translations["rulepage"]; ?></span>
                             </a>
                         </li>
                     <?php
                     }
                     ?>
                     <li class="sidebar-header">
-                        <?php
-<?php echo $translations["shopcategory"]; ?>
+                        <?php echo $translations["shopcategory"]; ?>
                     </li>
                     <li class="sidebar-item">
                         <!-- <a class="sidebar-ling" href="../shop/gateway">
                             <i class="bi bi-shield-lock"></i>
-                            <span><?php
-<?php echo $translations["gatewaypage"]; ?></span>
+                            <span><?php echo $translations["gatewaypage"]; ?></span>
                         </a> -->
                         <a class="sidebar-ling" href="../../../../shop/tickets">
                             <i class="bi bi-ticket"></i>
-                            <span><?php
-<?php echo $translations["ticketspage"]; ?></span>
+                            <span><?php echo $translations["ticketspage"]; ?></span>
                         </a>
                     </li>
                     <li class="sidebar-header">
-                        <?php
-<?php echo $translations["trainersclass"]; ?>
+                        <?php echo $translations["trainersclass"]; ?>
                     </li>
                     <li><a class="sidebar-link" href="../../../../trainers/timetable">
                             <i class="bi bi-calendar-event"></i>
-                            <span><?php
-<?php echo $translations["timetable"]; ?></span>
+                            <span><?php echo $translations["timetable"]; ?></span>
                         </a></li>
                     <li><a class="sidebar-link" href="../../../../trainers/personal">
                             <i class="bi bi-award"></i>
-                            <span><?php
-<?php echo $translations["trainers"]; ?></span>
+                            <span><?php echo $translations["trainers"]; ?></span>
                         </a></li>
-                    <li class="sidebar-header"><?php
-<?php echo $translations["other-header"]; ?></li>
+                    <li class="sidebar-header"><?php echo $translations["other-header"]; ?></li>
                     <?php
                     if ($is_boss === 1) {
                     ?>
                         <li class="sidebar-item">
                             <a class="sidebar-ling" href="../../../../updater">
                                 <i class="bi bi-cloud-download"></i>
-                                <span><?php
-<?php echo $translations["updatepage"]; ?></span>
-                                <?php
-<?php if ($is_new_version_available) : ?>
+                                <span><?php echo $translations["updatepage"]; ?></span>
+                                <?php if ($is_new_version_available) : ?>
                                     <span class="sidebar-badge badge">
                                         <i class="bi bi-exclamation-circle"></i>
                                     </span>
-                                <?php
-<?php endif; ?>
+                                <?php endif; ?>
                             </a>
                         </li>
                     <?php
@@ -843,8 +792,7 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
                     <li class="sidebar-item">
                         <a class="sidebar-ling" href="../../../../log">
                             <i class="bi bi-clock-history"></i>
-                            <span><?php
-<?php echo $translations["logpage"]; ?></span>
+                            <span><?php echo $translations["logpage"]; ?></span>
                         </a>
                     </li>
                 </ul><br>
@@ -854,18 +802,15 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
                 <div class="d-none topnav d-sm-inline-block">
                     <a href="https://gymoneglobal.com/discord" class="btn btn-primary mx-1" target="_blank" rel="noopener noreferrer">
                         <i class="bi bi-question-circle"></i>
-                        <?php
-<?php echo $translations["support"]; ?>
+                        <?php echo $translations["support"]; ?>
                     </a>
 
                     <a href="https://gymoneglobal.com/docs" class="btn btn-danger" target="_blank" rel="noopener noreferrer">
                         <i class="bi bi-journals"></i>
-                        <?php
-<?php echo $translations["docs"]; ?>
+                        <?php echo $translations["docs"]; ?>
                     </a>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#logoutModal">
-                        <?php
-<?php echo $translations["logout"]; ?>
+                        <?php echo $translations["logout"]; ?>
                     </button>
                     <h5 id="clock" style="display: inline-block; margin-bottom: 0;"></h5>
 
@@ -878,15 +823,12 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
                 ?>
                 <div class="pc">
                     <div class="pc-head">
-                        <a href="../../ticket/?userid=<?php
-<?php echo urlencode($tickerbuyerid); ?>" class="pc-back">
-                            <i class="bi bi-arrow-left"></i> <?php
-<?php echo $translations['sell-change'] ?? 'Vissza'; ?>
+                        <a href="../../ticket/?userid=<?php echo urlencode($tickerbuyerid); ?>" class="pc-back">
+                            <i class="bi bi-arrow-left"></i> <?php echo $translations['sell-change'] ?? 'Vissza'; ?>
                         </a>
                         <div class="pc-head-title">
                             <span class="pc-head-icon"><i class="bi bi-bag-check-fill"></i></span>
-                            <h3><?php
-<?php echo $translations['shopcategory'] ?? 'Termékek'; ?></h3>
+                            <h3><?php echo $translations['shopcategory'] ?? 'Termékek'; ?></h3>
                         </div>
                     </div>
 
@@ -897,35 +839,25 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
                         <div class="pc-card">
                             <div class="pc-card-head">
                                 <span class="pc-card-icon"><i class="bi bi-person"></i></span>
-                                <h5><?php
-<?php echo $translations['selected-member'] ?? 'Vásárló'; ?></h5>
+                                <h5><?php echo $translations['selected-member'] ?? 'Vásárló'; ?></h5>
                             </div>
                             <div class="pc-buyer">
                                 <div class="pc-avatar">
-                                    <span class="pc-ava-ini"><?php
-<?php echo htmlspecialchars($pc_ini($firstname, $lastname)); ?></span>
-                                    <img class="pc-ava-img" src="../../../../../assets/img/profiles/<?php
-<?php echo htmlspecialchars($tickerbuyerid); ?>.png" alt="" onerror="this.remove()">
+                                    <span class="pc-ava-ini"><?php echo htmlspecialchars($pc_ini($firstname, $lastname)); ?></span>
+                                    <img class="pc-ava-img" src="../../../../../assets/img/profiles/<?php echo htmlspecialchars($tickerbuyerid); ?>.png" alt="" onerror="this.remove()">
                                 </div>
                                 <div>
-                                    <div class="pc-buyer-name"><?php
-<?php echo htmlspecialchars($firstname . ' ' . $lastname); ?></div>
-                                    <div class="pc-buyer-id"><i class="bi bi-person-badge"></i> <?php
-<?php echo htmlspecialchars($tickerbuyerid); ?></div>
+                                    <div class="pc-buyer-name"><?php echo htmlspecialchars($firstname . ' ' . $lastname); ?></div>
+                                    <div class="pc-buyer-id"><i class="bi bi-person-badge"></i> <?php echo htmlspecialchars($tickerbuyerid); ?></div>
                                 </div>
                             </div>
                             <ul class="pc-meta">
-                                <li><i class="bi bi-envelope"></i> <span><?php
-<?php echo htmlspecialchars($email); ?></span></li>
-                                <li><i class="bi bi-geo-alt"></i> <span><?php
-<?php echo htmlspecialchars(trim($city . ' ' . $street . ' ' . $house_number)); ?></span></li>
+                                <li><i class="bi bi-envelope"></i> <span><?php echo htmlspecialchars($email); ?></span></li>
+                                <li><i class="bi bi-geo-alt"></i> <span><?php echo htmlspecialchars(trim($city . ' ' . $street . ' ' . $house_number)); ?></span></li>
                             </ul>
-                            <button type="button" class="pc-btn pc-btn-primary pc-block <?php
-<?php echo (!empty($data)) ? '' : 'pc-disabled'; ?>"
-                                data-toggle="modal" data-target="#paymentModal" <?php
-<?php echo (!empty($data)) ? '' : 'disabled'; ?>>
-                                <i class="bi bi-wallet2"></i> <?php
-<?php echo $translations["paybutton"]; ?>
+                            <button type="button" class="pc-btn pc-btn-primary pc-block <?php echo (!empty($data)) ? '' : 'pc-disabled'; ?>"
+                                data-toggle="modal" data-target="#paymentModal" <?php echo (!empty($data)) ? '' : 'disabled'; ?>>
+                                <i class="bi bi-wallet2"></i> <?php echo $translations["paybutton"]; ?>
                             </button>
                         </div>
 
@@ -933,71 +865,47 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
                         <div class="pc-card pc-summary">
                             <div class="pc-card-head">
                                 <span class="pc-card-icon"><i class="bi bi-cart3"></i></span>
-                                <h5><?php
-<?php echo $translations["ticketinfo"] ?? 'Kosár'; ?></h5>
+                                <h5><?php echo $translations["ticketinfo"] ?? 'Kosár'; ?></h5>
                             </div>
-                            <?php
-<?php if (!empty($data)): ?>
+                            <?php if (!empty($data)): ?>
                                 <div class="pc-items">
-                                    <?php
-<?php foreach ($data as $row): ?>
+                                    <?php foreach ($data as $row): ?>
                                         <div class="pc-item">
                                             <div class="pc-item-main">
-                                                <div class="pc-item-name"><?php
-<?php echo htmlspecialchars($row['name']); ?></div>
-                                                <?php
-<?php if (!empty($row['description'])): ?>
-                                                    <div class="pc-item-desc"><?php
-<?php echo htmlspecialchars($row['description']); ?></div>
-                                                <?php
-<?php endif; ?>
+                                                <div class="pc-item-name"><?php echo htmlspecialchars($row['name']); ?></div>
+                                                <?php if (!empty($row['description'])): ?>
+                                                    <div class="pc-item-desc"><?php echo htmlspecialchars($row['description']); ?></div>
+                                                <?php endif; ?>
                                                 <div class="pc-item-price">
-                                                    <?php
-<?php echo number_format($row['price'], 0, ',', '.'); ?> <?php
-<?php echo $currency; ?>
-                                                    &times; <?php
-<?php echo (int) $row['quantity']; ?> =
-                                                    <b><?php
-<?php echo number_format($row['subtotal'], 0, ',', '.'); ?> <?php
-<?php echo $currency; ?></b>
+                                                    <?php echo number_format($row['price'], 0, ',', '.'); ?> <?php echo $currency; ?>
+                                                    &times; <?php echo (int) $row['quantity']; ?> =
+                                                    <b><?php echo number_format($row['subtotal'], 0, ',', '.'); ?> <?php echo $currency; ?></b>
                                                 </div>
                                             </div>
                                             <div class="pc-item-side">
                                                 <form action="" method="POST" class="pc-qtyform">
-                                                    <input type="number" name="quantity" value="<?php
-<?php echo (int) $row['quantity']; ?>" min="1" class="pc-qty" required>
-                                                    <input type="hidden" name="cart_id" value="<?php
-<?php echo (int) $row['cart_id']; ?>">
-                                                    <button type="submit" name="update_quantity" class="pc-iconbtn pc-iconbtn-save" title="<?php
-<?php echo $translations["save"]; ?>"><i class="bi bi-check-lg"></i></button>
+                                                    <input type="number" name="quantity" value="<?php echo (int) $row['quantity']; ?>" min="1" class="pc-qty" required>
+                                                    <input type="hidden" name="cart_id" value="<?php echo (int) $row['cart_id']; ?>">
+                                                    <button type="submit" name="update_quantity" class="pc-iconbtn pc-iconbtn-save" title="<?php echo $translations["save"]; ?>"><i class="bi bi-check-lg"></i></button>
                                                 </form>
                                                 <form action="" method="POST">
-                                                    <input type="hidden" name="cart_id" value="<?php
-<?php echo (int) $row['cart_id']; ?>">
-                                                    <button type="submit" name="delete" class="pc-iconbtn pc-iconbtn-del" title="<?php
-<?php echo $translations["delete"]; ?>"><i class="bi bi-trash3"></i></button>
+                                                    <input type="hidden" name="cart_id" value="<?php echo (int) $row['cart_id']; ?>">
+                                                    <button type="submit" name="delete" class="pc-iconbtn pc-iconbtn-del" title="<?php echo $translations["delete"]; ?>"><i class="bi bi-trash3"></i></button>
                                                 </form>
                                             </div>
                                         </div>
-                                    <?php
-<?php endforeach; ?>
+                                    <?php endforeach; ?>
                                 </div>
                                 <div class="pc-total">
-                                    <span><?php
-<?php echo $translations["invoiceamount"]; ?></span>
-                                    <span class="pc-total-val"><?php
-<?php echo number_format($total, 0, ',', '.'); ?> <?php
-<?php echo $currency; ?></span>
+                                    <span><?php echo $translations["invoiceamount"]; ?></span>
+                                    <span class="pc-total-val"><?php echo number_format($total, 0, ',', '.'); ?> <?php echo $currency; ?></span>
                                 </div>
-                            <?php
-<?php else: ?>
+                            <?php else: ?>
                                 <div class="pc-empty">
                                     <i class="bi bi-cart-x"></i>
-                                    <p><?php
-<?php echo $translations["empty"]; ?></p>
+                                    <p><?php echo $translations["empty"]; ?></p>
                                 </div>
-                            <?php
-<?php endif; ?>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -1021,22 +929,19 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
                     </div>
 
                     <h4 style="font-weight: bold; margin-bottom: 15px;">
-                        <p><?php
-<?php echo $translations["exit-modal"]; ?></p>
+                        <p><?php echo $translations["exit-modal"]; ?></p>
                     </h4>
 
                     <div class="text-center">
                         <a type="button" class="btn btn-default" data-dismiss="modal"
                             style="padding: 8px 25px; margin-right: 10px;">
                             <i class="bi bi-x-circle" style="margin-right: 5px;"></i>
-                            <?php
-<?php echo $translations["not-yet"]; ?>
+                            <?php echo $translations["not-yet"]; ?>
                         </a>
 
                         <a href="../../,./../logout.php" type="button" class="btn btn-danger" style="padding: 8px 25px;">
                             <i class="bi bi-check-circle" style="margin-right: 5px;"></i>
-                            <?php
-<?php echo $translations["confirm"]; ?>
+                            <?php echo $translations["confirm"]; ?>
                         </a>
                     </div>
                 </div>
@@ -1055,9 +960,7 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
                     </div>
                     <div class="pc-modal-amount">
                         <span><?= $translations["invoiceamount"]; ?></span>
-                        <b><?php
-<?php echo number_format((float) $total, 0, ',', '.'); ?> <?php
-<?php echo $currency; ?></b>
+                        <b><?php echo number_format((float) $total, 0, ',', '.'); ?> <?php echo $currency; ?></b>
                     </div>
                     <form method="post">
                         <div class="pc-methods">
@@ -1073,14 +976,12 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
                                 <input type="radio" name="paymentMethod" value="transfer">
                                 <span class="pc-method-box"><i class="bi bi-bank"></i><span>Transferencia</span></span>
                             </label>
-                            <?php
-<?php if ($profile_balance_odd >= $total): ?>
+                            <?php if ($profile_balance_odd >= $total): ?>
                                 <label class="pc-method">
                                     <input type="radio" name="paymentMethod" value="profile">
                                     <span class="pc-method-box"><i class="bi bi-person-badge"></i><span><?= $translations["profilebalancepay"]; ?></span></span>
                                 </label>
-                            <?php
-<?php endif; ?>
+                            <?php endif; ?>
                         </div>
                         <div class="pc-modal-actions">
                             <button type="button" class="pc-btn pc-btn-ghost" data-dismiss="modal"><?= $translations["not-yet"] ?? 'Mégse'; ?></button>
@@ -1092,8 +993,7 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
         </div>
     </div>
 
-    <?php
-<?php include __DIR__ . '/../_pc_assets.php'; ?>
+    <?php include __DIR__ . '/../_pc_assets.php'; ?>
 
     <?php
     $conn->close();
