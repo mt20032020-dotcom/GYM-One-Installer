@@ -172,11 +172,11 @@ CSS;
 
         // Logók: kép, ha van; különben szöveges tartalék (nincs törött kép)
         $topLogoHtml = $logoSrc !== ''
-            ? "<img src='{$logoSrc}' class='inv-logo' alt='Logo'>"
+            ? "<table cellpadding='0' cellspacing='0'><tr><td style='background:#111111; padding:10px 16px; border-radius:8px;'><img src='{$logoSrc}' class='inv-logo' alt='Logo'></td></tr></table>"
             : "<span style='font-size:20px; font-weight:bold; color:#e53935;'>{$businessName}</span>";
 
         $partnerLogoHtml = $partnerLogoSrc !== ''
-            ? "<img src='{$partnerLogoSrc}' width='90' alt='GYM ONE Logo COPYRIGHT DO NOT REMOVE'>"
+            ? "<table cellpadding='0' cellspacing='0'><tr><td style='background:#111111; padding:6px 10px; border-radius:6px;'><img src='{$partnerLogoSrc}' width='90' alt='GYM ONE Logo COPYRIGHT DO NOT REMOVE'></td></tr></table>"
             : "<span style='font-size:13px; font-weight:bold; color:#e53935;'>GYM One</span>";
 
         return "

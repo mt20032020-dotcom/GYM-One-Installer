@@ -237,7 +237,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $translatedPaymentMethod = $translations["profilebalancepay"];
     }
 
-    $invoiceNumber = bin2hex(random_bytes(8));
+    $seqRow = $conn->query("SELECT COALESCE(MAX(id),0)+1 AS n FROM invoices")->fetch_assoc();
+    $invoiceNumber = 'ADR-' . date('Y') . '-' . str_pad($seqRow['n'], 5, '0', STR_PAD_LEFT);
     $date = date('Y-m-d');
     $dueDate = $expire_date;
     $clientName = $firstname . ' ' . $lastname;
@@ -285,7 +286,7 @@ $inv_pm = ($method == 'profile') ? $translations["profilebalancepay"] : (($metho
         'businessPhone' => $phoneno,
         'date' => $date,
         'invoiceNumber' => $invoiceNumber,
-        'userid' => $userid,
+        'userid' => (function($cn, $uid){ $r = $cn->query("SELECT cedula FROM users WHERE userid = " . (int)$uid); $a = $r ? $r->fetch_assoc() : null; return $a['cedula'] ?? $uid; })($conn, $userid),
         'clientName' => $clientName,
         'clientCity' => $clientCity,
         'clientAddress' => $clientAddress,
