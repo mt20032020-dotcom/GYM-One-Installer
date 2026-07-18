@@ -103,6 +103,29 @@ if (isset($_GET['user']) && is_numeric($_GET['user'])) {
     $verify = $row['confirmed'];
     $lastip = $row['lastip'];
     // Eliminar plan futuro
+    // Beneficiarios: agregar por cedula
+    if (isset($_POST['add_beneficiary_cedula'])) {
+        require_once '/app/includes/beneficiaries.php';
+        $ced_b = trim($_POST['add_beneficiary_cedula']);
+        $stmt_b = $conn->prepare('SELECT userid FROM users WHERE cedula = ?');
+        $stmt_b->bind_param('s', $ced_b);
+        $stmt_b->execute();
+        $row_b = $stmt_b->get_result()->fetch_assoc();
+        if (!$row_b) {
+            $beneficiary_msg = 'No existe un usuario con esa cedula. Debe registrarse primero.';
+        } else {
+            $is_repl = !empty($_POST['is_replacement']);
+            $res_b = add_beneficiary($conn, $useridgymuser, $row_b['userid'], $is_repl);
+            $beneficiary_msg = ($res_b === true) ? 'OK' : $res_b;
+        }
+    }
+    // Beneficiarios: eliminar
+    if (isset($_GET['remove_beneficiary']) && is_numeric($_GET['remove_beneficiary'])) {
+        require_once '/app/includes/beneficiaries.php';
+        remove_beneficiary($conn, $useridgymuser, intval($_GET['remove_beneficiary']));
+        header('Location: ?user=' . $useridgymuser);
+        exit();
+    }
     if (isset($_GET['remove_future']) && is_numeric($_GET['remove_future'])) {
         require_once '/app/includes/future_plans.php';
         remove_future_plan($conn, intval($_GET['remove_future']), $useridgymuser);
@@ -776,6 +799,112 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['userid'])) {
             require_once "/app/includes/future_plans.php";
             $future_plans = get_future_plans($conn, $useridgymuser);
             ?>
+            <?php
+            require_once "/app/includes/beneficiaries.php";
+            $tiq_activa = get_active_tiquetera($conn, $useridgymuser);
+            if ($tiq_activa):
+                $benefs = get_beneficiaries($conn, $useridgymuser);
+                $puede_cambiar = can_change_beneficiary($conn, $useridgymuser);
+            ?>
+            <div style="background:#fff;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+              <h4 style="font-weight:800; margin-bottom:12px;"><i class="bi bi-people"></i> Beneficiarios de la tiquetera
+                <span class="badge" style="background:#0ea5e9;color:#fff;font-size:0.6em;vertical-align:middle;"><?php echo count($benefs); ?>/2</span>
+              </h4>
+              <p style="font-size:0.85em;color:#888;margin-bottom:12px;">
+                <i class="bi bi-info-circle"></i> Tiquetera: <strong><?php echo htmlspecialchars($tiq_activa["ticketname"]); ?></strong> — vence <?php echo date("d/m/Y", strtotime($tiq_activa["expiredate"])); ?>.
+                Cambio de beneficiario disponible: <strong style="color:<?php echo $puede_cambiar ? "#16a34a" : "#dc2626"; ?>;"><?php echo $puede_cambiar ? "Sí" : "Ya usado en esta vigencia"; ?></strong>
+              </p>
+              <?php if (!empty($beneficiary_msg) && $beneficiary_msg !== "OK"): ?>
+                <div class="alert alert-warning" style="padding:8px;font-size:0.9em;"><?php echo htmlspecialchars($beneficiary_msg); ?></div>
+              <?php elseif (!empty($beneficiary_msg)): ?>
+                <div class="alert alert-success" style="padding:8px;font-size:0.9em;">Beneficiario agregado correctamente.</div>
+              <?php endif; ?>
+              <?php if (empty($benefs)): ?>
+                <p style="color:#999;">Sin beneficiarios registrados.</p>
+              <?php else: ?>
+                <table class="table table-striped" style="margin-bottom:12px;">
+                  <thead><tr><th>Nombre</th><th>Cédula</th><th>Desde</th><th></th></tr></thead>
+                  <tbody>
+                    <?php foreach ($benefs as $b): ?>
+                    <tr>
+                      <td><strong><?php echo htmlspecialchars($b["lastname"] . " " . $b["firstname"]); ?></strong></td>
+                      <td><?php echo htmlspecialchars($b["cedula"]); ?></td>
+                      <td><?php echo date("d/m/Y", strtotime($b["created_at"])); ?></td>
+                      <td>
+                        <a href="?user=<?php echo $useridgymuser; ?>&remove_beneficiary=<?php echo $b["beneficiary_userid"]; ?>"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('¿Quitar este beneficiario? Recuerda: solo se permite 1 cambio por vigencia.');">
+                          <i class="bi bi-trash"></i>
+                        </a>
+                      </td>
+                    </tr>
+                    <?php endforeach; ?>
+                  </tbody>
+                </table>
+              <?php endif; ?>
+              <?php if (count($benefs) < 2): ?>
+              <div style="position:relative;">
+                <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;">
+                  <input type="text" id="benefSearch" class="form-control" placeholder="Buscar por cédula o nombre..." style="max-width:280px;" autocomplete="off">
+                  <?php if (!empty($benefs)): ?>
+                  <label style="font-weight:normal;font-size:0.85em;margin:0;"><input type="checkbox" id="benefIsRepl"> Es reemplazo</label>
+                  <?php endif; ?>
+                  <button type="button" class="btn btn-success btn-sm" onclick="abrirModalNuevoBenef()"><i class="bi bi-person-plus-fill"></i> Crear nuevo</button>
+                </div>
+                <div id="benefResults" style="display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid #ddd;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.15);z-index:100;max-width:280px;width:100%;max-height:220px;overflow-y:auto;"></div>
+              </div>
+              <!-- Form oculto para enviar la seleccion -->
+              <form method="POST" id="benefHiddenForm" style="display:none;">
+                <input type="hidden" name="add_beneficiary_cedula" id="benefSelectedCedula">
+                <input type="hidden" name="is_replacement" id="benefHiddenRepl" value="">
+              </form>
+              <!-- Modal crear nuevo -->
+              <div id="modalNuevoBenef" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:9998;justify-content:center;align-items:center;">
+                <div style="background:#fff;border-radius:14px;padding:24px;max-width:480px;width:92%;max-height:90vh;overflow-y:auto;">
+                  <h4 style="margin-top:0;"><i class="bi bi-person-plus"></i> Registrar beneficiario nuevo</h4>
+                  <div id="nbError" style="display:none;" class="alert alert-danger"></div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+                    <input type="text" id="nbFirstname" class="form-control" placeholder="Nombre *">
+                    <input type="text" id="nbLastname" class="form-control" placeholder="Apellido *">
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+                    <input type="text" id="nbCedula" class="form-control" placeholder="Cédula *">
+                    <input type="tel" id="nbCelular" class="form-control" placeholder="Celular">
+                  </div>
+                  <input type="email" id="nbEmail" class="form-control" placeholder="Correo (opcional)" style="margin-bottom:8px;">
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+                    <select id="nbGender" class="form-control">
+                      <option value="Male">Masculino</option>
+                      <option value="Female">Femenino</option>
+                      <option value="Other">Otro</option>
+                    </select>
+                    <input type="date" id="nbBirthdate" class="form-control">
+                  </div>
+                  <div style="margin-bottom:12px;">
+                    <button type="button" class="btn btn-default btn-sm" onclick="nbAbrirCamara()"><i class="bi bi-camera"></i> Tomar foto</button>
+                    <span id="nbFotoStatus" style="font-size:0.85em;color:#999;margin-left:8px;">Sin foto</span>
+                    <small style="display:block;color:#888;font-size:0.75em;margin-top:3px;"><i class="bi bi-info-circle"></i> Foto para ingreso con reconocimiento facial.</small>
+                  <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:8px;margin-top:8px;font-size:0.8em;color:#1e40af;">
+                    <i class="bi bi-key"></i> La contraseña inicial será su <strong>número de cédula</strong>. Podrá cambiarla desde su perfil.
+                  </div>
+                  </div>
+                  <div id="nbCamModal" style="display:none;margin-bottom:12px;text-align:center;">
+                    <video id="nbCamVideo" autoplay playsinline style="max-width:100%;border-radius:10px;"></video>
+                    <canvas id="nbCamCanvas" style="display:none;"></canvas>
+                    <div style="margin-top:8px;">
+                      <button type="button" class="btn btn-danger btn-sm" onclick="nbCapturar()"><i class="bi bi-camera-fill"></i> Capturar</button>
+                      <button type="button" class="btn btn-default btn-sm" onclick="nbCerrarCamara()">Cancelar</button>
+                    </div>
+                  </div>
+                  <div style="display:flex;gap:8px;justify-content:flex-end;">
+                    <button type="button" class="btn btn-default" onclick="cerrarModalNuevoBenef()">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="nbGuardar()"><i class="bi bi-check-lg"></i> Registrar y agregar</button>
+                  </div>
+                </div>
+              </div>
+              <?php endif; ?>
+            </div>
+            <?php endif; ?>
             <div style="background:#fff;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.08);">
               <h4 style="font-weight:800; margin-bottom:12px;"><i class="bi bi-calendar-plus"></i> Planes futuros
                 <span class="badge" style="background:#7c3aed;color:#fff;font-size:0.6em;vertical-align:middle;"><?php echo count($future_plans); ?> en cola</span>
@@ -912,6 +1041,95 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['userid'])) {
   <!-- SCRIPTS! -->
   <script src="../../../assets/js/date-time.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script>
+// ===== BENEFICIARIOS: buscador en vivo =====
+(function(){
+  var inp = document.getElementById("benefSearch");
+  if (!inp) return;
+  var box = document.getElementById("benefResults");
+  var timer = null;
+  inp.addEventListener("input", function(){
+    clearTimeout(timer);
+    var q = inp.value.trim();
+    if (q.length < 2) { box.style.display = "none"; return; }
+    timer = setTimeout(function(){
+      fetch("beneficiary_api.php?action=search&q=" + encodeURIComponent(q))
+        .then(r => r.json())
+        .then(function(list){
+          if (!list.length) { box.innerHTML = "<div style='padding:10px;color:#999;font-size:0.85em;'>Sin resultados — usa Crear nuevo</div>"; box.style.display = "block"; return; }
+          box.innerHTML = list.map(function(u){
+            return "<div onclick='seleccionarBenef(\"" + u.cedula + "\")' style='padding:10px;cursor:pointer;border-bottom:1px solid #eee;' onmouseover='this.style.background=\"#f5f5f5\"' onmouseout='this.style.background=\"#fff\"'>" +
+              "<strong>" + u.lastname + " " + u.firstname + "</strong><br><small style='color:#888;'>CC " + u.cedula + "</small></div>";
+          }).join("");
+          box.style.display = "block";
+        });
+    }, 300);
+  });
+  document.addEventListener("click", function(e){
+    if (!box.contains(e.target) && e.target !== inp) box.style.display = "none";
+  });
+})();
+
+function seleccionarBenef(cedula) {
+  document.getElementById("benefSelectedCedula").value = cedula;
+  var repl = document.getElementById("benefIsRepl");
+  document.getElementById("benefHiddenRepl").value = (repl && repl.checked) ? "1" : "";
+  document.getElementById("benefHiddenForm").submit();
+}
+
+// ===== Modal crear nuevo =====
+function abrirModalNuevoBenef() { document.getElementById("modalNuevoBenef").style.display = "flex"; }
+function cerrarModalNuevoBenef() { nbCerrarCamara(); document.getElementById("modalNuevoBenef").style.display = "none"; }
+
+var nbStream = null;
+var nbFoto = "";
+
+function nbAbrirCamara() {
+  document.getElementById("nbCamModal").style.display = "block";
+  navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
+    .then(function(s){ nbStream = s; document.getElementById("nbCamVideo").srcObject = s; })
+    .catch(function(e){ alert("No se pudo acceder a la cámara: " + e.message); document.getElementById("nbCamModal").style.display = "none"; });
+}
+
+function nbCapturar() {
+  var v = document.getElementById("nbCamVideo");
+  var c = document.getElementById("nbCamCanvas");
+  c.width = v.videoWidth; c.height = v.videoHeight;
+  c.getContext("2d").drawImage(v, 0, 0);
+  nbFoto = c.toDataURL("image/jpeg", 0.85);
+  document.getElementById("nbFotoStatus").innerHTML = "<span style='color:#16a34a;'><i class='bi bi-check-circle'></i> Foto lista</span>";
+  nbCerrarCamara();
+}
+
+function nbCerrarCamara() {
+  if (nbStream) { nbStream.getTracks().forEach(t => t.stop()); nbStream = null; }
+  document.getElementById("nbCamModal").style.display = "none";
+}
+
+function nbGuardar() {
+  var err = document.getElementById("nbError");
+  err.style.display = "none";
+  var datos = new FormData();
+  datos.append("action", "create");
+  datos.append("firstname", document.getElementById("nbFirstname").value.trim());
+  datos.append("lastname", document.getElementById("nbLastname").value.trim());
+  datos.append("cedula", document.getElementById("nbCedula").value.trim());
+  datos.append("celular", document.getElementById("nbCelular").value.trim());
+  datos.append("email", document.getElementById("nbEmail").value.trim());
+  datos.append("gender", document.getElementById("nbGender").value);
+  datos.append("birthdate", document.getElementById("nbBirthdate").value);
+  datos.append("face_photo", nbFoto);
+
+  fetch("beneficiary_api.php", { method: "POST", body: datos })
+    .then(r => r.json())
+    .then(function(res){
+      if (res.error) { err.textContent = res.error; err.style.display = "block"; return; }
+      // Creado: ahora agregarlo como beneficiario via el form
+      seleccionarBenef(res.cedula);
+    })
+    .catch(function(){ err.textContent = "Error de conexión."; err.style.display = "block"; });
+}
+</script>
 </body>
 
 </html>
