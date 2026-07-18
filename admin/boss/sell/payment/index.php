@@ -156,6 +156,11 @@ use Mpdf\Mpdf;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $paymentMethod = $_POST['paymentMethod'] ?? '';
+    // Anti duplicado: misma venta (user+plan) en los ultimos 30 segundos
+    $dupChk = $conn->query("SELECT COUNT(*) t FROM invoices WHERE userid = " . (int)$userid . " AND price = " . (float)$ticketprice . " AND created_at >= DATE_SUB(NOW(), INTERVAL 30 SECOND)");
+    if ($dupChk && ((int)$dupChk->fetch_assoc()['t']) > 0) {
+        $alerts_html .= '<div class="alert alert-warning" role="alert"><i class="bi bi-exclamation-triangle"></i> Esta venta ya fue registrada hace unos segundos. Se evitó un cobro duplicado.</div>';
+    } else {
     $date = date('Y-m-d');
     $amount = $ticketprice;
     $method = $paymentMethod;
@@ -614,6 +619,22 @@ $inv_pm = ($method == 'profile') ? $translations["profilebalancepay"] : (($metho
 #mixedPanel input[type=number]{ width:100% !important; box-sizing:border-box; }
 #mixedPanel label{ white-space:nowrap; display:block; margin-bottom:4px; }
 </style>
+<script>
+// Anti doble-clic: deshabilitar Siguiente al enviar
+(function(){
+    var formPago = document.querySelector(".pc-btn.pc-btn-success");
+    if (!formPago) return;
+    var form = formPago.closest("form");
+    if (!form) return;
+    form.addEventListener("submit", function(e){
+        var btn = form.querySelector(".pc-btn.pc-btn-success");
+        if (btn.dataset.enviando === "1") { e.preventDefault(); return; }
+        btn.dataset.enviando = "1";
+        btn.disabled = true;
+        btn.innerHTML = "<i class=\"bi bi-hourglass-split\"></i> Procesando...";
+    });
+})();
+</script>
 </body>
 
 </html>
@@ -632,6 +653,7 @@ EOD;
     }
 
     $stmt->close();
+    } // fin anti-duplicado
 }
 
 $message = "";
@@ -1140,6 +1162,22 @@ $is_new_version_available = version_compare($latest_version, $current_version) >
 #mixedPanel input[type=number]{ width:100% !important; box-sizing:border-box; }
 #mixedPanel label{ white-space:nowrap; display:block; margin-bottom:4px; }
 </style>
+<script>
+// Anti doble-clic: deshabilitar Siguiente al enviar
+(function(){
+    var formPago = document.querySelector(".pc-btn.pc-btn-success");
+    if (!formPago) return;
+    var form = formPago.closest("form");
+    if (!form) return;
+    form.addEventListener("submit", function(e){
+        var btn = form.querySelector(".pc-btn.pc-btn-success");
+        if (btn.dataset.enviando === "1") { e.preventDefault(); return; }
+        btn.dataset.enviando = "1";
+        btn.disabled = true;
+        btn.innerHTML = "<i class=\"bi bi-hourglass-split\"></i> Procesando...";
+    });
+})();
+</script>
 </body>
 
 </html>
