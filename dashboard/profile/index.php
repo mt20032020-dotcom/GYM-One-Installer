@@ -1,7 +1,6 @@
 <?php
 session_start();
-
-require_once __DIR__ . '/../../../includes/mailer.php';
+require_once "/app/includes/mailer.php";
 // COMPOSER!
 
 
@@ -273,7 +272,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['userid'])) {
 EOD;
 
 
-          $result = send_mail($env_data ?? [], $mail => '{$firstname}', $translations["passwordedited"], $editedcontent, $business_name ?? '');
+          $result = send_mail($env_data ?? [], $mail, $translations["passwordedited"], $editedcontent, $business_name ?? '');
           header("Refresh:2");
         } else {
           $alerts_html .= '<div class="alert alert-danger" role="alert">
