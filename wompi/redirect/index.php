@@ -18,7 +18,7 @@ if ($tx_id) {
         }
         return $env;
     }
-    $env = read_env('../../../.env');
+    $env = read_env('/app/.env');
     $prv = $env['WOMPI_PRIVATE_KEY'];
 
     $ch = curl_init("https://production.wompi.co/v1/transactions/$tx_id");

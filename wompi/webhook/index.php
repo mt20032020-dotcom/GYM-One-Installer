@@ -16,7 +16,7 @@ function read_env($file) {
     return $env;
 }
 
-$env = read_env('../../../.env');
+$env = read_env('/app/.env');
 
 // Verificar firma
 $signature = $_SERVER['HTTP_X_WOMPI_SIGNATURE'] ?? '';
