@@ -149,7 +149,8 @@ $stmt->close();
 $total_cash = 0;
 $total_card = 0;
 $total_transfer = 0;
-$stmt = $conn->prepare("SELECT COALESCE(SUM(cash),0) AS total_cash, COALESCE(SUM(bank_card),0) AS total_card, COALESCE(SUM(transfer),0) AS total_transfer FROM revenu_stats WHERE `date` BETWEEN ? AND ?");
+$total_web = 0;
+$stmt = $conn->prepare("SELECT COALESCE(SUM(cash),0) AS total_cash, COALESCE(SUM(bank_card),0) AS total_card, COALESCE(SUM(transfer),0) AS total_transfer, COALESCE(SUM(web),0) AS total_web FROM revenu_stats WHERE `date` BETWEEN ? AND ?");
 $stmt->bind_param("ss", $start_date, $end_date);
 $stmt->execute();
 $pm = $stmt->get_result()->fetch_assoc();
@@ -157,6 +158,7 @@ if ($pm) {
     $total_cash = (float) $pm['total_cash'];
     $total_card = (float) $pm['total_card'];
     $total_transfer = (float) $pm['total_transfer'];
+    $total_web = (float) ($pm['total_web'] ?? 0);
 }
 $stmt->close();
 
@@ -399,6 +401,12 @@ $conn->close();
                                 <div class="stat-card" style="background:linear-gradient(135deg,#0e7490,#155e75);color:#fff;">
                                     <h4>Transferencia</h4>
                                     <div class="value"><?php echo number_format($total_transfer, 2); ?> <?php echo htmlspecialchars($currency); ?></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="stat-card" style="background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;">
+                                    <h4>Pagos Web</h4>
+                                    <div class="value"><?php echo number_format($total_web, 2); ?> <?php echo htmlspecialchars($currency); ?></div>
                                 </div>
                             </div>
                         </div>

@@ -131,6 +131,30 @@ if ($plan_result && $plan_result["type"] === "active" && file_exists("/app/asset
 // Log
 $db->query("INSERT INTO logs (userid, action, actioncolor, time) VALUES ($userid, 'Plan asignado via Wompi: {$ticket['name']}', 'success', NOW())");
 
+// ===== REGISTRO CONTABLE =====
+$monto_pesos = $transaction["amount_in_cents"] / 100;
+$hoy_rev = date("Y-m-d");
+
+// 1. Ingresos del dia (columna web)
+$rRev = $db->query("SELECT id FROM revenu_stats WHERE date = '$hoy_rev'");
+if ($rRev && $rRev->num_rows > 0) {
+    $revId = $rRev->fetch_assoc()["id"];
+    $db->query("UPDATE revenu_stats SET web = web + $monto_pesos WHERE id = " . (int)$revId);
+} else {
+    $db->query("INSERT INTO revenu_stats (date, bank_card, cash, transfer, web) VALUES ('$hoy_rev', 0, 0, 0, $monto_pesos)");
+}
+
+// 2. Factura en invoices con numeracion consecutiva
+$seqW = $db->query("SELECT COALESCE(MAX(id),0)+1 AS n FROM invoices")->fetch_assoc();
+$invNumW = "ADR-" . date("Y") . "-" . str_pad($seqW["n"], 5, "0", STR_PAD_LEFT);
+$uNameRow = $db->query("SELECT firstname, lastname FROM users WHERE userid = " . (int)$userid)->fetch_assoc();
+$fullNameW = trim(($uNameRow["firstname"] ?? "") . " " . ($uNameRow["lastname"] ?? ""));
+$statusW = "Pagado";
+$routeW = ""; // pago web: sin PDF generado por ahora
+$stmtInv = $db->prepare("INSERT INTO invoices (userid, name, price, status, route, created_at) VALUES (?, ?, ?, ?, ?, NOW())");
+$stmtInv->bind_param("isdss", $userid, $fullNameW, $monto_pesos, $statusW, $routeW);
+$stmtInv->execute();
+
 // Correo de confirmacion al cliente
 $stmtM = $db->prepare("SELECT firstname FROM users WHERE userid = ?");
 $stmtM->bind_param("i", $userid);
