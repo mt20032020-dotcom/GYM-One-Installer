@@ -70,6 +70,17 @@ if (!$ticket_id) {
 
 require_once "/app/includes/future_plans.php";
 $db = new mysqli($env['DB_SERVER'], $env['DB_USERNAME'], $env['DB_PASSWORD'], $env['DB_NAME']);
+$db->query("CREATE TABLE IF NOT EXISTS wompi_processed (reference VARCHAR(120) PRIMARY KEY, processed_at DATETIME DEFAULT CURRENT_TIMESTAMP)");
+// Idempotencia: si la referencia ya fue procesada, responder OK sin duplicar
+$stmtIdem = $db->prepare("SELECT 1 FROM wompi_processed WHERE reference = ?");
+$stmtIdem->bind_param("s", $reference);
+$stmtIdem->execute();
+if ($stmtIdem->get_result()->fetch_row()) {
+    @file_put_contents("/app/wompi/webhook_log.txt", date("Y-m-d H:i:s") . " DUPLICADO ignorado: $reference\n", FILE_APPEND);
+    http_response_code(200);
+    exit(json_encode(["ok" => true, "duplicate" => true]));
+}
+$db->query("INSERT IGNORE INTO wompi_processed (reference) VALUES ('" . $db->real_escape_string($reference) . "')");
 
 // Buscar ticket
 $stmt = $db->prepare("SELECT * FROM tickets WHERE id = ?");
