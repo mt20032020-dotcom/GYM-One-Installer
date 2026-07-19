@@ -1,6 +1,7 @@
 <?php
 // Leer body
 $body = file_get_contents('php://input');
+@file_put_contents('/app/wompi/webhook_log.txt', date('Y-m-d H:i:s') . " RECIBIDO: " . substr($body, 0, 500) . "\n", FILE_APPEND);
 $data = json_decode($body, true);
 
 function read_env($file) {
@@ -18,14 +19,24 @@ function read_env($file) {
 
 $env = read_env('/app/.env');
 
-// Verificar firma
-$signature = $_SERVER['HTTP_X_WOMPI_SIGNATURE'] ?? '';
+// Verificar firma (esquema oficial Wompi: X-Event-Checksum)
+$signature = $_SERVER['HTTP_X_EVENT_CHECKSUM'] ?? '';
 $events_secret = $env['WOMPI_EVENTS_SECRET'];
-$computed = hash('sha256', $body . $events_secret);
+$props = $data['signature']['properties'] ?? [];
+$timestamp = $data['timestamp'] ?? '';
+$concat = '';
+foreach ($props as $prop) {
+    $keys = explode('.', $prop);
+    $val = $data['data'];
+    foreach ($keys as $k) { $val = $val[$k] ?? ''; }
+    $concat .= $val;
+}
+$computed = hash('sha256', $concat . $timestamp . $events_secret);
 
-if ($computed !== $signature) {
+if (empty($signature) || !hash_equals($computed, $signature)) {
+    @file_put_contents('/app/wompi/webhook_log.txt', date('Y-m-d H:i:s') . " FIRMA INVALIDA: esperada=$computed recibida=$signature\n", FILE_APPEND);
     http_response_code(401);
-    exit('Firma inválida');
+    exit(json_encode(["error" => "Firma inválida"]));
 }
 
 // Solo procesar transacciones aprobadas
