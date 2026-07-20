@@ -122,7 +122,7 @@ $integrity_secret = $env['WOMPI_INTEGRITY_SECRET'];
 
 // Generar referencia única
 $start_pref = ($_SESSION["checkout_start_option"] ?? "today") === "custom" && !empty($_SESSION["checkout_custom_start"]) ? str_replace("-", "", $_SESSION["checkout_custom_start"]) : "T";
-$reference = 'GYM-' . $ticket_id . '-' . time() . '-' . rand(100, 999) . '-' . $start_pref;
+$reference = 'GYM-' . $ticket_id . '-' . ($_SESSION['userid'] ?? 0) . '-' . time() . '-' . $start_pref;
 $amount_cents = intval($ticket['price'] * 100);
 $currency = 'COP';
 

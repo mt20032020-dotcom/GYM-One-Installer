@@ -80,7 +80,7 @@ if ($stmtIdem->get_result()->fetch_row()) {
     http_response_code(200);
     exit(json_encode(["ok" => true, "duplicate" => true]));
 }
-$db->query("INSERT IGNORE INTO wompi_processed (reference) VALUES ('" . $db->real_escape_string($reference) . "')");
+// (marca de procesado se hace al final, tras asignar el plan)
 
 // Buscar ticket
 $stmt = $db->prepare("SELECT * FROM tickets WHERE id = ?");
@@ -93,19 +93,21 @@ if (!$ticket) {
     exit('OK');
 }
 
-// Buscar usuario por email
-$email = $transaction['customer_email'] ?? '';
-$stmt2 = $db->prepare("SELECT userid FROM users WHERE email = ?");
-$stmt2->bind_param("s", $email);
+// Buscar usuario por userid codificado en la referencia (parts[2])
+$userid = intval($parts[2] ?? 0);
+$stmt2 = $db->prepare("SELECT userid, email FROM users WHERE userid = ?");
+$stmt2->bind_param("i", $userid);
 $stmt2->execute();
 $user = $stmt2->get_result()->fetch_assoc();
 
 if (!$user) {
+    @file_put_contents('/app/wompi/webhook_log.txt', date('Y-m-d H:i:s') . " USUARIO NO ENCONTRADO ref=$reference userid=$userid\n", FILE_APPEND);
+    header('Content-Type: application/json');
     http_response_code(200);
-    exit('Usuario no encontrado');
+    exit(json_encode(['ok' => false, 'error' => 'usuario no encontrado']));
 }
 
-$userid = $user['userid'];
+$email = $user['email'];
 
 // Calcular vencimiento
 $expire_days = $ticket['expire_days'];
@@ -121,16 +123,23 @@ if (isset($parts[4]) && $parts[4] !== "T" && strlen($parts[4]) === 8) {
     $custom_start = substr($parts[4], 0, 4) . "-" . substr($parts[4], 4, 2) . "-" . substr($parts[4], 6, 2);
 }
 $plan_result = add_plan($db, $userid, $ticketname, $expire_days, $occasions, $custom_start);
+$db->query("INSERT IGNORE INTO wompi_processed (reference) VALUES ('" . $db->real_escape_string($reference) . "')");
 
 // Enrolar en SpeedFace si tiene foto y el plan quedo activo
-if ($plan_result && $plan_result["type"] === "active" && file_exists("/app/assets/img/profiles/{$userid}.png")) {
-    require_once "/app/iclock/lib/enroll.php";
-    @enrolar_en_speedface($userid);
+try {
+    if ($plan_result && $plan_result["type"] === "active" && file_exists("/app/assets/img/profiles/{$userid}.png")) {
+        require_once "/app/iclock/lib/enroll.php";
+        @enrolar_en_speedface($userid);
+    }
+} catch (\Throwable $eEnr) {
+    @file_put_contents("/app/wompi/webhook_log.txt", date("Y-m-d H:i:s") . " ERROR ENROLL: " . $eEnr->getMessage() . "\n", FILE_APPEND);
 }
 
 // Log
 $db->query("INSERT INTO logs (userid, action, actioncolor, time) VALUES ($userid, 'Plan asignado via Wompi: {$ticket['name']}', 'success', NOW())");
 
+mysqli_report(MYSQLI_REPORT_OFF); // no matar el flujo por errores secundarios
+try {
 // ===== REGISTRO CONTABLE =====
 $monto_pesos = $transaction["amount_in_cents"] / 100;
 $hoy_rev = date("Y-m-d");
@@ -149,13 +158,17 @@ $seqW = $db->query("SELECT COALESCE(MAX(id),0)+1 AS n FROM invoices")->fetch_ass
 $invNumW = "ADR-" . date("Y") . "-" . str_pad($seqW["n"], 5, "0", STR_PAD_LEFT);
 $uNameRow = $db->query("SELECT firstname, lastname FROM users WHERE userid = " . (int)$userid)->fetch_assoc();
 $fullNameW = trim(($uNameRow["firstname"] ?? "") . " " . ($uNameRow["lastname"] ?? ""));
-$statusW = "Pagado";
+$statusW = "paid";
 $routeW = ""; // pago web: sin PDF generado por ahora
 $stmtInv = $db->prepare("INSERT INTO invoices (userid, name, price, status, route, created_at) VALUES (?, ?, ?, ?, ?, NOW())");
 $stmtInv->bind_param("isdss", $userid, $fullNameW, $monto_pesos, $statusW, $routeW);
 $stmtInv->execute();
+} catch (\Throwable $eCont) {
+    @file_put_contents("/app/wompi/webhook_log.txt", date("Y-m-d H:i:s") . " ERROR CONTABLE: " . $eCont->getMessage() . "\n", FILE_APPEND);
+}
 
 // Correo de confirmacion al cliente
+try {
 $stmtM = $db->prepare("SELECT firstname FROM users WHERE userid = ?");
 $stmtM->bind_param("i", $userid);
 $stmtM->execute();
@@ -187,6 +200,10 @@ if ($uM && !empty($email) && strpos($email, "@") !== false) {
         @send_mail($env, $email, "Pago confirmado — Adrenaline Gym", $bodyM, $env["BUSINESS_NAME"] ?? "Adrenaline Gym", true);
     }
 }
+} catch (\Throwable $eMail) {
+    @file_put_contents("/app/wompi/webhook_log.txt", date("Y-m-d H:i:s") . " ERROR CORREO: " . $eMail->getMessage() . "\n", FILE_APPEND);
+}
 
+header('Content-Type: application/json');
 http_response_code(200);
-echo 'OK';
+echo json_encode(['ok' => true]);
