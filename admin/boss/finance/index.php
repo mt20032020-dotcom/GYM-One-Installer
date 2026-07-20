@@ -159,6 +159,15 @@ if ($pm) {
     $total_card = (float) $pm['total_card'];
     $total_transfer = (float) $pm['total_transfer'];
     $total_web = (float) ($pm['total_web'] ?? 0);
+
+// Historial de cierres de caja del rango
+$cierres_caja = [];
+$stmtCC = $conn->prepare("SELECT cc.*, u.firstname, u.lastname FROM cash_closures cc LEFT JOIN users u ON u.userid = cc.closed_by WHERE cc.closure_date BETWEEN ? AND ? ORDER BY cc.closure_date DESC");
+if ($stmtCC) {
+    $stmtCC->bind_param('ss', $start_date, $end_date);
+    $stmtCC->execute();
+    $cierres_caja = $stmtCC->get_result()->fetch_all(MYSQLI_ASSOC);
+}
 }
 $stmt->close();
 
@@ -407,6 +416,38 @@ $conn->close();
                                 <div class="stat-card" style="background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;">
                                     <h4>Pagos Web</h4>
                                     <div class="value"><?php echo number_format($total_web, 2); ?> <?php echo htmlspecialchars($currency); ?></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top:20px;">
+                            <div class="col-sm-12">
+                                <div style="background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+                                    <h4 style="font-weight:800;margin-top:0;"><i class="bi bi-safe"></i> Cierres de caja</h4>
+                                    <?php if (empty($cierres_caja)): ?>
+                                    <p style="color:#999;">No hay cierres en el rango seleccionado.</p>
+                                    <?php else: ?>
+                                    <table class="table table-striped">
+                                        <thead><tr>
+                                            <th>Fecha</th><th>Cerró</th><th>Efectivo</th><th>Gastos</th><th>Esperado</th><th>Contado</th><th>Diferencia</th><th>Obs.</th>
+                                        </tr></thead>
+                                        <tbody>
+                                        <?php foreach ($cierres_caja as $cc): ?>
+                                        <tr>
+                                            <td><?php echo date("d/m/Y", strtotime($cc["closure_date"])); ?></td>
+                                            <td><?php echo htmlspecialchars(trim(($cc["firstname"] ?? "") . " " . ($cc["lastname"] ?? ""))); ?></td>
+                                            <td>$<?php echo number_format($cc["cash_sales"],0,",","."); ?></td>
+                                            <td>$<?php echo number_format($cc["cash_expenses"],0,",","."); ?></td>
+                                            <td>$<?php echo number_format($cc["expected_cash"],0,",","."); ?></td>
+                                            <td>$<?php echo number_format($cc["counted_cash"],0,",","."); ?></td>
+                                            <td style="font-weight:bold;color:<?php echo $cc["difference"] == 0 ? "#16a34a" : "#dc2626"; ?>;">
+                                                <?php echo $cc["difference"] == 0 ? "Cuadró ✓" : ($cc["difference"] > 0 ? "+" : "") . "$" . number_format($cc["difference"],0,",","."); ?>
+                                            </td>
+                                            <td style="font-size:0.85em;color:#888;"><?php echo htmlspecialchars($cc["observations"] ?? ""); ?></td>
+                                        </tr>
+                                        <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>

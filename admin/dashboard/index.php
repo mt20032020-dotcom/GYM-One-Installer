@@ -320,6 +320,7 @@ if ($countryCode !== '') {
                     </li>
                     <li><a href="../invoices"><i class="bi bi-receipt"></i>
                             <?php echo $translations["invoicepage"]; ?></a></li>
+                    <li><a href="../cashclose/"><i class="bi bi-safe"></i> Cierre de caja</a></li>
                     <?php if ($is_boss === 1) { ?>
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="bi bi-gear"></i>
@@ -386,6 +387,11 @@ if ($countryCode !== '') {
                     <li class="sidebar-item">
                         <a href="../invoices/" class="sidebar-link">
                             <i class="bi bi-receipt"></i> <?php echo $translations["invoicepage"]; ?>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="../cashclose/" class="sidebar-link">
+                            <i class="bi bi-safe"></i> Cierre de caja
                         </a>
                     </li>
                     <li class="sidebar-header">Finanzas</li>
