@@ -153,13 +153,71 @@ if ($rRev && $rRev->num_rows > 0) {
     $db->query("INSERT INTO revenu_stats (date, bank_card, cash, transfer, web) VALUES ('$hoy_rev', 0, 0, 0, $monto_pesos)");
 }
 
-// 2. Factura en invoices con numeracion consecutiva
+// 2. Factura en invoices con numeracion consecutiva + PDF
 $seqW = $db->query("SELECT COALESCE(MAX(id),0)+1 AS n FROM invoices")->fetch_assoc();
 $invNumW = "ADR-" . date("Y") . "-" . str_pad($seqW["n"], 5, "0", STR_PAD_LEFT);
-$uNameRow = $db->query("SELECT firstname, lastname FROM users WHERE userid = " . (int)$userid)->fetch_assoc();
-$fullNameW = trim(($uNameRow["firstname"] ?? "") . " " . ($uNameRow["lastname"] ?? ""));
+$uRowW = $db->query("SELECT firstname, lastname, email, cedula, city FROM users WHERE userid = " . (int)$userid)->fetch_assoc();
+$fullNameW = trim(($uRowW["firstname"] ?? "") . " " . ($uRowW["lastname"] ?? ""));
 $statusW = "paid";
-$routeW = ""; // pago web: sin PDF generado por ahora
+$routeW = "";
+
+// Generar PDF de la factura
+try {
+    require_once "/app/vendor/autoload.php";
+    require_once "/app/admin/boss/sell/payment/_invoice.php";
+    $langW = $env["LANG_CODE"] ?? "ES";
+    $translations = json_decode(@file_get_contents("/app/assets/lang/" . $langW . ".json"), true) ?: [];
+    $currencyW = $env["CURRENCY"] ?? "COP";
+    $inv_items = "
+        <table class='inv-table'>
+            <thead>
+                <tr>
+                    <th class='inv-th' style='width:14%'>ID</th>
+                    <th class='inv-th'>" . htmlspecialchars($translations["invoicedescription"] ?? "Descripción") . "</th>
+                    <th class='inv-th inv-r' style='width:30%'>" . htmlspecialchars($translations["unitprice"] ?? "Precio unitario") . "</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>" . (int)$ticket_id . "</td>
+                    <td>" . htmlspecialchars($ticketname) . "</td>
+                    <td class='inv-r'>" . number_format($monto_pesos, 0, ",", ".") . " " . $currencyW . "</td>
+                </tr>
+                <tr class='inv-total-row'>
+                    <td colspan='2' class='inv-r'>" . htmlspecialchars($translations["invoiceamount"] ?? "Total") . "</td>
+                    <td class='inv-r'>" . number_format($monto_pesos, 0, ",", ".") . " " . $currencyW . "</td>
+                </tr>
+            </tbody>
+        </table>";
+    $invoiceHtmlW = gymone_invoice_shell([
+        "t" => $translations,
+        "title" => $translations["invoice"] ?? "Factura",
+        "logoPath" => "/app/assets/img/brand/logo.png",
+        "partnerLogoPath" => "/app/assets/img/logo.png",
+        "year" => date("Y"),
+        "businessName" => $env["BUSINESS_NAME"] ?? "Adrenaline Gym",
+        "businessEmail" => $env["MAIL_USERNAME"] ?? "",
+        "businessPhone" => $env["PHONENO"] ?? "",
+        "date" => date("Y-m-d"),
+        "invoiceNumber" => $invNumW,
+        "userid" => $uRowW["cedula"] ?? $userid,
+        "clientName" => $fullNameW,
+        "clientCity" => !empty($uRowW["city"]) ? "Barrio: " . $uRowW["city"] : "",
+        "clientAddress" => "",
+        "clientEmail" => $uRowW["email"] ?? "",
+        "workerName" => "Pago Web",
+        "paymentType" => "Pago Web (Wompi)",
+    ], $inv_items);
+    $mpdfW = new \Mpdf\Mpdf(["tempDir" => "/tmp"]);
+    $mpdfW->WriteHTML($invoiceHtmlW);
+    $routeW = $userid . "-" . $invNumW . ".pdf";
+    $mpdfW->Output("/app/assets/docs/invoices/" . $routeW, \Mpdf\Output\Destination::FILE);
+    @chmod("/app/assets/docs/invoices/" . $routeW, 0644);
+} catch (\Throwable $ePdf) {
+    @file_put_contents("/app/wompi/webhook_log.txt", date("Y-m-d H:i:s") . " ERROR PDF: " . $ePdf->getMessage() . "\n", FILE_APPEND);
+    $routeW = "";
+}
+
 $stmtInv = $db->prepare("INSERT INTO invoices (userid, name, price, status, route, created_at) VALUES (?, ?, ?, ?, ?, NOW())");
 $stmtInv->bind_param("isdss", $userid, $fullNameW, $monto_pesos, $statusW, $routeW);
 $stmtInv->execute();
