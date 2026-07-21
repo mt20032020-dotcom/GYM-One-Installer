@@ -89,6 +89,7 @@ if (isset($_GET['user']) && is_numeric($_GET['user'])) {
   $useridgymuser = $_GET['user'];
 
   $sql = "SELECT * FROM users WHERE userid = $useridgymuser";
+require_once "/app/includes/cortesia_handler.php";
   $result = $conn->query($sql);
 
   if ($result->num_rows > 0) {
@@ -600,11 +601,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['userid'])) {
                   </div>
 
                 </div>
+                <div style="display:flex;gap:8px;flex-wrap:nowrap;align-items:center;">
                 <button type="submit" name="save" class="btn btn-primary"><i class="bi bi-save"></i>
                   <?php echo $translations["save"]; ?></button>
                 <?php
                 if ($is_boss == 1) {
                   ?>
+                  <?php require "/app/includes/cortesia_ui.php"; ?>
                   <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal"
                     data-userid="1">
                     <i class="bi bi-trash"></i>
@@ -612,6 +615,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['userid'])) {
                   </button> <?php
                 }
                 ?>
+                </div>
 
               </form>
             </div>
