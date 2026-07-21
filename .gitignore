@@ -11,3 +11,8 @@ admin/shop/gateway/PAYPALCHECK.php
 .log_FIX
 vendor/
 uploads/
+iclock/*.txt
+iclock/*.log
+iclock/fotos_extraidas/
+uploads/
+*.bak_boton

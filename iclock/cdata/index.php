@@ -81,7 +81,7 @@ if (($_GET['options'] ?? '') === 'all') {
     $r .= "OPERLOGStamp=None\r\n";
     $r .= "ATTPHOTOStamp=None\r\n";
     $r .= "ErrorDelay=30\r\n";
-    $r .= "Delay=10\r\n";
+    $r .= "Delay=2\r\n";
     $r .= "TransTimes=00:00;14:05\r\n";
     $r .= "TransInterval=1\r\n";
     $r .= "TransFlag=TransData AttLog OpLog AttPhoto EnrollUser ChgUser EnrollFP ChgFP FACE UserPic\r\n";

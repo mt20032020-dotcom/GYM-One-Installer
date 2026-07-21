@@ -818,6 +818,28 @@ if ($countryCode !== '') {
                     <input hidden id="qrcodeContent">
                 </div>
                 <div class="modal-footer">
+                        <!-- ===== BOTON ABRIR TORNIQUETE ===== -->
+                        <button type="button" id="btnAbrirTorniquete" class="btn btn-success" style="font-weight:700;" onclick="abrirTorniquete()">&#128275; Abrir torniquete</button>
+                        <span id="torniqueteMsg" style="margin-left:8px;font-size:0.85em;color:#666;"></span>
+                        <script>
+                        function abrirTorniquete() {
+                            var b = document.getElementById('btnAbrirTorniquete');
+                            var m = document.getElementById('torniqueteMsg');
+                            b.disabled = true; m.style.color = '#666'; m.textContent = 'Enviando...';
+                            fetch('/admin/dashboard/abrir_puerta.php', { method: 'POST' })
+                                .then(function(r){ return r.json(); })
+                                .then(function(d){
+                                    if (d.ok) {
+                                        m.style.color = '#28a745'; m.textContent = 'Abriendo torniquete (tarda unos segundos)...';
+                                        setTimeout(function(){ b.disabled = false; m.textContent = ''; }, 8000);
+                                    } else {
+                                        m.style.color = '#dc3545'; m.textContent = 'Error: ' + (d.error || 'desconocido');
+                                        b.disabled = false;
+                                    }
+                                })
+                                .catch(function(e){ m.style.color = '#dc3545'; m.textContent = 'Fallo: ' + e.message; b.disabled = false; });
+                        }
+                        </script>
                     <button type="button" class="cm-btn cm-btn-ghost"
                         data-dismiss="modal"><?php echo $translations["close"]; ?></button>
                     <a type="button" id="continueButton" class="cm-btn cm-btn-primary" style="display:none;">
