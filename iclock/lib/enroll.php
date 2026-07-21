@@ -33,14 +33,14 @@ function enrolar_en_speedface($userid) {
     $out=imagecreatetruecolor(480,640);
     imagefill($out,0,0,imagecolorallocate($out,255,255,255));
     imagecopyresampled($out,$img,0,0,$sx,$sy,480,640,$nw,$nh);
-    $tmp = "/tmp/face_{$pin}.jpg"; $size = 999999;
+    $tmp = "/tmp/face_{$pin}_" . uniqid() . ".jpg"; $size = 999999;
     for ($q=85; $q>=25; $q-=5) {
         imagejpeg($out,$tmp,$q);
         clearstatcache(true,$tmp);
         $size = filesize($tmp);
         if ($size <= 20000) break;
     }
-    if ($size > 20000) { $r['error']="Foto no baja de 20KB ($size)"; return $r; }
+    if ($size > 20000) { $r['error']="Foto no baja de 20KB ($size)"; { @unlink($tmp); return $r; } }
     $r['pasos'][] = "foto: $size bytes";
     $b64 = base64_encode(file_get_contents($tmp));
 
@@ -51,7 +51,7 @@ function enrolar_en_speedface($userid) {
         "C:{$base}2:DATA UPDATE biophoto PIN={$pin}\tType=9\tSize={$size}\tContent={$b64}",
     ];
     $fh = fopen('/app/iclock/cmd_queue.txt', 'a');
-    if (!$fh) { $r['error']='No se pudo abrir la cola'; return $r; }
+    if (!$fh) { $r['error']='No se pudo abrir la cola'; { @unlink($tmp); return $r; } }
     flock($fh, LOCK_EX);
     foreach ($cmds as $cmd) { fwrite($fh, $cmd . "\n"); }
     flock($fh, LOCK_UN);
@@ -59,5 +59,5 @@ function enrolar_en_speedface($userid) {
     @chmod('/app/iclock/cmd_queue.txt', 0666);
     $r['pasos'][] = 'encolados 3 comandos';
     $r['ok'] = true;
-    return $r;
+    @unlink($tmp); return $r;
 }

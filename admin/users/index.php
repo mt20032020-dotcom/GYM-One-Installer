@@ -397,7 +397,7 @@ $result = $stmt->get_result();
                                             <a href="index.php" class="btn btn-success btn-block"><i
                                                     class="bi bi-arrow-clockwise"></i>
                                                 <?php echo $translations["resetbtn"]; ?></a>
-                                            <a href="../../register/" target="_blank" class="btn btn-danger btn-block mt-1"><i class="bi bi-person-plus"></i> Registrar nuevo</a>
+                                            <?php require __DIR__ . "/quick_register_ui.php"; ?>
                                         </div>
                                     </div>
                                 </div>
