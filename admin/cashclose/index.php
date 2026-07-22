@@ -92,13 +92,15 @@ if (isset($_POST['action']) && $_POST['action'] === 'close' && !$cierre_hoy) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cierre de Caja - <?php echo htmlspecialchars($business_name); ?></title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../../assets/css/dashboard.css">
+    <link rel="shortcut icon" href="https://gymoneglobal.com/assets/img/logo.png" type="image/x-icon">
     <style>
         body { background: #f4f5f7; font-family: 'Segoe UI', Arial, sans-serif; }
-        .topbar { background: #111; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; }
+        .topbar { background: #111; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; border-radius: 12px; margin-bottom: 18px; }
         .topbar img { height: 44px; }
-        .topbar a { color: #fff; text-decoration: none; font-size: 0.9em; }
-        .wrap { max-width: 820px; margin: 26px auto; padding: 0 16px; }
+        .wrap { max-width: 820px; }
         .card-x { background: #fff; border-radius: 14px; padding: 22px; box-shadow: 0 1px 6px rgba(0,0,0,0.08); margin-bottom: 18px; }
         .money-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
         .money-row .v { font-weight: bold; }
@@ -110,12 +112,74 @@ if (isset($_POST['action']) && $_POST['action'] === 'close' && !$cierre_hoy) {
     </style>
 </head>
 <body>
+<nav class="navbar navbar-inverse visible-xs">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#"><img src="../../assets/img/logo.png" width="50px" alt="Logo"></a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li><a href="../dashboard"><i class="bi bi-speedometer"></i> Inicio</a></li>
+                <li><a href="../users"><i class="bi bi-people"></i> Miembros</a></li>
+                <li><a href="../statistics"><i class="bi bi-bar-chart"></i> Estadisticas</a></li>
+                <li><a href="../boss/sell"><i class="bi bi-shop"></i> Venta</a></li>
+                <li><a href="../invoices"><i class="bi bi-receipt"></i> Facturas</a></li>
+                <li class="active"><a href="#"><i class="bi bi-cash"></i> Cierre de caja</a></li>
+                <li><a href="../boss/finance"><i class="bi bi-cash-stack"></i> Reportes financieros</a></li>
+                <li><a href="../boss/expenses"><i class="bi bi-wallet2"></i> Gastos</a></li>
+                <li><a href="../boss/payroll"><i class="bi bi-clipboard-data"></i> Nomina</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row content">
+        <div class="col-sm-2 sidenav hidden-xs text-center">
+            <h2><img src="../../assets/img/logo.png" width="105px" alt="Logo"></h2>
+            <p class="lead mb-4 fs-4"><?php echo htmlspecialchars($business_name); ?></p>
+            <ul class="nav nav-pills nav-stacked">
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="../dashboard/"><i class="bi bi-speedometer"></i> Inicio</a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="../users"><i class="bi bi-people"></i> Miembros</a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="../statistics"><i class="bi bi-bar-chart"></i> Estadisticas</a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="../boss/sell"><i class="bi bi-shop"></i> Venta</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="../invoices/" class="sidebar-link"><i class="bi bi-receipt"></i> Facturas</a>
+                </li>
+                <li class="sidebar-item active">
+                    <a class="sidebar-link" href="#"><i class="bi bi-cash"></i> <span>Cierre de caja</span></a>
+                </li>
+                <li class="sidebar-header">Finanzas</li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="../boss/finance"><i class="bi bi-cash-stack"></i> <span>Reportes financieros</span></a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="../boss/expenses"><i class="bi bi-wallet2"></i> <span>Gastos</span></a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="../boss/payroll"><i class="bi bi-clipboard-data"></i> <span>Nomina</span></a>
+                </li>
+            </ul><br>
+        </div>
+        <br>
+        <div class="col-sm-10">
+
 <div class="topbar">
     <div style="display:flex;align-items:center;gap:12px;">
         <img src="../../assets/img/logo.png" alt="Logo" onerror="this.style.display='none'">
         <span style="color:#fff;font-weight:bold;letter-spacing:0.5px;">CIERRE DE CAJA — <?php echo date('d/m/Y'); ?></span>
     </div>
-    <a href="../dashboard/"><i class="bi bi-arrow-left"></i> Volver al panel</a>
 </div>
 
 <div class="wrap">
@@ -189,5 +253,10 @@ if (isset($_POST['action']) && $_POST['action'] === 'close' && !$cierre_hoy) {
 
 <?php endif; ?>
 </div>
+
+        </div>
+    </div>
+</div>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </body>
 </html>

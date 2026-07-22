@@ -211,6 +211,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } elseif (!is_valid_uploaded_image('profile_photo')) {
     $alerts_html .= '<div class="alert alert-danger">' . ($translations["profilepicturerequired"] ?? 'A profilkép feltöltése kötelező!') . '</div>';
     header("Refresh: 5");
+  } elseif (empty($_POST['accept_biometric'])) {
+    $alerts_html .= '<div class="alert alert-danger">Debes autorizar el tratamiento de tu foto para verificacion biometrica de acceso.</div>';
+    header("Refresh: 5");
   } else {
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
@@ -254,6 +257,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       if ($photo_saved) {
         require_once __DIR__ . '/../iclock/lib/enroll.php';
         @enrolar_en_speedface($userid); // si falla, el registro no se afecta
+        $conn->query("INSERT INTO logs (userid, action, actioncolor, time) VALUES (" . (int)$userid . ", 'Autorizacion de datos biometricos otorgada en autoregistro', 'success', NOW())");
       }
 
       $alerts_html .= '<div class="alert alert-success">Sikeres regisztráció!</div>';
@@ -685,6 +689,12 @@ EOD;
                   <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" required>
                   <label class="form-check-label" for="flexCheckDefault">
                     <?php echo $translations["acceptrules"]; ?>
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="acceptBiometric" name="accept_biometric" required>
+                  <label class="form-check-label" for="acceptBiometric">
+                    Autorizo el tratamiento de mi fotograf&iacute;a con fines de verificaci&oacute;n biom&eacute;trica de acceso (reconocimiento facial en el torniquete).
                   </label>
                 </div>
                 <button type="submit" class="btn btn-primary"><?php echo $translations["register"]; ?></button>

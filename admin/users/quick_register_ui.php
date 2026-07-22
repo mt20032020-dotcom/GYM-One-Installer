@@ -186,14 +186,10 @@
       .then(function(r){ return r.json(); })
       .then(function(d){
         if(d.ok){
-          if(d.enroll_ok === false){
-            showAlert('Registrado, pero fallo la sincronizacion con el torniquete. Avisa para revisarlo. Redirigiendo...', true);
-          } else {
-            showAlert('Registrado! Redirigiendo a elegir plan...', true);
-          }
+          showAlert('Registrado! Le llegara un correo para autorizar el acceso facial. Redirigiendo a elegir plan...', true);
           setTimeout(function(){
             window.location.href = '../boss/sell/ticket/?userid=' + encodeURIComponent(d.userid);
-          }, d.enroll_ok === false ? 2500 : 900);
+          }, 1400);
         } else {
           showAlert(d.error || 'Error desconocido', false);
           btn.disabled = false;

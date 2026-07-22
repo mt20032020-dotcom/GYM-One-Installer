@@ -201,6 +201,7 @@ $conn->close();
                     <li><a href="../../invoices"><i class="bi bi-receipt"></i> <?php echo t($translations, "invoicepage", "Facturas"); ?></a></li>
                     <li><a href="../finance"><i class="bi bi-cash-stack"></i> Reportes financieros</a></li>
                     <li class="active"><a href="#"><i class="bi bi-wallet2"></i> Gastos</a></li>
+                    <li><a href="../payroll"><i class="bi bi-clipboard-data"></i> Nomina</a></li>
                 </ul>
             </div>
         </div>
@@ -248,6 +249,12 @@ $conn->close();
                         <a class="sidebar-link" href="#">
                             <i class="bi bi-wallet2"></i>
                             <span>Gastos</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="../payroll">
+                            <i class="bi bi-clipboard-data"></i>
+                            <span>Nomina</span>
                         </a>
                     </li>
                 </ul><br>

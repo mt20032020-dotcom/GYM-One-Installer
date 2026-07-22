@@ -437,7 +437,7 @@ $conn->close();
                                                 <div class="col-md-3">
                                                     <div class="card mb-4 text-center">
                                                         <img src="<?php echo '../../../assets/img/trainers/trainer_' . $row['id'] . '.png'; ?>"
-                                                            class="card-img-top img-fluid" alt="<?php echo $row['name']; ?>">
+                                                            class="card-img-top img-fluid" alt="<?php echo $row['name']; ?>" style="height:220px;width:100%;object-fit:cover;">
                                                         <div class="card-body">
                                                             <h5 class="card-title"><?php echo $row['name']; ?></h5>
                                                             <p class="card-text"><?php echo nl2br($row['description']); ?></p>

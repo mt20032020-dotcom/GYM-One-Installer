@@ -407,6 +407,12 @@ if ($countryCode !== '') {
                             <span>Gastos</span>
                         </a>
                     </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="../boss/payroll">
+                            <i class="bi bi-clipboard-data"></i>
+                            <span>Nomina</span>
+                        </a>
+                    </li>
                     <?php
                     if ($is_boss === 1) {
                         ?>

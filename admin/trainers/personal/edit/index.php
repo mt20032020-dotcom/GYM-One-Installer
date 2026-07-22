@@ -102,24 +102,25 @@ if (isset($_GET['id'])) {
         $description = $_POST['description'];
         $price_1hour = $_POST['price_1hour'];
         $price_10sessions = $_POST['price_10sessions'];
+        $hourly_wage = isset($_POST['hourly_wage']) && $_POST['hourly_wage'] !== '' ? (float)$_POST['hourly_wage'] : null;
 
         if ($_FILES['image']['name']) {
-            $target_dir = "../../../../assets/img/trainers/";
+            $target_dir = "/app/assets/img/trainers/";
             $image_extension = pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
             $target_file = $target_dir . "trainer_" . $id . "." . $image_extension;
 
             if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-                $sql = "UPDATE trainers SET name=?, image=?, description=?, price_1hour=?, price_10sessions=? WHERE id=?";
+                $sql = "UPDATE trainers SET name=?, image=?, description=?, price_1hour=?, price_10sessions=?, hourly_wage=? WHERE id=?";
                 $stmt = $conn->prepare($sql);
-                $stmt->bind_param("sssssi", $name, $target_file, $description, $price_1hour, $price_10sessions, $id);
+                $stmt->bind_param("sssssdi", $name, $target_file, $description, $price_1hour, $price_10sessions, $hourly_wage, $id);
             } else {
                 echo "Error uploading file.";
                 exit;
             }
         } else {
-            $sql = "UPDATE trainers SET name=?, description=?, price_1hour=?, price_10sessions=? WHERE id=?";
+            $sql = "UPDATE trainers SET name=?, description=?, price_1hour=?, price_10sessions=?, hourly_wage=? WHERE id=?";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ssssi", $name, $description, $price_1hour, $price_10sessions, $id);
+            $stmt->bind_param("ssssdi", $name, $description, $price_1hour, $price_10sessions, $hourly_wage, $id);
         }
 
         if ($stmt->execute() === TRUE) {
@@ -420,6 +421,10 @@ $conn->close();
                                                     <input type="number" class="form-control" id="price_10sessions" name="price_10sessions" value="<?php echo $trainer['price_10sessions']; ?>">
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="hourly_wage" class="form-label" style="color:#c0392b;font-weight:600;">Tarifa que le pagamos por hora (NO es lo que cobra al cliente)</label>
+                                            <input type="number" step="0.01" class="form-control" id="hourly_wage" name="hourly_wage" value="<?php echo $trainer['hourly_wage'] ?? ''; ?>" placeholder="Ej: 25000">
                                         </div>
                                         <button type="submit" class="btn mt-5 btn-primary"><i class="bi bi-pencil-square"></i> <?php echo $translations["traineredit"]; ?></button>
                                     </form>

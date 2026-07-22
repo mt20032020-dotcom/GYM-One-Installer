@@ -83,7 +83,7 @@ if (!$stmt->execute()) {
 }
 $stmt->close();
 
-// Guardar foto (mismo formato 512x512 PNG que el registro normal)
+// Guardar foto de perfil (esto NO es enrolamiento biometrico todavia, es solo la foto de identificacion del socio)
 $destDir = '/app/assets/img/profiles';
 if (!is_dir($destDir)) @mkdir($destDir, 0775, true);
 $destPath = $destDir . '/' . $userid . '.png';
@@ -108,42 +108,44 @@ if ($src) {
     imagedestroy($src); imagedestroy($dst);
 }
 
-// Enrolar en SpeedFace (si la foto se guardo bien)
-$enrollResult = null;
-if ($photoSaved) {
-    require_once '/app/iclock/lib/enroll.php';
-    $enrollResult = @enrolar_en_speedface($userid);
-    @file_put_contents('/app/iclock/enroll_quickreg.log', date('Y-m-d H:i:s') . " userid={$userid} cedula={$cedula} ok=" . (!empty($enrollResult['ok']) ? '1' : '0') . ' ' . json_encode($enrollResult, JSON_UNESCAPED_UNICODE) . "\n", FILE_APPEND);
-}
+// ===== Autorizacion biometrica pendiente (NO se enrola aun) =====
+$consentToken = bin2hex(random_bytes(24));
+$stmtC = $conn->prepare("INSERT INTO biometric_consents (userid, token, requested_at) VALUES (?, ?, NOW())");
+$stmtC->bind_param("is", $userid, $consentToken);
+$stmtC->execute();
+$stmtC->close();
 
-// ===== Correos =====
+$conn->query("INSERT INTO logs (userid, action, actioncolor, time) VALUES (" . (int)$userid . ", 'Registro asistido: pendiente de autorizacion biometrica del titular', 'warning', NOW())");
+
+// ===== Correo unico: acceso facial primero, luego clave inicial =====
 $domain_url = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'];
 $businessName = $env['BUSINESS_NAME'] ?? '';
+$consentUrl = $domain_url . '/consent/?token=' . urlencode($consentToken);
 
-// Correo 1: bienvenida simple (registro ya confirmado, sin boton de confirmar)
-$welcomeHtml = "
-<div style='font-family:Segoe UI,Tahoma,sans-serif;max-width:560px;margin:0 auto;'>
+$emailHtml = "
+<div style='font-family:Segoe UI,Tahoma,sans-serif;max-width:560px;margin:0 auto;padding:20px;'>
   <div style='text-align:center;padding:24px 0;'><img src='{$domain_url}/assets/img/brand/logo.png' style='max-width:160px;'></div>
   <h2 style='color:#222;text-align:center;'>Bienvenido a {$businessName}, {$firstname}!</h2>
   <p style='color:#555;text-align:center;'>Tu cuenta ya esta activa y lista para usar.</p>
-</div>";
-@send_mail($env, $email, "Bienvenido a {$businessName}", $welcomeHtml, $businessName, true);
 
-// Correo 2 (NUEVO): recordatorio de clave inicial
-$pwHtml = "
-<div style='font-family:Segoe UI,Tahoma,sans-serif;max-width:560px;margin:0 auto;padding:20px;'>
-  <div style='text-align:center;padding:24px 0;'><img src='{$domain_url}/assets/img/brand/logo.png' style='max-width:160px;'></div>
-  <h2 style='color:#222;text-align:center;'>Tu clave de acceso</h2>
-  <p style='color:#555;'>Hola {$firstname}, tu cuenta en {$businessName} quedo creada con estos datos de acceso:</p>
+  <h3 style='color:#222;text-align:center;margin-top:28px;'>Un ultimo paso: acceso facial</h3>
+  <p style='color:#555;text-align:center;'>Para poder entrar usando reconocimiento facial en el torniquete, necesitamos tu autorizacion para tratar tu fotografia con ese fin.</p>
+  <div style='text-align:center;margin:20px 0;'>
+    <a href='{$consentUrl}' style='background:#e53935;color:#fff;text-decoration:none;padding:14px 28px;border-radius:8px;font-weight:700;font-size:15px;'>Autorizar acceso facial</a>
+  </div>
+  <p style='color:#94a3b8;font-size:12px;text-align:center;'>Si prefieres no autorizarlo, puedes solicitar en recepcion que te registren el ingreso de forma manual.</p>
+
+  <hr style='border:none;border-top:1px solid #e5e7eb;margin:28px 0;'>
+
   <div style='background:#f8f9fa;border-radius:10px;padding:18px 22px;margin:20px 0;'>
     <p style='margin:4px 0;'><strong>Usuario (email):</strong> {$email}</p>
     <p style='margin:4px 0;'><strong>Clave inicial:</strong> tu numero de cedula ({$cedula})</p>
   </div>
-  <p style='color:#e53935;font-weight:600;'>Por seguridad, te recomendamos entrar al portal y cambiar tu clave cuanto antes.</p>
-  <div style='text-align:center;margin:26px 0;'>
-    <a href='{$domain_url}/login/' style='background:#e53935;color:#fff;text-decoration:none;padding:14px 28px;border-radius:8px;font-weight:700;'>Entrar al portal</a>
+  <p style='color:#e53935;font-weight:600;text-align:center;'>Por seguridad, te recomendamos entrar al portal y cambiar tu clave cuanto antes.</p>
+  <div style='text-align:center;margin:20px 0;'>
+    <a href='{$domain_url}/login/' style='background:#334155;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600;font-size:14px;'>Entrar al portal</a>
   </div>
 </div>";
-@send_mail($env, $email, "Tu clave de acceso a {$businessName}", $pwHtml, $businessName, true);
+@send_mail($env, $email, "Bienvenido a {$businessName} - falta un paso", $emailHtml, $businessName, true);
 
-echo json_encode(['ok' => true, 'userid' => $userid, 'firstname' => $firstname, 'lastname' => $lastname, 'enroll_ok' => !empty($enrollResult['ok'])]);
+echo json_encode(['ok' => true, 'userid' => $userid, 'firstname' => $firstname, 'lastname' => $lastname, 'pending_consent' => true]);

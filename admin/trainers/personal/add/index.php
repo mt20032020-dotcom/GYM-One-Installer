@@ -89,13 +89,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $price_1hour = $_POST['price_1hour'];
     $price_10sessions = $_POST['price_10sessions'];
 
-    $sql = "INSERT INTO trainers (name, description, price_1hour, price_10sessions) 
-            VALUES ('$name', '$description', '$price_1hour', '$price_10sessions')";
+    $hourly_wage = isset($_POST['hourly_wage']) && $_POST['hourly_wage'] !== '' ? (float)$_POST['hourly_wage'] : null;
+    $hourly_wage_sql = $hourly_wage === null ? 'NULL' : $conn->real_escape_string($hourly_wage);
+    $sql = "INSERT INTO trainers (name, image, description, price_1hour, price_10sessions, hourly_wage) 
+            VALUES ('$name', '', '$description', '$price_1hour', '$price_10sessions', $hourly_wage_sql)";
 
     if ($conn->query($sql) === TRUE) {
         $trainer_id = $conn->insert_id;
 
-        $target_dir = "../../../../assets/img/trainers/";
+        $target_dir = "/app/assets/img/trainers/";
         $image_extension = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));
 
         if ($image_extension === 'png') {
@@ -385,6 +387,10 @@ $conn->close();
                                         <div class="mb-3">
                                             <label for="price_10sessions" class="form-label"><?php echo $translations["price"]; ?> (10 <?php echo $translations["occasions"]; ?>):</label>
                                             <input type="number" class="form-control" id="price_10sessions" name="price_10sessions">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="hourly_wage" class="form-label" style="color:#c0392b;font-weight:600;">Tarifa que le pagamos por hora (NO es lo que cobra al cliente)</label>
+                                            <input type="number" step="0.01" class="form-control" id="hourly_wage" name="hourly_wage" placeholder="Ej: 25000">
                                         </div>
                                         <button type="submit" class="btn btn-primary"><i class="bi bi-plus-circle"></i> <?php echo $translations["newtraineradd"]; ?></button>
                                     </form>
