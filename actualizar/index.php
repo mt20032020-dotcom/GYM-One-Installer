@@ -1,14 +1,19 @@
 <?php
 session_start();
-function read_env_file($p){ $d=[]; foreach(file($p) as $l){ if(strpos($l,'=')!==false){ [$k,$v]=explode('=',trim($l),2); $d[$k]=$v; } } return $d; }
+if (isset($_GET['reset'])) { session_unset(); session_destroy(); header('Location: ./'); exit(); }
+require_once __DIR__ . '/../includes/chatwoot.php';
+require_once __DIR__ . '/../includes/meta_whatsapp.php';
+
+function read_env_file($p){ $d=[]; foreach(file($p) as $l){ if(strpos($l,'=')!==false){ [$k,$v]=explode('=',trim($l),2); $d[trim($k)]=trim($v); } } return $d; }
 $env = read_env_file(__DIR__ . '/../.env');
 $conn = new mysqli($env['DB_SERVER'],$env['DB_USERNAME'],$env['DB_PASSWORD'],$env['DB_NAME']);
+mysqli_report(MYSQLI_REPORT_OFF);
 $conn->set_charset('utf8mb4');
 
-$paso = 'cedula'; $error = ''; $ok = false; $u = null;
+$error = ''; $ok = false; $sendWarning = '';
 
 function buscar_usuario($conn, $cedula) {
-    $stmt = $conn->prepare("SELECT userid, cedula, firstname, lastname, email, celular, birthdate, gender FROM users WHERE cedula = ?");
+    $stmt = $conn->prepare("SELECT userid, cedula, firstname, lastname, email, celular, birthdate, gender, city FROM users WHERE cedula = ?");
     $stmt->bind_param('s', $cedula);
     $stmt->execute();
     $u = $stmt->get_result()->fetch_assoc();
@@ -16,72 +21,176 @@ function buscar_usuario($conn, $cedula) {
     return $u;
 }
 
-// PASO 2: buscar por cedula
+function ya_actualizado($userid) {
+    return file_exists(__DIR__ . '/../assets/img/profiles/' . $userid . '.png');
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['buscar_cedula'])) {
     $ced = preg_replace('/\D/','', $_POST['cedula'] ?? '');
     $u = buscar_usuario($conn, $ced);
+
     if (!$u) {
         $error = 'No encontramos esa c&eacute;dula. Verifica el n&uacute;mero o ac&eacute;rcate a recepci&oacute;n.';
-    } elseif (file_exists(__DIR__ . '/../assets/img/profiles/' . $u['userid'] . '.png')) {
+    } elseif (ya_actualizado($u['userid'])) {
         $error = 'Tus datos ya fueron actualizados. Si necesitas cambiarlos, ac&eacute;rcate a recepci&oacute;n.';
-        $u = null;
+    } elseif (empty($u['celular'])) {
+        $error = 'No tenemos un celular registrado para verificarte. Ac&eacute;rcate a recepci&oacute;n.';
     } else {
-        $paso = 'formulario';
+        $chk = $conn->prepare("SELECT created_at FROM verification_codes WHERE userid = ? ORDER BY id DESC LIMIT 1");
+        $chk->bind_param('i', $u['userid']);
+        $chk->execute();
+        $last = $chk->get_result()->fetch_assoc();
+        $chk->close();
+
+        if ($last && (time() - strtotime($last['created_at'])) < 60) {
+            $_SESSION['upd_userid'] = (int) $u['userid'];
+            $_SESSION['upd_step'] = 'verificar';
+            header('Location: ./'); exit();
+        }
+
+        $code = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        $now = date('Y-m-d H:i:s');
+        $expires = date('Y-m-d H:i:s', strtotime('+10 minutes'));
+        $ins = $conn->prepare("INSERT INTO verification_codes (userid, code, created_at, expires_at) VALUES (?, ?, ?, ?)");
+        $ins->bind_param('isss', $u['userid'], $code, $now, $expires);
+        $ins->execute();
+        $ins->close();
+
+        $envio = enviar_codigo_whatsapp_meta($u['celular'], $code);
+
+        $_SESSION['upd_userid'] = (int) $u['userid'];
+        $_SESSION['upd_step'] = 'verificar';
+        if (!$envio['ok']) {
+            $_SESSION['upd_send_error'] = $envio['error'];
+        }
+        header('Location: ./'); exit();
     }
 }
 
-// PASO 3: guardar
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
-    $ced = preg_replace('/\D/','', $_POST['cedula'] ?? '');
-    $u = buscar_usuario($conn, $ced);
-    if (!$u) { $error = 'Sesi&oacute;n inv&aacute;lida, vuelve a empezar.'; }
-    elseif (file_exists(__DIR__ . '/../assets/img/profiles/' . $u['userid'] . '.png')) { $error = 'Este perfil ya fue actualizado.'; $u = null; }
-    else {
-        $nombre = trim($_POST['nombre'] ?? '');
-        $apellido = trim($_POST['apellido'] ?? '');
-        $email = trim($_POST['email'] ?? '');
-        $celular = trim($_POST['celular'] ?? '');
-        $nacimiento = $_POST['nacimiento'] ?? '';
-        $genero = ($_POST['genero'] ?? '') === 'Female' ? 'Female' : 'Male';
-        $pass = $_POST['password'] ?? '';
-        $pass2 = $_POST['confirm_password'] ?? '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['verificar_codigo'])) {
+    $uid = (int) ($_SESSION['upd_userid'] ?? 0);
+    $codeInput = preg_replace('/\D/', '', $_POST['codigo'] ?? '');
 
-        if ($nombre === '' || $apellido === '') { $error = 'Nombre y apellido son obligatorios.'; $paso='formulario'; }
-        elseif (strlen($pass) < 6) { $error = 'La contrase&ntilde;a debe tener al menos 6 caracteres.'; $paso='formulario'; }
-        elseif ($pass !== $pass2) { $error = 'Las contrase&ntilde;as no coinciden.'; $paso='formulario'; }
-        elseif (empty($_FILES['profile_photo']['tmp_name'])) { $error = 'La foto es obligatoria (t&oacute;mala con la c&aacute;mara).'; $paso='formulario'; }
-        else {
-            $tmp = $_FILES['profile_photo']['tmp_name'];
-            $info = @getimagesize($tmp);
-            if (!$info || $_FILES['profile_photo']['size'] > 8*1024*1024) { $error = 'Foto inv&aacute;lida o mayor a 8MB.'; $paso='formulario'; }
+    if (!$uid) {
+        $error = 'Tu sesi&oacute;n expir&oacute;. Vuelve a empezar.';
+        unset($_SESSION['upd_step']);
+    } else {
+        $stmt = $conn->prepare("SELECT id, code, expires_at FROM verification_codes WHERE userid = ? AND used = 0 ORDER BY id DESC LIMIT 1");
+        $stmt->bind_param('i', $uid);
+        $stmt->execute();
+        $row = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        if (!$row) {
+            $error = 'No hay un c&oacute;digo pendiente. Solicita uno nuevo.';
+        } elseif (strtotime($row['expires_at']) < time()) {
+            $error = 'Tu c&oacute;digo expir&oacute;. Solicita uno nuevo.';
+        } elseif (!hash_equals($row['code'], $codeInput)) {
+            $error = 'C&oacute;digo incorrecto.';
+        } else {
+            $conn->query("UPDATE verification_codes SET used = 1 WHERE id = " . (int) $row['id']);
+            $_SESSION['upd_verified'] = true;
+            $_SESSION['upd_step'] = 'formulario';
+            header('Location: ./'); exit();
+        }
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
+    $uid = (int) ($_SESSION['upd_userid'] ?? 0);
+    $verificado = $_SESSION['upd_verified'] ?? false;
+
+    if (!$uid || !$verificado) {
+        $error = 'Verificaci&oacute;n requerida. Vuelve a empezar.';
+        session_unset();
+    } else {
+        $stmt = $conn->prepare("SELECT userid, cedula, firstname, lastname FROM users WHERE userid = ?");
+        $stmt->bind_param('i', $uid);
+        $stmt->execute();
+        $u = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        if (!$u || ya_actualizado($uid)) {
+            $error = 'Este perfil ya fue actualizado o no existe.';
+            session_unset();
+        } else {
+            $nombre = trim($_POST['nombre'] ?? '');
+            $apellido = trim($_POST['apellido'] ?? '');
+            $email = trim($_POST['email'] ?? '');
+            $celular = trim($_POST['celular'] ?? '');
+            $barrio = trim($_POST['barrio'] ?? '');
+            $nacimiento = $_POST['nacimiento'] ?? '';
+            $generoInput = $_POST['genero'] ?? '';
+            $genero = in_array($generoInput, ['Male', 'Female', 'Other'], true) ? $generoInput : 'Male';
+            $pass = $_POST['password'] ?? '';
+            $pass2 = $_POST['confirm_password'] ?? '';
+            $aceptaReglamento = isset($_POST['accept_reglamento']);
+            $aceptaBiometria = isset($_POST['accept_biometric']);
+
+            if ($nombre === '' || $apellido === '') { $error = 'Nombre y apellido son obligatorios.'; }
+            elseif (strlen($pass) < 6) { $error = 'La contrase&ntilde;a debe tener al menos 6 caracteres.'; }
+            elseif ($pass !== $pass2) { $error = 'Las contrase&ntilde;as no coinciden.'; }
+            elseif (!$aceptaReglamento) { $error = 'Debes aceptar el reglamento del gimnasio para continuar.'; }
+            elseif (!$aceptaBiometria) { $error = 'Debes autorizar el tratamiento de tu foto para verificaci&oacute;n biom&eacute;trica de acceso.'; }
+            elseif (empty($_FILES['profile_photo']['tmp_name'])) { $error = 'La foto es obligatoria (t&oacute;mala con la c&aacute;mara).'; }
             else {
-                switch ($info[2]) {
-                    case IMAGETYPE_JPEG: $img = imagecreatefromjpeg($tmp); break;
-                    case IMAGETYPE_PNG:  $img = imagecreatefrompng($tmp); break;
-                    case IMAGETYPE_WEBP: $img = imagecreatefromwebp($tmp); break;
-                    default: $img = false;
-                }
-                if (!$img) { $error = 'Formato de foto no soportado.'; $paso='formulario'; }
+                $tmp = $_FILES['profile_photo']['tmp_name'];
+                $info = @getimagesize($tmp);
+                if (!$info || $_FILES['profile_photo']['size'] > 8*1024*1024) { $error = 'Foto inv&aacute;lida o mayor a 8MB.'; }
                 else {
-                    $dest = __DIR__ . '/../assets/img/profiles/' . $u['userid'] . '.png';
-                    imagepng($img, $dest);
-                    @chmod($dest, 0666);
-                    imagedestroy($img);
-                    // Actualizar datos (herencia hungara: firstname=APELLIDO, lastname=NOMBRE)
-                    $hash = password_hash($pass, PASSWORD_DEFAULT);
-                    $stmt = $conn->prepare("UPDATE users SET firstname=?, lastname=?, email=?, celular=?, birthdate=?, gender=?, password=? WHERE userid=?");
-                    $stmt->bind_param('sssssssi', $apellido, $nombre, $email, $celular, $nacimiento, $genero, $hash, $u['userid']);
-                    $stmt->execute();
-                    $stmt->close();
-                    // Enrolar al SpeedFace + sincronizar acceso segun plan
-                    require_once __DIR__ . '/../iclock/lib/enroll.php';
-                    @enrolar_en_speedface((int)$u['userid']);
-                    require_once __DIR__ . '/../iclock/lib/endtime.php';
-                    @sincronizar_acceso_speedface((int)$u['userid']);
-                    $ok = true;
+                    switch ($info[2]) {
+                        case IMAGETYPE_JPEG: $img = imagecreatefromjpeg($tmp); break;
+                        case IMAGETYPE_PNG:  $img = imagecreatefrompng($tmp); break;
+                        case IMAGETYPE_WEBP: $img = imagecreatefromwebp($tmp); break;
+                        default: $img = false;
+                    }
+                    if (!$img) { $error = 'Formato de foto no soportado.'; }
+                    else {
+                        $dest = __DIR__ . '/../assets/img/profiles/' . $uid . '.png';
+                        imagepng($img, $dest);
+                        @chmod($dest, 0666);
+                        imagedestroy($img);
+                        $hash = password_hash($pass, PASSWORD_DEFAULT);
+                        $upd = $conn->prepare("UPDATE users SET firstname=?, lastname=?, email=?, celular=?, city=?, birthdate=?, gender=?, password=? WHERE userid=?");
+                        $upd->bind_param('ssssssssi', $apellido, $nombre, $email, $celular, $barrio, $nacimiento, $genero, $hash, $uid);
+                        $upd->execute();
+                        $upd->close();
+
+                        $conn->query("INSERT INTO logs (userid, action, actioncolor, time) VALUES (" . (int)$uid . ", 'Autorizacion de datos biometricos otorgada en actualizacion de perfil', 'success', NOW())");
+
+                        require_once __DIR__ . '/../includes/future_plans.php';
+                        $resCortesiaDia = add_plan($conn, $uid, 'Cortesia actualizacion de datos - 1 dia', 1, null, null);
+                        $accSDia = ($resCortesiaDia['type'] === 'active') ? 'activada ahora' : ('encolada, inicia ' . ($resCortesiaDia['start_date'] ?? '?'));
+                        $conn->query("INSERT INTO logs (userid, action, actioncolor, time) VALUES (" . (int)$uid . ", 'Cortesia por actualizacion web: 1 dia (" . $accSDia . ")', 'success', NOW())");
+
+                        require_once __DIR__ . '/../iclock/lib/enroll.php';
+                        @enrolar_en_speedface($uid);
+                        require_once __DIR__ . '/../iclock/lib/endtime.php';
+                        @sincronizar_acceso_speedface($uid);
+
+                        $ok = true;
+                        $nombreOk = $nombre;
+                        session_unset();
+                    }
                 }
             }
         }
+    }
+}
+
+$paso = $_SESSION['upd_step'] ?? 'cedula';
+if ($ok) { $paso = 'listo'; }
+$sendWarning = $_SESSION['upd_send_error'] ?? '';
+
+$datosActuales = null;
+if ($paso === 'formulario' && ($_SESSION['upd_verified'] ?? false)) {
+    $uidForm = (int) ($_SESSION['upd_userid'] ?? 0);
+    if ($uidForm) {
+        $stmtD = $conn->prepare("SELECT firstname, lastname, email, celular, birthdate, gender, city FROM users WHERE userid = ?");
+        $stmtD->bind_param('i', $uidForm);
+        $stmtD->execute();
+        $datosActuales = $stmtD->get_result()->fetch_assoc();
+        $stmtD->close();
     }
 }
 $conn->close();
@@ -109,6 +218,7 @@ input:focus, select:focus{ outline:none; border-color:#e31e24; box-shadow:0 0 0 
 .alert{ padding:12px 14px; border-radius:8px; margin-bottom:14px; font-weight:600; }
 .alert-err{ background:#fee2e2; color:#b91c1c; }
 .alert-ok{ background:#dcfce7; color:#15803d; }
+.alert-warn{ background:#fef3c7; color:#92400e; }
 .foto-zone{ text-align:center; margin:16px 0; }
 .foto-preview{ width:150px; height:150px; border-radius:50%; object-fit:cover; border:3px dashed #d4d4d8; display:none; margin:0 auto 10px; }
 .btn-cam{ background:transparent; border:2px solid #e31e24; color:#e31e24; font-weight:700; border-radius:8px; padding:9px 18px; cursor:pointer; margin:4px; }
@@ -118,24 +228,29 @@ input:focus, select:focus{ outline:none; border-color:#e31e24; box-shadow:0 0 0 
 .row2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
 .ok-big{ text-align:center; font-size:3em; }
 small.hint{ color:#a1a1aa; }
+.codigo-input{ text-align:center; font-size:1.6em; letter-spacing:8px; font-weight:800; }
+.consent-box{ display:flex; align-items:flex-start; gap:8px; margin-top:14px; padding:10px 12px; background:#f9fafb; border-radius:8px; border:1px solid #e5e7eb; }
+.consent-box input{ width:auto; margin-top:3px; flex-shrink:0; }
+.consent-box span{ font-size:.85em; color:#3f3f46; line-height:1.4; }
 </style>
 </head>
 <body>
 <div class="card">
 <img class="logo" src="../assets/img/brand/logo.png" alt="Adrenaline Gym">
-<?php if ($ok): ?>
+
+<?php if ($paso === 'listo'): ?>
     <div class="ok-big">&#128170;</div>
-    <h1>&iexcl;Listo, <?php echo htmlspecialchars($_POST['nombre']); ?>!</h1>
+    <h1>&iexcl;Listo, <?php echo htmlspecialchars($nombreOk); ?>!</h1>
     <div class="alert alert-ok" style="margin-top:16px; text-align:center;">
         Tus datos quedaron actualizados y tu rostro quedar&aacute; activo en la entrada en unos minutos.
     </div>
     <p class="sub">Tu acceso funciona seg&uacute;n tu plan vigente. &iexcl;Nos vemos entrenando!</p>
-<?php elseif ($paso === 'formulario' && $u): ?>
+
+<?php elseif ($paso === 'formulario' && ($_SESSION['upd_verified'] ?? false)): ?>
     <h1>Confirma tus datos</h1>
     <p class="sub">Revisa que todo est&eacute; correcto, t&oacute;mate la foto y crea tu contrase&ntilde;a.</p>
     <?php if ($error): ?><div class="alert alert-err"><?php echo $error; ?></div><?php endif; ?>
     <form method="post" enctype="multipart/form-data" id="formActualizar">
-        <input type="hidden" name="cedula" value="<?php echo htmlspecialchars($u['cedula']); ?>">
         <div class="foto-zone">
             <img id="fotoPreview" class="foto-preview" alt="">
             <input type="file" id="profile_photo" name="profile_photo" accept="image/*" capture="user" style="display:none;">
@@ -149,31 +264,66 @@ small.hint{ color:#a1a1aa; }
             <div><small class="hint">Foto de frente, buena luz (es la que usar&aacute; la entrada)</small></div>
         </div>
         <div class="row2">
-            <div><label>Nombre(s)</label><input type="text" name="nombre" required value="<?php echo htmlspecialchars($u['lastname']); ?>"></div>
-            <div><label>Apellido</label><input type="text" name="apellido" required value="<?php echo htmlspecialchars($u['firstname']); ?>"></div>
+            <div><label>Nombre(s)</label><input type="text" name="nombre" required value="<?php echo htmlspecialchars($datosActuales['firstname'] ?? ''); ?>"></div>
+            <div><label>Apellido</label><input type="text" name="apellido" required value="<?php echo htmlspecialchars($datosActuales['lastname'] ?? ''); ?>"></div>
         </div>
-        <label>C&eacute;dula</label><input type="text" value="<?php echo htmlspecialchars($u['cedula']); ?>" disabled>
-        <label>Celular</label><input type="tel" name="celular" value="<?php echo htmlspecialchars($u['celular']); ?>">
-        <label>Email</label><input type="email" name="email" value="<?php echo htmlspecialchars($u['email']); ?>">
+        <label>Celular</label><input type="tel" name="celular" value="<?php echo htmlspecialchars($datosActuales['celular'] ?? ''); ?>">
+        <label>Email</label><input type="email" name="email" value="<?php echo htmlspecialchars($datosActuales['email'] ?? ''); ?>">
+        <label>Barrio</label><input type="text" name="barrio" value="<?php echo htmlspecialchars($datosActuales['city'] ?? ''); ?>">
         <div class="row2">
-            <div><label>Fecha de nacimiento</label><input type="date" name="nacimiento" value="<?php echo htmlspecialchars($u['birthdate']); ?>"></div>
-            <div><label>G&eacute;nero</label><select name="genero"><option value="Male">Masculino</option><option value="Female">Femenino</option></select></div>
+            <div><label>Fecha de nacimiento</label><input type="date" name="nacimiento" value="<?php echo htmlspecialchars($datosActuales['birthdate'] ?? ''); ?>"></div>
+            <div><label>G&eacute;nero</label>
+                <select name="genero">
+                    <option value="Male" <?php echo ($datosActuales['gender'] ?? '') === 'Male' ? 'selected' : ''; ?>>Masculino</option>
+                    <option value="Female" <?php echo ($datosActuales['gender'] ?? '') === 'Female' ? 'selected' : ''; ?>>Femenino</option>
+                    <option value="Other" <?php echo ($datosActuales['gender'] ?? '') === 'Other' ? 'selected' : ''; ?>>Otro</option>
+                </select>
+            </div>
         </div>
         <div class="row2">
             <div><label>Crea tu contrase&ntilde;a</label><input type="password" name="password" required minlength="6"></div>
             <div><label>Conf&iacute;rmala</label><input type="password" name="confirm_password" required></div>
         </div>
         <div id="passAviso" style="color:#e31e24;font-size:.85em;font-weight:600;margin-top:4px;display:none;">Las contrase&ntilde;as no coinciden</div>
+
+        <label>Pol&iacute;ticas</label>
+        <div style="border:1px solid #d4d4d8;border-radius:8px;overflow:hidden;margin-bottom:8px;">
+            <iframe src="../admin/boss/rule/rule.html" frameborder="0" style="width:100%;height:180px;display:block;"></iframe>
+        </div>
+        <div class="consent-box">
+            <input type="checkbox" id="acceptReglamento" name="accept_reglamento" required>
+            <span>&iexcl;Acepto las reglas del gimnasio!</span>
+        </div>
+        <div class="consent-box">
+            <input type="checkbox" id="acceptBiometric" name="accept_biometric" required>
+            <span>Autorizo el tratamiento de mi fotograf&iacute;a con fines de verificaci&oacute;n biom&eacute;trica de acceso (reconocimiento facial en el torniquete).</span>
+        </div>
+
         <button type="submit" name="guardar" value="1" class="btn" id="btnGuardar">Actualizar mis datos</button>
     </form>
+
+<?php elseif ($paso === 'verificar' && !empty($_SESSION['upd_userid'])): ?>
+    <h1>Verifica tu identidad</h1>
+    <p class="sub">Te enviamos un c&oacute;digo de 6 d&iacute;gitos por WhatsApp. Escr&iacute;belo aqu&iacute; para continuar.</p>
+    <?php if ($sendWarning): ?>
+        <div class="alert alert-warn">No pudimos enviarte el c&oacute;digo autom&aacute;ticamente (<?php echo htmlspecialchars($sendWarning); ?>). Ac&eacute;rcate a recepci&oacute;n para que te ayudemos.</div>
+    <?php endif; ?>
+    <?php if ($error): ?><div class="alert alert-err"><?php echo $error; ?></div><?php endif; ?>
+    <form method="post">
+        <label>C&oacute;digo de verificaci&oacute;n</label>
+        <input type="tel" name="codigo" class="codigo-input" maxlength="6" required autofocus placeholder="000000">
+        <button type="submit" name="verificar_codigo" value="1" class="btn">Verificar</button>
+    </form>
+    <p class="sub" style="margin-top:14px;"><a href="?reset=1" style="color:#e31e24;font-weight:700;">&iexcl;No es mi turno / empezar de nuevo</a></p>
+
 <?php else: ?>
     <h1>Actualiza tus datos</h1>
-    <p class="sub">Adrenaline Gym estren&oacute; sistema. Digita tu c&eacute;dula para confirmar tus datos y activar tu rostro en la entrada.</p>
+    <p class="sub">Adrenaline Gym estren&oacute; sistema. Digita tu c&eacute;dula, te llegar&aacute; un c&oacute;digo por WhatsApp para confirmar que eres t&uacute;.</p>
     <?php if ($error): ?><div class="alert alert-err"><?php echo $error; ?></div><?php endif; ?>
     <form method="post">
         <label>N&uacute;mero de c&eacute;dula</label>
         <input type="tel" name="cedula" required autofocus placeholder="Ej: 1085123456">
-        <button type="submit" name="buscar_cedula" value="1" class="btn">Buscar mis datos</button>
+        <button type="submit" name="buscar_cedula" value="1" class="btn">Enviar c&oacute;digo</button>
     </form>
 <?php endif; ?>
 </div>
@@ -205,8 +355,10 @@ small.hint{ color:#a1a1aa; }
   });
   var p1=document.querySelector('input[name="password"]'), p2=document.querySelector('input[name="confirm_password"]'),
       aviso=document.getElementById('passAviso'), guardar=document.getElementById('btnGuardar');
-  function chk(){ var mal=p2.value!==''&&p1.value!==p2.value; aviso.style.display=mal?'block':'none'; guardar.disabled=mal; }
-  p1.addEventListener('input',chk); p2.addEventListener('input',chk);
+  if (p1 && p2) {
+    function chk(){ var mal=p2.value!==''&&p1.value!==p2.value; aviso.style.display=mal?'block':'none'; guardar.disabled=mal; }
+    p1.addEventListener('input',chk); p2.addEventListener('input',chk);
+  }
 })();
 </script>
 </body>

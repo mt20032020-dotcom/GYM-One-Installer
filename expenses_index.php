@@ -243,6 +243,12 @@ $conn->close();
                             <span>Gastos</span>
                         </a>
                     </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="../payroll">
+                            <i class="bi bi-clipboard-data"></i>
+                            <span>Nomina</span>
+                        </a>
+                    </li>
                 </ul><br>
             </div>
             <br>

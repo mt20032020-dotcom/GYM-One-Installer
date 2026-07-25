@@ -99,6 +99,9 @@ require_once "/app/includes/cortesia_handler.php";
     $email = $row['email'];
     $cedula = $row['cedula'] ?? '';
     $celular = $row['celular'] ?? '';
+    $city = $row['city'] ?? '';
+    $gender = $row['gender'] ?? 'Male';
+    $birthdate = $row['birthdate'] ?? '';
     $regdate = $row['registration_date'];
     $lastlogin = $row['lastlogin'];
     $verify = $row['confirmed'];
@@ -159,7 +162,7 @@ require_once "/app/includes/cortesia_handler.php";
 
 
 if (isset($_POST['save'])) {
-  $fields = ['firstname', 'lastname', 'email', 'cedula', 'celular'];
+  $fields = ['firstname', 'lastname', 'email', 'cedula', 'celular', 'gender', 'birthdate'];
   if (isset($_POST['barrio'])) $_POST['city'] = trim($_POST['barrio']);
   $fields[] = 'city';
   $new_data = [];
@@ -187,9 +190,9 @@ if (isset($_POST['save'])) {
   }
 
   if (!empty($changes)) {
-    $sql_update = "UPDATE users SET firstname = ?, lastname = ?, email = ?, cedula = ?, celular = ?, city = ? WHERE userid = ?";
+    $sql_update = "UPDATE users SET firstname = ?, lastname = ?, email = ?, cedula = ?, celular = ?, city = ?, gender = ?, birthdate = ? WHERE userid = ?";
     $stmt_update = $conn->prepare($sql_update);
-    $stmt_update->bind_param("ssssssi", $new_data['firstname'], $new_data['lastname'], $new_data['email'], $new_data['cedula'], $new_data['celular'], $new_data['city'], $useridgymuser);
+    $stmt_update->bind_param("ssssssssi", $new_data['firstname'], $new_data['lastname'], $new_data['email'], $new_data['cedula'], $new_data['celular'], $new_data['city'], $new_data['gender'], $new_data['birthdate'], $useridgymuser);
 
     if ($stmt_update->execute()) {
       $stmt_update->close();
@@ -592,8 +595,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['userid'])) {
                     <input type="tel" class="form-control" id="celular" name="celular" value="<?php echo htmlspecialchars($celular, ENT_QUOTES, 'UTF-8'); ?>" placeholder="Celular">
                     <br>
                     <label for="barrio">Barrio</label>
-                    <input type="text" class="form-control" id="barrio" name="barrio" value="<?php echo htmlspecialchars($row['city'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" placeholder="Barrio">
+                    <input type="text" class="form-control" id="barrio" name="barrio" value="<?php echo htmlspecialchars($city ?? '', ENT_QUOTES, 'UTF-8'); ?>" placeholder="Barrio">
                     <br>
+                    <label for="gender">Genero</label>
+                    <select class="form-control" id="gender" name="gender">
+                      <option value="Male" <?php echo ($gender === 'Male') ? 'selected' : ''; ?>>Masculino</option>
+                      <option value="Female" <?php echo ($gender === 'Female') ? 'selected' : ''; ?>>Femenino</option>
+                      <option value="Other" <?php echo ($gender === 'Other') ? 'selected' : ''; ?>>Otro</option>
+                    </select>
+                    <br>
+                    <label for="birthdate">Fecha de nacimiento</label>
+                    <input type="date" class="form-control" id="birthdate" name="birthdate" value="<?php echo htmlspecialchars($birthdate ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+                    <br>
+
                     <label for="email"><?php echo $translations["email"]; ?></label>
                     <br>
                     <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($email, ENT_QUOTES, 'UTF-8'); ?>"

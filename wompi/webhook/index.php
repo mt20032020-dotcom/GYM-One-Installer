@@ -95,7 +95,7 @@ if (!$ticket) {
 
 // Buscar usuario por userid codificado en la referencia (parts[2])
 $userid = intval($parts[2] ?? 0);
-$stmt2 = $db->prepare("SELECT userid, email FROM users WHERE userid = ?");
+$stmt2 = $db->prepare("SELECT userid, email, celular FROM users WHERE userid = ?");
 $stmt2->bind_param("i", $userid);
 $stmt2->execute();
 $user = $stmt2->get_result()->fetch_assoc();
@@ -260,6 +260,63 @@ if ($uM && !empty($email) && strpos($email, "@") !== false) {
 }
 } catch (\Throwable $eMail) {
     @file_put_contents("/app/wompi/webhook_log.txt", date("Y-m-d H:i:s") . " ERROR CORREO: " . $eMail->getMessage() . "\n", FILE_APPEND);
+}
+
+// ===== Confirmacion por WhatsApp via Chatwoot (adicional al correo) =====
+try {
+    if (!empty($user['celular'])) {
+        $celularClean = preg_replace('/\D/', '', $user['celular']);
+        if (strlen($celularClean) === 10) { $celularClean = '57' . $celularClean; }
+
+        $chatwootBase = 'https://n8n-chatwoot.spqqf7.easypanel.host/api/v1/accounts/3';
+        $chatwootToken = 'PEGAR_TOKEN_AQUI';
+
+        $ch = curl_init("$chatwootBase/contacts/search?q=" . urlencode($celularClean));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ["api_access_token: $chatwootToken"]);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 8);
+        $searchRaw = curl_exec($ch);
+        curl_close($ch);
+        @file_put_contents('/app/wompi/webhook_log.txt', date('Y-m-d H:i:s') . " WA-SEARCH cel=$celularClean resp=" . substr($searchRaw,0,300) . "\n", FILE_APPEND);
+        $searchResult = json_decode($searchRaw, true);
+        $contactId = $searchResult['payload'][0]['id'] ?? null;
+
+        if ($contactId) {
+            $ch2 = curl_init("$chatwootBase/contacts/$contactId/conversations");
+            curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch2, CURLOPT_HTTPHEADER, ["api_access_token: $chatwootToken"]);
+            curl_setopt($ch2, CURLOPT_TIMEOUT, 8);
+            $convRaw = curl_exec($ch2);
+            curl_close($ch2);
+            @file_put_contents('/app/wompi/webhook_log.txt', date('Y-m-d H:i:s') . " WA-CONV contact=$contactId resp=" . substr($convRaw,0,300) . "\n", FILE_APPEND);
+            $convResult = json_decode($convRaw, true);
+            $conversationId = $convResult['payload'][0]['id'] ?? ($convResult[0]['id'] ?? null);
+
+            if ($conversationId) {
+                $mensajeWA = "✅ *Pago exitoso*\n\nTu membresia *{$ticket['name']}* ya esta activa.\nMonto: $" . number_format($monto_pesos,0,',','.') . " COP";
+                if ($plan_result && $plan_result['type'] === 'active') {
+                    $mensajeWA .= "\nVence: " . date('d/m/Y', strtotime($plan_result['end_date']));
+                }
+                $mensajeWA .= "\n\nNos vemos en el gym! 💪";
+
+                $ch3 = curl_init("$chatwootBase/conversations/$conversationId/messages");
+                curl_setopt($ch3, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch3, CURLOPT_POST, true);
+                curl_setopt($ch3, CURLOPT_HTTPHEADER, ["api_access_token: $chatwootToken", "Content-Type: application/json"]);
+                curl_setopt($ch3, CURLOPT_POSTFIELDS, json_encode(['content' => $mensajeWA, 'message_type' => 'outgoing']));
+                curl_setopt($ch3, CURLOPT_TIMEOUT, 8);
+                $sendRaw = curl_exec($ch3);
+                curl_close($ch3);
+                @file_put_contents('/app/wompi/webhook_log.txt', date('Y-m-d H:i:s') . " WA-ENVIADO conv=$conversationId resp=" . substr($sendRaw,0,300) . "\n", FILE_APPEND);
+            } else {
+                @file_put_contents('/app/wompi/webhook_log.txt', date('Y-m-d H:i:s') . " WA sin conversacion para contact=$contactId\n", FILE_APPEND);
+            }
+        } else {
+            @file_put_contents('/app/wompi/webhook_log.txt', date('Y-m-d H:i:s') . " WA contacto no encontrado cel=$celularClean\n", FILE_APPEND);
+        }
+    }
+} catch (\Throwable $eWA) {
+    @file_put_contents('/app/wompi/webhook_log.txt', date('Y-m-d H:i:s') . " ERROR WHATSAPP: " . $eWA->getMessage() . "\n", FILE_APPEND);
 }
 
 header('Content-Type: application/json');
