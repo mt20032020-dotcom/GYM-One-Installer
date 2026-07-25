@@ -166,15 +166,18 @@ if (isset($_POST['save'])) {
   if (isset($_POST['barrio'])) $_POST['city'] = trim($_POST['barrio']);
   $fields[] = 'city';
   $new_data = [];
+  $campo_faltante = false;
   foreach ($fields as $field) {
     if (empty($_POST[$field])) {
-      $alerts_html .= '<div class="alert alert-danger">Minden mező kitöltése kötelező.</div>';
-      return;
+      $alerts_html .= '<div class="alert alert-danger">Todos los campos son obligatorios (falta: ' . htmlspecialchars($field) . ').</div>';
+      $campo_faltante = true;
+      break;
     }
     $new_data[$field] = $_POST[$field];
   }
+  if (!$campo_faltante) {
 
-  $sql_old = "SELECT firstname, lastname, email, cedula, celular, city FROM users WHERE userid = ?";
+  $sql_old = "SELECT firstname, lastname, email, cedula, celular, city, gender, birthdate FROM users WHERE userid = ?";
   $stmt_old = $conn->prepare($sql_old);
   $stmt_old->bind_param("i", $useridgymuser);
   $stmt_old->execute();
@@ -212,6 +215,7 @@ if (isset($_POST['save'])) {
     } else {
       $alerts_html .= '<div class="alert alert-danger">Unexpected error: ' . $conn->error . '</div>';
     }
+  }
   }
 }
 
@@ -556,6 +560,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['userid'])) {
             <div class="card shadow">
               <div class="card-heading">
                 <h5 class="card-title"><?php echo $translations["editprofile"]; ?></h5>
+                <?php echo $alerts_html; ?>
               </div>
               <form method="POST">
                 <div class="row">
@@ -621,7 +626,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['userid'])) {
                 <?php
                 if ($is_boss == 1) {
                   ?>
-                  <?php require "/app/includes/cortesia_ui.php"; ?>
                   <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal"
                     data-userid="1">
                     <i class="bi bi-trash"></i>
@@ -632,6 +636,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['userid'])) {
                 </div>
 
               </form>
+              <div style="margin-top:8px;">
+                <?php require "/app/includes/cortesia_ui.php"; ?>
+              </div>
             </div>
           </div>
           <div class="col-md-6">
