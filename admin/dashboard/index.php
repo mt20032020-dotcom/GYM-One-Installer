@@ -461,6 +461,12 @@ if ($countryCode !== '') {
                                 <span><?php echo $translations["rulepage"]; ?></span>
                             </a>
                         </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="../boss/bot_info">
+                                <i class="bi bi-robot"></i>
+                                <span>Info del Bot</span>
+                            </a>
+                        </li>
                         <?php
                     }
                     ?>

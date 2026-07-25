@@ -202,6 +202,7 @@ $conn->close();
                     <li><a href="../finance"><i class="bi bi-cash-stack"></i> Reportes financieros</a></li>
                     <li class="active"><a href="#"><i class="bi bi-wallet2"></i> Gastos</a></li>
                     <li><a href="../payroll"><i class="bi bi-clipboard-data"></i> Nomina</a></li>
+                    <li><a href="../bot_info"><i class="bi bi-robot"></i> Info del Bot</a></li>
                 </ul>
             </div>
         </div>
@@ -255,6 +256,12 @@ $conn->close();
                         <a class="sidebar-link" href="../payroll">
                             <i class="bi bi-clipboard-data"></i>
                             <span>Nomina</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="../bot_info">
+                            <i class="bi bi-robot"></i>
+                            <span>Info del Bot</span>
                         </a>
                     </li>
                 </ul><br>
