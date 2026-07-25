@@ -40,7 +40,7 @@ $hoyMes = date('m');
 $hoyDia = date('d');
 $anioActual = (int) date('Y');
 
-$stmt = $conn->prepare("SELECT userid, lastname, celular FROM users WHERE MONTH(birthdate) = ? AND DAY(birthdate) = ? AND celular IS NOT NULL AND celular != ''");
+$stmt = $conn->prepare("SELECT userid, lastname, email, celular FROM users WHERE MONTH(birthdate) = ? AND DAY(birthdate) = ? AND celular IS NOT NULL AND celular != ''");
 $stmt->bind_param('ss', $hoyMes, $hoyDia);
 $stmt->execute();
 $cumpleanieros = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
@@ -73,6 +73,28 @@ foreach ($cumpleanieros as $u) {
 
     $envio = enviar_plantilla_whatsapp_meta($u['celular'], 'feliz_cumpleanos', 'es_CO', [], [$u['lastname']]);
     if ($envio['ok']) { $procesados++; } else { $errores++; }
+
+    if (!empty($u['email']) && strpos($u['email'], '@') !== false && !empty($env['MAIL_HOST'])) {
+        require_once '/app/includes/mailer.php';
+        require_once '/app/includes/email_templates.php';
+
+        $filasEmail = ['Regalo' => 'Semana de entrenamiento gratis'];
+        if ($res['type'] === 'active') {
+            $filasEmail['Vigente hasta'] = date('d/m/Y', strtotime($res['end_date']));
+            $subEmail = 'Tu semana de cortesia ya esta activa. Nos vemos en el gym!';
+        } else {
+            $filasEmail['Inicia aprox.'] = $res['start_date'] ? date('d/m/Y', strtotime($res['start_date'])) : 'Al vencer tu plan actual';
+            $subEmail = 'Tu semana de cortesia se activara automaticamente cuando termine tu plan actual.';
+        }
+
+        $bodyEmail = adrenaline_email(
+            'FELIZ CUMPLEANOS',
+            'Hola, ' . htmlspecialchars($u['lastname']) . '!',
+            'Para celebrar tu cumpleanos, te regalamos una semana de entrenamiento gratis en Adrenaline Gym. ' . $subEmail,
+            $filasEmail
+        );
+        @send_mail($env, $u['email'], 'Feliz cumpleanos - te regalamos una semana de entrenamiento', $bodyEmail, $env['BUSINESS_NAME'] ?? 'Adrenaline Gym', true);
+    }
 
     usleep(300000);
 }
