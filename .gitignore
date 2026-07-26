@@ -16,3 +16,5 @@ iclock/*.log
 iclock/fotos_extraidas/
 uploads/
 *.bak_boton
+*.bak_*
+wompi/webhook_log.txt
