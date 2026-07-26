@@ -27,10 +27,62 @@ if ($conn->connect_error) {
 }
 $conn->set_charset('utf8mb4');
 
-$result = $conn->query("SELECT categoria, contenido FROM bot_info ORDER BY orden ASC");
 $info = [];
+
+// ===== 1. Categorias de texto libre (panel admin/boss/bot_info) =====
+$result = $conn->query("SELECT categoria, contenido FROM bot_info ORDER BY orden ASC");
 while ($row = $result->fetch_assoc()) {
-    $info[] = ['categoria' => $row['categoria'], 'contenido' => $row['contenido']];
+    if (trim($row['contenido']) !== '') {
+        $info[] = ['categoria' => $row['categoria'], 'contenido' => $row['contenido']];
+    }
+}
+
+// ===== 2. Horarios de atencion (tabla opening_hours, en vivo) =====
+$diasNombre = [1 => 'Lunes', 2 => 'Martes', 3 => 'Miercoles', 4 => 'Jueves', 5 => 'Viernes', 6 => 'Sabado', 7 => 'Domingo'];
+$rHoras = $conn->query("SELECT day, open_time, close_time FROM opening_hours ORDER BY day ASC");
+$lineasHoras = [];
+while ($h = $rHoras->fetch_assoc()) {
+    $nombreDia = $diasNombre[(int)$h['day']] ?? $h['day'];
+    if (empty($h['open_time']) || empty($h['close_time'])) {
+        $lineasHoras[] = "$nombreDia: Cerrado";
+    } else {
+        $lineasHoras[] = "$nombreDia: " . substr($h['open_time'],0,5) . " a " . substr($h['close_time'],0,5);
+    }
+}
+if (!empty($lineasHoras)) {
+    $info[] = ['categoria' => 'Horarios de atencion', 'contenido' => implode("\n", $lineasHoras)];
+}
+
+// ===== 3. Planes y tiqueteras (tabla tickets, en vivo) =====
+$rTickets = $conn->query("SELECT id, name, expire_days, price, occasions FROM tickets WHERE visible = 1 ORDER BY price ASC");
+$lineasPlanes = [];
+$lineasTiqueteras = [];
+while ($t = $rTickets->fetch_assoc()) {
+    $precioFmt = number_format((float)$t['price'], 0, ',', '.');
+    $linkPago = "https://gympasto.com/checkout/?ticket=" . (int)$t['id'];
+    if ($t['occasions'] === null) {
+        $lineasPlanes[] = $t['name'] . ": $" . $precioFmt . " COP (" . (int)$t['expire_days'] . " dias) - Pagar: " . $linkPago;
+    } else {
+        $lineasTiqueteras[] = $t['name'] . ": $" . $precioFmt . " COP (" . (int)$t['occasions'] . " ingresos, vigencia " . (int)$t['expire_days'] . " dias) - Pagar: " . $linkPago;
+    }
+}
+if (!empty($lineasPlanes)) {
+    $info[] = ['categoria' => 'Membresias (acceso ilimitado)', 'contenido' => implode("\n", $lineasPlanes)];
+}
+if (!empty($lineasTiqueteras)) {
+    $info[] = ['categoria' => 'Tiqueteras (por numero de ingresos)', 'contenido' => implode("\n", $lineasTiqueteras)];
+}
+
+// ===== 4. Clases grupales (tabla timetable, en vivo) =====
+$rClases = $conn->query("SELECT event_name, day_of_week, start_time, end_time FROM timetable ORDER BY day_of_week, start_time ASC");
+$lineasClases = [];
+while ($cl = $rClases->fetch_assoc()) {
+    $lineasClases[] = $cl['day_of_week'] . ": " . $cl['event_name'] . " (" . substr($cl['start_time'],0,5) . " a " . substr($cl['end_time'],0,5) . ")";
+}
+if (!empty($lineasClases)) {
+    $info[] = ['categoria' => 'Clases grupales', 'contenido' => implode("\n", $lineasClases)];
+} else {
+    $info[] = ['categoria' => 'Clases grupales', 'contenido' => 'Por el momento no hay clases grupales programadas.'];
 }
 
 echo json_encode(['ok' => true, 'info' => $info], JSON_UNESCAPED_UNICODE);
