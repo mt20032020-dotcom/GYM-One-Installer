@@ -470,7 +470,7 @@ $conn->close();
                                     ];
 
                                     // aktuális hét hétfőjének dátuma
-                                    $monday = date('Y-m-d', strtotime('monday this week'));
+                                    $monday = date('Y-m-d', strtotime('monday', strtotime('sunday last week +1 day')));
 
                                     // FullCalendar események
                                     $fc_events = [];
@@ -487,13 +487,13 @@ $conn->close();
                                             $eventDate = date('Y-m-d', strtotime($monday . " + " . ($dow - 1) . " days"));
 
                                             // kezdés + befejezés
-                                            $start = $eventDate . " " . $event["start_time"];
-                                            $end = $eventDate . " " . $event["end_time"];
+                                            $start = $eventDate . "T" . $event["start_time"];
+                                            $end = $eventDate . "T" . $event["end_time"];
 
                                             $fc_events[] = [
                                                 "title" => $event["event_name"],
-                                                "start" => $start,
-                                                "end" => $end,
+                                                "daysOfWeek" => [$dow % 7], "startTime" => $event["start_time"],
+                                                "endTime" => $event["end_time"],
                                                 "color" => $event["color"]
                                             ];
                                         }
@@ -522,10 +522,10 @@ $conn->close();
                                                 editable: false,
                                                 eventOverlap: true,
                                                 nowIndicator: true,
-                                                locale: 'hu',
+                                                locale: 'es',
 
                                                 headerToolbar: {
-                                                    left: '',
+                                                    left: 'prev,next today',
                                                     center: 'title',
                                                     right: ''
                                                 }

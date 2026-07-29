@@ -340,6 +340,116 @@ $conn->close();
                     <div class="row sp-cols">
                         <!-- QR -->
                         <div class="col-sm-6">
+                            <?php
+require_once __DIR__ . "/payment/_pc_assets.php";
+$vrPrice = 0; $vrCurrency = $currency ?? "COP";
+$vrC = @new mysqli($db_host, $db_username, $db_password, $db_name);
+if ($vrC && !$vrC->connect_error) {
+    $vrC->set_charset("utf8mb4");
+    $vrQ = $vrC->query("SELECT price FROM tickets WHERE id = 10");
+    if ($vrQ && ($vrR = $vrQ->fetch_assoc())) { $vrPrice = $vrR["price"]; }
+    $vrC->close();
+}
+?>
+                            <div class="sp-card" style="margin-bottom:18px;border-color:#e53935;">
+                                <div class="sp-card-head">
+                                    <span class="sp-card-icon" style="background:#ffebee;color:#e53935;"><i class="bi bi-lightning-charge-fill"></i></span>
+                                    <h5>Venta r&aacute;pida</h5>
+                                </div>
+                                <p style="color:#64748b;font-size:14px;margin-bottom:14px;">Sesi&oacute;n para visitante ocasional. Factura a Consumidor Final y abre el torniquete.</p>
+                                <button type="button" onclick="vrOpen()" style="width:100%;background:#e53935;color:#fff;padding:14px;border:0;border-radius:10px;font-weight:600;font-size:16px;cursor:pointer;">Vender sesi&oacute;n</button>
+                            </div>
+                            <div id="vrOverlay" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:9999;align-items:center;justify-content:center;padding:16px;">
+                              <div style="background:#fff;border-radius:16px;max-width:420px;width:100%;padding:26px;">
+                                <div id="vrBody">
+                                  <div class="pc-modal-head" style="text-align:center;margin-bottom:6px;">
+                                    <h5 class="pc-modal-title" style="margin:0;font-weight:700;">Venta r&aacute;pida</h5>
+                                    <p class="pc-modal-sub" style="color:#64748b;font-size:14px;margin:4px 0 0;">Sesi&oacute;n &middot; Consumidor Final &middot; abre el torniquete</p>
+                                  </div>
+                                  <div class="pc-modal-amount"><span>Total</span><b><?php echo number_format((float)$vrPrice,0,",","."); ?> <?php echo htmlspecialchars($vrCurrency); ?></b></div>
+                                  <div class="pc-methods">
+                                    <label class="pc-method"><input type="radio" name="vrPay" value="cash" checked><span class="pc-method-box"><i class="bi bi-cash-coin"></i><span>Efectivo</span></span></label>
+                                    <label class="pc-method"><input type="radio" name="vrPay" value="card"><span class="pc-method-box"><i class="bi bi-credit-card-2-front"></i><span>Tarjeta</span></span></label>
+                                    <label class="pc-method"><input type="radio" name="vrPay" value="transfer"><span class="pc-method-box"><i class="bi bi-bank"></i><span>Transferencia</span></span></label>
+                                    <label class="pc-method"><input type="radio" name="vrPay" value="mixed"><span class="pc-method-box"><i class="bi bi-pie-chart"></i><span>Pago mixto</span></span></label>
+                                  </div>
+                                  <div id="vrMixPanel" style="display:none;margin-bottom:16px;padding:16px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;">
+                                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+                                      <div><label style="font-size:.85em;font-weight:700;"><i class="bi bi-cash-coin"></i> Efectivo</label><input type="number" min="0" step="100" id="vrMixCash" class="form-control" value="0"></div>
+                                      <div><label style="font-size:.85em;font-weight:700;"><i class="bi bi-credit-card-2-front"></i> Tarjeta</label><input type="number" min="0" step="100" id="vrMixCard" class="form-control" value="0"></div>
+                                      <div><label style="font-size:.85em;font-weight:700;"><i class="bi bi-bank"></i> Transf.</label><input type="number" min="0" step="100" id="vrMixTr" class="form-control" value="0"></div>
+                                    </div>
+                                    <div id="vrMixStatus" style="margin-top:12px;font-weight:800;color:#dc2626;text-align:center;font-size:1.05em;"></div>
+                                  </div>
+                                  <button type="button" id="vrConfirm" style="width:100%;padding:15px;border:0;border-radius:10px;color:#fff;font-weight:600;font-size:16px;cursor:pointer;background:#16a34a;"><i class="bi bi-check2"></i> Confirmar venta</button>
+                                </div>
+                                <button type="button" onclick="vrClose()" style="width:100%;padding:12px;margin-top:6px;background:#f1f5f9;color:#475569;border:0;border-radius:10px;cursor:pointer;">Cerrar</button>
+                              </div>
+                            </div>
+                            <script>
+                            var vrTpl = null;
+                            function vrOpen(){
+                              var b = document.getElementById('vrBody');
+                              if (vrTpl === null) { vrTpl = b.innerHTML; } else { b.innerHTML = vrTpl; }
+                              document.getElementById('vrOverlay').style.display = 'flex';
+                              vrRefresh();
+                            }
+                            function vrClose(){ document.getElementById('vrOverlay').style.display = 'none'; }
+                            var vrTotal = <?php echo (float)$vrPrice; ?>;
+                            function vrFmt(v){ return '$' + Math.round(v).toLocaleString('es-CO'); }
+                            function vrRefresh(){
+                              var sel = document.querySelector('input[name="vrPay"]:checked');
+                              var panel = document.getElementById('vrMixPanel');
+                              var conf = document.getElementById('vrConfirm');
+                              if (!sel || !panel || !conf) return;
+                              var esMix = sel.value === 'mixed';
+                              panel.style.display = esMix ? 'block' : 'none';
+                              if (!esMix) { conf.disabled = false; conf.style.opacity = '1'; return; }
+                              var c = parseFloat(document.getElementById('vrMixCash').value)||0;
+                              var t = parseFloat(document.getElementById('vrMixCard').value)||0;
+                              var r = parseFloat(document.getElementById('vrMixTr').value)||0;
+                              var sum = c+t+r, st = document.getElementById('vrMixStatus');
+                              if (Math.abs(sum - vrTotal) < 0.01 && sum > 0) {
+                                st.style.color = '#16a34a'; st.innerHTML = '&#10003; Completo: ' + vrFmt(sum);
+                                conf.disabled = false; conf.style.opacity = '1';
+                              } else {
+                                st.style.color = '#dc2626';
+                                st.innerHTML = (sum < vrTotal ? 'Faltan ' + vrFmt(vrTotal - sum) : 'Sobran ' + vrFmt(sum - vrTotal)) + ' (' + vrFmt(sum) + ' de ' + vrFmt(vrTotal) + ')';
+                                conf.disabled = true; conf.style.opacity = '.5';
+                              }
+                            }
+                            document.addEventListener('change', function(e){ if (e.target && e.target.name === 'vrPay') vrRefresh(); });
+                            document.addEventListener('input', function(e){ if (e.target && ['vrMixCash','vrMixCard','vrMixTr'].indexOf(e.target.id) >= 0) vrRefresh(); });
+                            document.addEventListener('click', function(e){
+                              var btn = e.target && e.target.closest ? e.target.closest('#vrConfirm') : null;
+                              if (!btn) return;
+                              var sel = document.querySelector('input[name="vrPay"]:checked');
+                              if (!sel) return;
+                              var body = document.getElementById('vrBody');
+                              btn.disabled = true; btn.style.opacity = '.5';
+                              body.insertAdjacentHTML('beforeend','<p style="text-align:center;color:#64748b;margin:12px 0 0;">Procesando...</p>');
+                              var fd = new FormData();
+                              fd.append('pm', sel.value);
+                              if (sel.value === 'mixed') {
+                                fd.append('mix_cash', document.getElementById('vrMixCash').value);
+                                fd.append('mix_card', document.getElementById('vrMixCard').value);
+                                fd.append('mix_transfer', document.getElementById('vrMixTr').value);
+                              }
+                              fd.append('ajax','1');
+                              fetch('/admin/boss/sell/quick/', {method:'POST', body:fd, credentials:'same-origin'})
+                                .then(function(r){ return r.json(); })
+                                .then(function(d){
+                                  if (d.ok) {
+                                    body.innerHTML = '<div style="background:#e8f5e9;border-left:4px solid #2e7d32;padding:16px;border-radius:8px;"><b>Venta registrada</b><br>Factura ' + d.invoice + '<br>' + d.door + '<br><a style="color:#166534;font-weight:600;" href="/assets/docs/invoices/' + encodeURIComponent(d.pdf) + '" target="_blank">Ver factura PDF</a></div>';
+                                  } else {
+                                    body.innerHTML = '<div style="background:#ffebee;border-left:4px solid #c62828;padding:16px;border-radius:8px;">' + (d.msg || 'Error desconocido') + '</div>';
+                                  }
+                                })
+                                .catch(function(err){
+                                  body.innerHTML = '<div style="background:#ffebee;border-left:4px solid #c62828;padding:16px;border-radius:8px;">Error de red: ' + err + '</div>';
+                                });
+                            });
+                            </script>
                             <div class="sp-card">
                                 <div class="sp-card-head">
                                     <span class="sp-card-icon"><i class="bi bi-qr-code-scan"></i></span>
