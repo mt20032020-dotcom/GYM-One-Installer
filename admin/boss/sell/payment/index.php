@@ -300,7 +300,7 @@ $inv_pm = ($method == 'profile') ? $translations["profilebalancepay"] : (($metho
         'paymentType' => $inv_pm,
     ], $inv_items);
 
-    $mpdf = new Mpdf();
+    $mpdf = new Mpdf(["tempDir" => "/tmp"]);
     $mpdf->WriteHTML($invoiceHtml);
 
     $invoicePath = __DIR__ . "/../../../../assets/docs/invoices/{$userid}-{$invoiceNumber}.pdf";

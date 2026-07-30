@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pm'])) {
                 'clientEmail'=>'','workerName'=>$wn,'paymentType'=>$pmLabel,
             ], $inv_items);
 
-            $mpdf = new \Mpdf\Mpdf();
+            $mpdf = new \Mpdf\Mpdf(["tempDir" => "/tmp"]);
             $mpdf->WriteHTML($invoiceHtml);
             $pdfName = "{$CF_USERID}-{$invoiceNumber}.pdf";
             $mpdf->Output("/app/assets/docs/invoices/{$pdfName}", \Mpdf\Output\Destination::FILE);
