@@ -5,6 +5,7 @@ if (!isset($_SESSION['adminuser'])) {
     exit();
 }
 $userid = $_SESSION['adminuser'];
+if (($_SESSION['adminrole'] ?? 'reception') !== 'boss') { header("Location: ../../dashboard/"); exit(); }
 function read_env_file($file_path) {
     $env_data = [];
     foreach (preg_split("/\r\n|\n|\r/", (string) @file_get_contents($file_path)) as $line) {
