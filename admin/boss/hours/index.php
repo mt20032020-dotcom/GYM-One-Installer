@@ -68,6 +68,8 @@ if ($stmt->num_rows > 0) {
     $stmt->fetch();
 }
 $stmt->close();
+require_once '/app/includes/roles.php';
+if (!gymone_can($conn, $userid, ['boss','finance'])) { header("Location: ../../dashboard/"); exit(); }
 
 $alerts_html = '';
 

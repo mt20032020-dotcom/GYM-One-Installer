@@ -57,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $sql = "SELECT userid, password_hash FROM workers WHERE username = ?";
+    $sql = "SELECT userid, password_hash, role, is_boss FROM workers WHERE username = ?";
     $stmt = $conn->prepare($sql);
 
     if ($stmt === false) {
@@ -75,6 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $row = $result->fetch_assoc();
             if (password_verify($password, $row['password_hash'])) {
                 $_SESSION['adminuser'] = $row['userid'];
+                $_SESSION['adminrole'] = (!empty($row['role'])) ? $row['role'] : (($row['is_boss'] == 1) ? 'boss' : 'reception');
 
                 $ip_address = $_SERVER['REMOTE_ADDR'];
                 if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {

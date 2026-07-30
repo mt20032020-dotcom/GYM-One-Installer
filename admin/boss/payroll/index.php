@@ -30,6 +30,10 @@ $stmtB->execute();
 $stmtB->bind_result($is_boss);
 $stmtB->fetch();
 $stmtB->close();
+require_once '/app/includes/roles.php';
+if (!gymone_can($conn, $userid, ['boss','finance'])) { header("Location: ../../dashboard/"); exit(); }
+/* GYMONE_LOCK */
+if ($is_boss != 1) { header("Location: ../../dashboard/"); exit(); }
 
 $conn->query("CREATE TABLE IF NOT EXISTS payroll_expense_log (
     id INT AUTO_INCREMENT PRIMARY KEY,

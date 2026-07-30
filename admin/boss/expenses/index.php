@@ -74,10 +74,8 @@ if ($stmt->num_rows > 0) {
 }
 $stmt->close();
 
-if ($is_boss != 1) {
-    header("Location: ../../dashboard/");
-    exit();
-}
+require_once '/app/includes/roles.php';
+if (!gymone_can($conn, $userid, ['boss','finance'])) { header("Location: ../../dashboard/"); exit(); }
 
 // ----- Make sure the expenses table exists -----
 $chk = $conn->query("SHOW COLUMNS FROM expenses LIKE 'payment_method'");
