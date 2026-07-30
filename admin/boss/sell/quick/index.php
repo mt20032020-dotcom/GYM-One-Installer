@@ -92,6 +92,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pm'])) {
             $s=$conn->prepare("INSERT INTO invoices (userid,name,price,status,route,created_at) VALUES (?,?,?,?,?,NOW())");
             $s->bind_param("isdss",$CF_USERID,$nm,$price,$st,$pdfName); $s->execute(); $s->close();
 
+            $uidTmp = $CF_USERID . '-' . time() . rand(10,99);
+            $sT=$conn->prepare("INSERT INTO temp_loggeduser (name,userid,login_date,lockerid) VALUES (?,?,NOW(),0)");
+            $sT->bind_param("ss",$nm,$uidTmp); $sT->execute(); $sT->close();
             $s=$conn->prepare("INSERT INTO access_log (userid,display_name,is_companion,entry_time) VALUES (?,?,0,NOW())");
             $s->bind_param("is",$CF_USERID,$nm); $s->execute(); $s->close();
 

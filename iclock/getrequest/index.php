@@ -30,6 +30,17 @@ header('Content-Type: text/plain');
 header('Content-Length: ' . strlen($body));
 echo $body;
 if (function_exists('fastcgi_finish_request')) { fastcgi_finish_request(); }
+/* AUTOSALIDA: cierra sesiones de mas de 90 minutos */
+$envAS = [];
+foreach (file('/app/.env') as $lAS) { if (strpos($lAS,'=')!==false) { [$kAS,$vAS]=explode('=',trim($lAS),2); $envAS[$kAS]=$vAS; } }
+$cAS = @new mysqli($envAS['DB_SERVER'],$envAS['DB_USERNAME'],$envAS['DB_PASSWORD'],$envAS['DB_NAME']);
+if ($cAS && !$cAS->connect_error) {
+    $cAS->query("DELETE FROM temp_loggeduser WHERE login_date < (NOW() - INTERVAL 90 MINUTE)");
+    if ($cAS->affected_rows > 0) {
+        @file_put_contents(__DIR__.'/../device_log.txt', date('Y-m-d H:i:s')." AUTOSALIDA: ".$cAS->affected_rows." sesion(es) cerrada(s)\n", FILE_APPEND);
+    }
+    $cAS->close();
+}
 if (!empty($GLOBALS['__barrer'])) {
     require __DIR__ . '/../lib/barrido_nocturno.php';
     // Recordatorios de vencimiento (planes que vencen manana)

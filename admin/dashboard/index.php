@@ -701,11 +701,11 @@ if ($countryCode !== '') {
                                         if ($result && $result->num_rows > 0) {
                                             $counter = 1;
                                             while ($row = $result->fetch_assoc()) {
-                                                $current_time = new DateTime();
-                                                $login_time = new DateTime($row["login_date"]);
+                                                $current_time = new DateTime("now", new DateTimeZone("America/Bogota"));
+                                                $login_time = new DateTime($row["login_date"], new DateTimeZone("America/Bogota"));
                                                 $interval = $current_time->diff($login_time);
 
-                                                $elapsed_time = $interval->format(' %h óra %i perc');
+                                                $elapsed_time = ((int)$interval->format("%h") > 0 ? (int)$interval->format("%h")." h " : "") . (int)$interval->format("%i")." min";
 
                                                 echo "<tr>";
                                                 echo "<td>" . $counter . "</td>";
