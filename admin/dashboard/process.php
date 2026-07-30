@@ -13,6 +13,7 @@
  */
 
 declare(strict_types=1);
+date_default_timezone_set('America/Bogota');
 
 session_start();
 header('Content-Type: application/json; charset=utf-8');

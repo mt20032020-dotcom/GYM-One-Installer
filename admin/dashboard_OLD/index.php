@@ -501,7 +501,8 @@ foreach ($data as $item) {
                 <div class="row">
                     <div class="col-sm-12">
                         <?php
-                        if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
+                        $esHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https') || (!empty($_SERVER['HTTP_X_FORWARDED_SSL']) && strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) === 'on');
+                            if (!$esHttps) {
                             echo '<div id="notHttpsAlert" class="alert alert-warning shadow-sm" role="alert">';
                             echo '<i class="bi bi-exclamation-triangle"></i> ' . $translations['notusehttps'];
                             echo '</div>';

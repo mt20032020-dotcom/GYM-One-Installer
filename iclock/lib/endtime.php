@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('America/Bogota');
 /**
  * Sincroniza el acceso del usuario en el SpeedFace segun su plan vigente.
  * Plan vigente -> autoriza. Sin plan o vencido -> veta.

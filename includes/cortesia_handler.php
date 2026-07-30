@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('America/Bogota');
 // Otorgar cortesia (plan gratis). Requiere: $conn, $useridgymuser, $translations ya definidos.
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['cortesia_ticket_id'])) {
     require_once '/app/includes/future_plans.php';

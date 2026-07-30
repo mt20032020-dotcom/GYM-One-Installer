@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('America/Bogota');
 require_once "/app/includes/mailer.php";
 session_start();
 

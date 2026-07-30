@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('America/Bogota');
 /**
  * Librería de Congelamiento de Planes - Adrenaline Gym
  * Reglas:

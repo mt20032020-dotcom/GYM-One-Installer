@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('America/Bogota');
 /**
  * Librería de Planes Futuros - Adrenaline Gym
  * Maneja la cola de planes y su activación automática

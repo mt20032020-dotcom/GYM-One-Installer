@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('America/Bogota');
 // Leer body
 $body = file_get_contents('php://input');
 @file_put_contents('/app/wompi/webhook_log.txt', date('Y-m-d H:i:s') . " RECIBIDO: " . substr($body, 0, 500) . "\n", FILE_APPEND);
