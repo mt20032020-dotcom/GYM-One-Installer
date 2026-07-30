@@ -113,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar']) && $sel_tr
     $saveMsg = "Guardado: $turnosGuardados turno(s) en total.";
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['emitir_gasto']) && $is_boss == 1) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['emitir_gasto']) && gymone_can($conn, $userid, ['boss','finance'])) {
     $chk = $conn->prepare("SELECT expense_id, amount, created_at FROM payroll_expense_log WHERE year=? AND month=? AND quincena=?");
     $chk->bind_param("iii", $sel_year, $sel_month, $sel_quincena);
     $chk->execute();
@@ -641,7 +641,7 @@ $periodLabelDisplay = ($sel_quincena == 1 ? '1 - 15' : '16 - fin') . ' de ' . $m
           <i class="bi bi-check-circle-fill"></i> Gasto de nomina ya emitido para este periodo: <strong><?php echo number_format($emitidoInfo['amount'],0,',','.'); ?> <?php echo $currency; ?></strong>
           (el <?php echo htmlspecialchars($emitidoInfo['created_at']); ?>). Revisalo en tu pantalla de Gastos, categoria "Nomina".
         </div>
-      <?php elseif ($is_boss == 1): ?>
+      <?php elseif (gymone_can($conn, $userid, ['boss','finance'])): ?>
         <form method="POST" id="formEmitirGasto" style="margin-top:14px;">
           <input type="hidden" name="year" value="<?php echo $sel_year; ?>">
           <input type="hidden" name="month" value="<?php echo $sel_month; ?>">
