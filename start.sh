@@ -4,6 +4,19 @@ chown -R nobody:nogroup /app/iclock 2>/dev/null || true
 find /app/iclock -type d -exec chmod 777 {} \; 2>/dev/null || true
 find /app/iclock -type f -exec chmod 666 {} \; 2>/dev/null || true
 chown -R nobody:nogroup /app/assets/img/profiles /app/uploads 2>/dev/null || true
+# GYMONE_PERMISOS_EXTRA
+# .env es File Mount de Easypanel y vuelve a root en cada deploy:
+# sin esto, Configuracion general no puede guardar.
+chown nobody:nogroup /app/.env 2>/dev/null || true
+chmod 664 /app/.env 2>/dev/null || true
+# Volumenes de facturas y logos
+mkdir -p /app/assets/docs/invoices /app/assets/img/brand 2>/dev/null || true
+chown -R nobody:nogroup /app/assets/docs/invoices /app/assets/img/brand 2>/dev/null || true
+chmod 777 /app/assets/docs/invoices 2>/dev/null || true
+# vendor lo regenera composer en cada build: mPDF necesita su tmp escribible
+mkdir -p /app/vendor/mpdf/mpdf/tmp 2>/dev/null || true
+chmod -R 777 /app/vendor/mpdf/mpdf/tmp 2>/dev/null || true
+chown -R nobody:nogroup /app/includes 2>/dev/null || true
 
 # Ajuste de PHP-FPM: el default de Nixpacks (50 max / 18 en reposo) es excesivo
 # para el trafico real de este gym. Se reduce para no desperdiciar memoria.
