@@ -74,7 +74,7 @@ function enviar_codigo_whatsapp_meta($celular, $codigo) {
  * $bodyParams: array simple en el orden de las variables {{1}}, {{2}}, etc.
  * No depende de Chatwoot - funciona con cualquier numero, aunque nunca haya escrito al bot.
  */
-function enviar_plantilla_whatsapp_meta($celular, $templateName, $languageCode, $bodyParams = [], $headerParams = []) {
+function enviar_plantilla_whatsapp_meta($celular, $templateName, $languageCode, $bodyParams = [], $headerParams = [], $buttonParams = []) {
     $env = [];
     foreach (file('/app/.env') as $l) { if (strpos($l,'=')!==false) { [$k,$v]=explode('=',trim($l),2); $env[$k]=$v; } }
 
@@ -101,6 +101,14 @@ function enviar_plantilla_whatsapp_meta($celular, $templateName, $languageCode, 
         ];
     }
 
+    foreach ($buttonParams as $idx => $bp) {
+        $components[] = [
+            'type' => 'button',
+            'sub_type' => 'url',
+            'index' => (string)$idx,
+            'parameters' => [['type' => 'text', 'text' => (string)$bp]]
+        ];
+    }
     $payload = [
         'messaging_product' => 'whatsapp',
         'to' => $celularClean,
