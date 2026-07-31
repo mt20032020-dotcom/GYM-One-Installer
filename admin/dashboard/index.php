@@ -170,6 +170,8 @@ if ($result && $result->num_rows > 0) {
 // SUM DAILY USERS !!!!END!!!!
 
 // TEMP USERS TABLE!!!
+/* AUTOSALIDA_DASH: respaldo por si el equipo no esta haciendo poll */
+@$conn->query("DELETE FROM temp_loggeduser WHERE login_date < (NOW() - INTERVAL 90 MINUTE)");
 $sql = "SELECT name, userid, login_date FROM temp_loggeduser";
 $result = $conn->query($sql);
 
