@@ -129,7 +129,12 @@ if ($rF) { $fin_mes = (float)$rF->fetch_assoc()['t']; }
 $rF = $conn->query("SELECT COALESCE(SUM(amount),0) t FROM expenses WHERE expense_date BETWEEN '$mesIni' AND '$mesFin'");
 if ($rF) { $fin_gastos = (float)$rF->fetch_assoc()['t']; }
 $fin_ganancia = $fin_mes - $fin_gastos;
-$sqlUserCount = "SELECT COUNT(*) as count FROM users";
+/* MIEMBROS_VIGENTES: solo con plan activo, sin el Consumidor Final */
+$sqlUserCount = "SELECT COUNT(DISTINCT ct.userid) as count
+                 FROM current_tickets ct
+                 WHERE ct.userid <> 222222222222
+                   AND ct.expiredate >= CURDATE()
+                   AND (ct.opportunities IS NULL OR ct.opportunities > 0)";
 $resultUserCount = $conn->query($sqlUserCount);
 
 $userCount = 0;
@@ -583,7 +588,7 @@ if ($countryCode !== '') {
                     <div class="col-sm-3">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title mb-0 fw-semibold"><?php echo $translations["users"]; ?></h5>
+                                <h5 class="card-title mb-0 fw-semibold">Miembros con plan vigente</h5>
                                 <h1><strong><?php echo $userCount; ?></strong></h1>
                             </div>
                         </div>
