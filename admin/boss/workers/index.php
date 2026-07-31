@@ -84,10 +84,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["add_user"])) {
 
     $newuserid = mt_rand(1000000000, 9999999994);
 
-    $sql = "INSERT INTO workers (userid, Firstname, Lastname, username, password_hash, is_boss)
-            VALUES ($newuserid, '$firstname', '$lastname', '$username', '$hashed_password', $is_this_boss)";
-
-    if ($conn->query($sql) === TRUE) {
+    $userExists = false; $insertOk = false;
+    $chk = $conn->prepare("SELECT userid FROM workers WHERE username = ?");
+    $chk->bind_param("s", $username); $chk->execute();
+    $userExists = ($chk->get_result()->num_rows > 0); $chk->close();
+    if ($userExists) {
+        $alerts_html .= "<div class='alert alert-warning'>El nombre de usuario <b>" . htmlspecialchars($username) . "</b> ya esta en uso. Elige otro.</div>";
+    } else {
+        $stmtW = $conn->prepare("INSERT INTO workers (userid, Firstname, Lastname, username, password_hash, is_boss) VALUES (?,?,?,?,?,?)");
+        $stmtW->bind_param("issssi", $newuserid, $firstname, $lastname, $username, $hashed_password, $is_this_boss);
+        $insertOk = $stmtW->execute(); $stmtW->close();
+    }
+    if ($userExists) { /* alerta ya mostrada */ }
+    elseif ($insertOk) {
         $alerts_html .= "<div class='alert alert-success'>{$translations["success-add"]}</div>";
 
         $role_text = $is_this_boss == 1 ? $translations["boss"] : $translations["worker"];
