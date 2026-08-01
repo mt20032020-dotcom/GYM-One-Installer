@@ -245,7 +245,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $ConfirmEmailPage_PLACEHOLDER = str_replace("{business_name}", $business_name, $translations["confirmemailpage"]);
     $replacements = [
       "{business_name}" => $business_name,
-      "{first_name}" => $firstname
+      "{first_name}" => $lastname
     ];
     $ConfirmEmailHeader_PLACEHOLDER = strtr($translations["confirmemailheader"], $replacements);
     $ConfirmEmailFooterWhy_PLACEHOLDER = str_replace("{business_name}", $business_name, $translations["confirmemailfooterwhy"]);
