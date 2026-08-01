@@ -49,6 +49,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $stmt = $conn->prepare("INSERT INTO access_log (userid, display_name, is_companion) VALUES (?, ?, 0)");
                         $stmt->bind_param('is', $uid, $nombre);
                         $stmt->execute(); $stmt->close();
+                        /* AFORO_SPEEDFACE: reflejar la entrada en el conteo de presentes */
+                        $yaDentro = $conn->query("SELECT 1 FROM temp_loggeduser WHERE userid = '$uid' LIMIT 1");
+                        if (!$yaDentro || $yaDentro->num_rows === 0) {
+                            $sT = $conn->prepare("INSERT INTO temp_loggeduser (name, userid, login_date, lockerid) VALUES (?, ?, NOW(), 0)");
+                            $uidStr = (string)$uid;
+                            $sT->bind_param('ss', $nombre, $uidStr);
+                            $sT->execute(); $sT->close();
+                        }
                         // Descontar solo si corresponde (1 por dia, considera beneficiarios)
                         if ($acceso['allowed'] && !empty($acceso['deduct']) && !empty($acceso['ticket_id'])) {
                             $conn->query("UPDATE current_tickets SET opportunities = GREATEST(0, opportunities - 1) WHERE id = " . (int)$acceso['ticket_id']);
