@@ -71,9 +71,38 @@ $stmt->close();
 
 $alerts_html = '';
 
-$sql = "SELECT userid, Firstname, Lastname, username, is_boss FROM workers";
+$sql = "SELECT userid, Firstname, Lastname, username, is_boss, cedula FROM workers";
 $result = $conn->query($sql);
 
+/* guardar_biometria: cedula y foto de un empleado existente */
+if (isset($_POST["guardar_biometria"])) {
+    $wid = (int)($_POST["wid"] ?? 0);
+    $ced = preg_replace("/\D/","", $_POST["ced"] ?? "");
+    if ($wid) {
+        if ($ced !== "") {
+            $stB = $conn->prepare("UPDATE workers SET cedula=? WHERE userid=?");
+            $stB->bind_param("si", $ced, $wid); $stB->execute(); $stB->close();
+        }
+        if (!empty($_FILES["fotoedit"]["tmp_name"])) {
+            @mkdir("/app/uploads/workers", 0777, true);
+            $inf = @getimagesize($_FILES["fotoedit"]["tmp_name"]);
+            if ($inf) {
+                $im = null;
+                if ($inf[2] === IMAGETYPE_JPEG) $im = @imagecreatefromjpeg($_FILES["fotoedit"]["tmp_name"]);
+                elseif ($inf[2] === IMAGETYPE_PNG) $im = @imagecreatefrompng($_FILES["fotoedit"]["tmp_name"]);
+                if ($im) {
+                    $w0=imagesx($im); $h0=imagesy($im); $w=544; $h=(int)round($h0*$w/$w0);
+                    $dst=imagecreatetruecolor($w,$h);
+                    imagecopyresampled($dst,$im,0,0,0,0,$w,$h,$w0,$h0);
+                    imagejpeg($dst, "/app/uploads/workers/$wid.jpg", 85);
+                    imagedestroy($im); imagedestroy($dst);
+                    @chmod("/app/uploads/workers/$wid.jpg", 0664);
+                }
+            }
+        }
+        $alerts_html .= "<div class='alert alert-success'>Datos biometricos actualizados.</div>";
+    }
+}
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["add_user"])) {
     $firstname = $_POST["firstname"];
     $lastname = $_POST["lastname"];
@@ -91,9 +120,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["add_user"])) {
     if ($userExists) {
         $alerts_html .= "<div class='alert alert-warning'>El nombre de usuario <b>" . htmlspecialchars($username) . "</b> ya esta en uso. Elige otro.</div>";
     } else {
-        $stmtW = $conn->prepare("INSERT INTO workers (userid, Firstname, Lastname, username, password_hash, is_boss) VALUES (?,?,?,?,?,?)");
-        $stmtW->bind_param("issssi", $newuserid, $firstname, $lastname, $username, $hashed_password, $is_this_boss);
+        $cedulaW = preg_replace("/\D/","", $_POST["cedula"] ?? "");
+        $stmtW = $conn->prepare("INSERT INTO workers (userid, Firstname, Lastname, username, password_hash, is_boss, cedula) VALUES (?,?,?,?,?,?,?)");
+        $stmtW->bind_param("issssis", $newuserid, $firstname, $lastname, $username, $hashed_password, $is_this_boss, $cedulaW);
         $insertOk = $stmtW->execute(); $stmtW->close();
+        if ($insertOk && !empty($_FILES["foto"]["tmp_name"])) {
+            @mkdir("/app/uploads/workers", 0777, true);
+            $inf = @getimagesize($_FILES["foto"]["tmp_name"]);
+            if ($inf) {
+                $im = null;
+                if ($inf[2] === IMAGETYPE_JPEG) $im = @imagecreatefromjpeg($_FILES["foto"]["tmp_name"]);
+                elseif ($inf[2] === IMAGETYPE_PNG) $im = @imagecreatefrompng($_FILES["foto"]["tmp_name"]);
+                if ($im) { imagepng($im, "/app/uploads/workers/$newuserid.png"); imagedestroy($im);
+                           @chmod("/app/uploads/workers/$newuserid.png", 0664); }
+            }
+        }
     }
     if ($userExists) { /* alerta ya mostrada */ }
     elseif ($insertOk) {
@@ -463,6 +504,7 @@ $conn->close();
                                                     <th scope="col"><?php echo $translations["lastname"]; ?></th>
                                                     <th scope="col"><?php echo $translations["username"]; ?></th>
                                                     <th scope="col"><?php echo $translations["position"]; ?></th>
+                                                    <th scope="col">Cedula y foto (torniquete)</th>
                                                     <th scope="col"><?php echo $translations["action"]; ?></th>
                                                 </tr>
                                             </thead>
@@ -482,7 +524,18 @@ $conn->close();
                                                             echo $translations["worker"];
                                                         }
 
-                                                        echo "</td>
+                                                        echo "</td>";
+                                                        $fotoW = file_exists("/app/uploads/workers/{$row["userid"]}.jpg") ? "SI" : "-";
+                                                        $cedW  = htmlspecialchars($row["cedula"] ?? "");
+                                                        echo "<td>
+                                    <form method='post' enctype='multipart/form-data' style='display:flex;gap:4px;align-items:center'>
+                                        <input type='hidden' name='wid' value='{$row["userid"]}'>
+                                        <input type='text' name='ced' value='{$cedW}' placeholder='Cedula' style='width:110px' class='form-control form-control-sm'>
+                                        <input type='file' name='fotoedit' accept='image/*' style='width:150px' class='form-control form-control-sm'>
+                                        <span title='Tiene foto' style='font-size:12px;color:#6B7280'>{$fotoW}</span>
+                                        <button type='submit' name='guardar_biometria' class='btn btn-primary btn-sm'>Guardar</button>
+                                    </form>
+                                </td>
                                 <td>
                                     <form method='post' style='display: inline;'>
                                         <input type='hidden' name='userid' value='{$row["userid"]}'>
@@ -492,7 +545,7 @@ $conn->close();
                               </tr>";
                                                     }
                                                 } else {
-                                                    echo "<tr><td colspan='5'>Users do not exist!</td></tr>";
+                                                    echo "<tr><td colspan='6'>Users do not exist!</td></tr>";
                                                 }
                                                 ?>
                                             </tbody>
@@ -513,7 +566,7 @@ $conn->close();
                                         <?php
                                         if ($is_boss == 1) {
                                             ?>
-                                            <form method="post"
+                                            <form method="post" enctype="multipart/form-data"
                                                 action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                                                 <div class="form-row">
                                                     <div class="form-group col-md-3">
@@ -532,6 +585,17 @@ $conn->close();
                                                     <div class="form-group col-md-3">
                                                         <input type="password" class="form-control" name="password"
                                                             placeholder="<?php echo $translations["password"]; ?>" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-4">
+                                                        <label style="font-size:13px;color:#6B7280">Cedula (la usa el torniquete)</label>
+                                                        <input type="text" class="form-control" name="cedula"
+                                                            placeholder="Ej: 1085123456" required>
+                                                    </div>
+                                                    <div class="form-group col-md-8">
+                                                        <label style="font-size:13px;color:#6B7280">Foto para reconocimiento facial (opcional)</label>
+                                                        <input type="file" class="form-control" name="foto" accept="image/*">
                                                     </div>
                                                 </div>
                                                 <div class="form-group form-check">
