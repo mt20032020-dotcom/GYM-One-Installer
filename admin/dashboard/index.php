@@ -383,6 +383,12 @@ if ($countryCode !== '') {
                         </a>
                     </li>
                     <li class="sidebar-item">
+                        <a class="sidebar-link" href="../users/actualizaciones/">
+                            <i class="bi bi-person-check"></i>
+                            <span>Actualizacion de datos</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
                         <a class="sidebar-link" href="../statistics">
                             <i class="bi bi-bar-chart"></i> <?php echo $translations["statspage"]; ?>
                         </a>
