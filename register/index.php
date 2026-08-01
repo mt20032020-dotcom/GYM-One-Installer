@@ -260,7 +260,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conn->query("INSERT INTO logs (userid, action, actioncolor, time) VALUES (" . (int)$userid . ", 'Autorizacion de datos biometricos otorgada en autoregistro', 'success', NOW())");
       }
 
-      $alerts_html .= '<div class="alert alert-success">Sikeres regisztráció!</div>';
+      $alerts_html .= '<div class="alert alert-success">Registro exitoso! Ya puedes iniciar sesion.</div>';
       header("Refresh: 5");
 
       $successEmailContent = <<<EOD
