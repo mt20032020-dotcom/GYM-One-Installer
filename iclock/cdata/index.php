@@ -43,6 +43,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $conn->close();
                             responder("OK");
                         }
+                        /* BLOQUEO_ACTUALIZACION: desde el 7 de agosto de 2026, los socios migrados
+                           que no confirmaron sus datos no pueden entrar por el torniquete.
+                           No aplica a quien se registro el 1 de agosto o despues. */
+                        if (date('Y-m-d') >= '2026-08-07') {
+                            $rBl = $conn->query("SELECT datos_actualizados, registration_date FROM users WHERE userid = $uid");
+                            $bl = $rBl ? $rBl->fetch_assoc() : null;
+                            if ($bl && empty($bl['datos_actualizados']) && substr($bl['registration_date'],0,10) < '2026-08-01') {
+                                $conn->query("INSERT INTO logs (userid, action, actioncolor, time) VALUES ($uid, 'Acceso denegado: datos sin actualizar', 'danger', NOW())");
+                                $conn->close();
+                                responder("OK");
+                            }
+                        }
                         @activate_next_plan($conn, $uid);
                         $acceso = resolve_access($conn, $uid);
                         // Bitacora (siempre se registra el ingreso)
