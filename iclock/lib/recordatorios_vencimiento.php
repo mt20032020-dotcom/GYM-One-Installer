@@ -16,7 +16,7 @@ $connR = @new mysqli($envR['DB_SERVER'], $envR['DB_USERNAME'], $envR['DB_PASSWOR
 if ($connR->connect_error) return;
 
 $manana = date('Y-m-d', strtotime('+1 day'));
-$stmtR = $connR->prepare("SELECT u.userid, u.firstname, u.email, c.ticketname, c.expiredate, c.opportunities
+$stmtR = $connR->prepare("SELECT u.userid, u.firstname, u.lastname, u.email, c.ticketname, c.expiredate, c.opportunities
     FROM current_tickets c
     JOIN users u ON u.userid = c.userid
     WHERE c.expiredate = ?");
@@ -40,7 +40,7 @@ while ($rowR = $resR->fetch_assoc()) {
     
     $bodyR = adrenaline_email(
         '⏰ TU PLAN VENCE MAÑANA',
-        '¡Hola, ' . htmlspecialchars($rowR['firstname']) . '!',
+        '¡Hola, ' . htmlspecialchars($rowR['lastname']) . '!',
         'Te recordamos que tu plan vence mañana. ¡No pares tu entrenamiento!',
         $filasR,
         $extraR

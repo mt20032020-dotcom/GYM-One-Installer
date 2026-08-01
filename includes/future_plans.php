@@ -131,7 +131,7 @@ function activate_next_plan($db, $userid) {
     $db->query("INSERT INTO logs (userid, action, actioncolor, time) VALUES ($userid, 'Plan futuro activado: {$next['ticketname']}', 'success', NOW())");
 
     // Correo al cliente
-    $stmtM = $db->prepare("SELECT firstname, email FROM users WHERE userid = ?");
+    $stmtM = $db->prepare("SELECT firstname, lastname, email FROM users WHERE userid = ?");
     $stmtM->bind_param("i", $userid);
     $stmtM->execute();
     $uM = $stmtM->get_result()->fetch_assoc();
@@ -149,7 +149,7 @@ function activate_next_plan($db, $userid) {
             if ($next["opportunities"]) $filasM["Ingresos disponibles"] = $next["opportunities"];
             $bodyM = adrenaline_email(
                 "✓ PLAN ACTIVADO",
-                "¡Hola, " . htmlspecialchars($uM["firstname"]) . "!",
+                "¡Hola, " . htmlspecialchars($uM["lastname"]) . "!",
                 "Tu plan en cola se activó automáticamente. ¡Ya puedes entrenar!",
                 $filasM
             );

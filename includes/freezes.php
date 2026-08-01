@@ -96,7 +96,7 @@ function freeze_plan($db, $userid, $freeze_start, $freeze_end, $reason, $has_med
     $db->query("INSERT INTO logs (userid, action, actioncolor, time) VALUES ($userid, 'Plan congelado del $freeze_start al $freeze_end ($days dias). Nuevo vencimiento: $new_expire', 'warning', NOW())");
     
     // Enviar correo al cliente
-    $stmtM = $db->prepare("SELECT firstname, email FROM users WHERE userid = ?");
+    $stmtM = $db->prepare("SELECT firstname, lastname, email FROM users WHERE userid = ?");
     $stmtM->bind_param("i", $userid);
     $stmtM->execute();
     $uM = $stmtM->get_result()->fetch_assoc();
@@ -108,7 +108,7 @@ function freeze_plan($db, $userid, $freeze_start, $freeze_end, $reason, $has_med
             require_once "/app/includes/email_templates.php";
             $bodyM = adrenaline_email(
                 "❄ PLAN CONGELADO",
-                "Hola, " . htmlspecialchars($uM["firstname"]) . "!",
+                "Hola, " . htmlspecialchars($uM["lastname"]) . "!",
                 "Tu plan ha sido congelado. Durante este periodo no podrás ingresar al gimnasio, pero no pierdes ni un día: tu vencimiento se extendió automáticamente.",
                 [
                     "Congelado desde" => date("d/m/Y", strtotime($freeze_start)),

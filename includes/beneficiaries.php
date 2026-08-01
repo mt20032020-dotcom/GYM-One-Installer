@@ -108,7 +108,7 @@ function add_beneficiary($db, $titular_userid, $beneficiary_userid, $is_replacem
     }
 
     // Correo al beneficiario
-    $stmtM = $db->prepare("SELECT firstname, email, cedula FROM users WHERE userid = ?");
+    $stmtM = $db->prepare("SELECT firstname, lastname, email, cedula FROM users WHERE userid = ?");
     $stmtM->bind_param("i", $beneficiary_userid);
     $stmtM->execute();
     $benM = $stmtM->get_result()->fetch_assoc();
@@ -129,7 +129,7 @@ function add_beneficiary($db, $titular_userid, $beneficiary_userid, $is_replacem
             </div>';
             $bodyM = adrenaline_email(
                 "👥 ERES BENEFICIARIO",
-                "¡Hola, " . htmlspecialchars($benM["firstname"]) . "!",
+                "¡Hola, " . htmlspecialchars($benM["lastname"]) . "!",
                 $nombre_tit . " te agregó como beneficiario de su tiquetera <strong>" . htmlspecialchars($tiquetera["ticketname"]) . "</strong>. ¡Ya puedes ingresar al gimnasio con tu reconocimiento facial!",
                 [
                     "Titular" => $nombre_tit,
