@@ -22,7 +22,15 @@ function buscar_usuario($conn, $cedula) {
 }
 
 function ya_actualizado($userid) {
-    return file_exists(__DIR__ . '/../assets/img/profiles/' . $userid . '.png');
+    /* Antes se marcaba por tener foto de perfil, pero los usuarios migrados
+       ya traen foto del SpeedFace y quedaban bloqueados sin poder crear clave. */
+    global $conn;
+    $st = $conn->prepare("SELECT datos_actualizados FROM users WHERE userid = ?");
+    $st->bind_param('i', $userid);
+    $st->execute();
+    $row = $st->get_result()->fetch_assoc();
+    $st->close();
+    return !empty($row['datos_actualizados']);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['buscar_cedula'])) {
@@ -151,7 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
                         @chmod($dest, 0666);
                         imagedestroy($img);
                         $hash = password_hash($pass, PASSWORD_DEFAULT);
-                        $upd = $conn->prepare("UPDATE users SET firstname=?, lastname=?, email=?, celular=?, city=?, birthdate=?, gender=?, password=? WHERE userid=?");
+                        $upd = $conn->prepare("UPDATE users SET firstname=?, lastname=?, email=?, celular=?, city=?, birthdate=?, gender=?, password=?, datos_actualizados=NOW() WHERE userid=?");
                         $upd->bind_param('ssssssssi', $apellido, $nombre, $email, $celular, $barrio, $nacimiento, $genero, $hash, $uid);
                         $upd->execute();
                         $upd->close();
@@ -264,8 +272,8 @@ small.hint{ color:#a1a1aa; }
             <div><small class="hint">Foto de frente, buena luz (es la que usar&aacute; la entrada)</small></div>
         </div>
         <div class="row2">
-            <div><label>Nombre(s)</label><input type="text" name="nombre" required value="<?php echo htmlspecialchars($datosActuales['firstname'] ?? ''); ?>"></div>
-            <div><label>Apellido</label><input type="text" name="apellido" required value="<?php echo htmlspecialchars($datosActuales['lastname'] ?? ''); ?>"></div>
+            <div><label>Nombre(s)</label><input type="text" name="nombre" required value="<?php echo htmlspecialchars($datosActuales['lastname'] ?? ''); ?>"></div>
+            <div><label>Apellido</label><input type="text" name="apellido" required value="<?php echo htmlspecialchars($datosActuales['firstname'] ?? ''); ?>"></div>
         </div>
         <label>Celular</label><input type="tel" name="celular" value="<?php echo htmlspecialchars($datosActuales['celular'] ?? ''); ?>">
         <label>Email</label><input type="email" name="email" value="<?php echo htmlspecialchars($datosActuales['email'] ?? ''); ?>">
