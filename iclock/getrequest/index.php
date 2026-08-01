@@ -19,7 +19,14 @@ $body = "OK";
 if (file_exists($cmdFile)) {
     $lineas = file($cmdFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     if (!empty($lineas)) {
-        $body = array_shift($lineas);           // entrega el primero
+        /* LOTE_COMANDOS: entrega hasta 10 por poll para acelerar cargas masivas.
+           Los comandos de biofoto son grandes, asi que se limita por tamano tambien. */
+        $lote = []; $bytes = 0;
+        while (!empty($lineas) && count($lote) < 10 && $bytes < 1500000) {
+            $linea = array_shift($lineas);
+            $lote[] = $linea; $bytes += strlen($linea);
+        }
+        $body = implode("\n", $lote);
         @unlink($cmdFile);
         if (!empty($lineas)) { @file_put_contents($cmdFile, implode("\n", $lineas) . "\n"); @chmod($cmdFile, 0666); }
         @file_put_contents($logFile, date('Y-m-d H:i:s') . " GETREQUEST >>> COMANDO: " . substr($body, 0, 80) . "... (quedan " . count($lineas) . ")\n", FILE_APPEND);
