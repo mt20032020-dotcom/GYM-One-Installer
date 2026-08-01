@@ -1,12 +1,12 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['userid'])) {
+/* GYMONE_CONFIRM_FIX: el enlace del correo llega sin sesion iniciada */
+if (!isset($_GET['userid']) && !isset($_SESSION['userid'])) {
     header("Location: ../");
     exit();
 }
-
-$userid = $_SESSION['userid'];
+$userid = isset($_GET['userid']) ? (int)$_GET['userid'] : $_SESSION['userid'];
 
 function read_env_file($file_path)
 {

@@ -110,10 +110,9 @@ if (!empty($expiredate) && strtotime($expiredate) !== false) {
 
 $sql_latest_training = "SELECT workout_date FROM workout_stats WHERE userid = $userid ORDER BY workout_date DESC LIMIT 1";
 $result_latest_training = $conn->query($sql_latest_training);
-if (!$result_latest_training) {
-    die("Hiba a legutóbbi edzés dátumának lekérdezésekor: " . $conn->error);
-}
-$latest_training = ($result_latest_training->num_rows > 0) ? $result_latest_training->fetch_assoc()['workout_date'] : $translations["n/a"];
+/* GYMONE_SAFE_TRAINING */
+if (!$result_latest_training) { error_log("Error consultando ultima visita: " . $conn->error); }
+$latest_training = ($result_latest_training && $result_latest_training->num_rows > 0) ? $result_latest_training->fetch_assoc()['workout_date'] : $translations["n/a"];
 
 
 
