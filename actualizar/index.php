@@ -269,7 +269,7 @@ small.hint{ color:#a1a1aa; }
                 <button type="button" class="btn-cam" id="btnCapture" style="background:#e31e24;color:#fff;">Capturar</button>
                 <button type="button" class="btn-cam" id="btnWebcamCancel" style="border-color:#71717a;color:#71717a;">Cancelar</button>
             </div>
-            <div><small class="hint">Foto de frente, buena luz (es la que usar&aacute; la entrada)</small></div>
+            <div><small class="hint"><b style="color:#e53935">Foto obligatoria</b> &mdash; de frente y con buena luz (es la que usar&aacute; la entrada)</small></div>
         </div>
         <div class="row2">
             <div><label>Nombre(s)</label><input type="text" name="nombre" required value="<?php echo htmlspecialchars($datosActuales['lastname'] ?? ''); ?>"></div>
