@@ -455,7 +455,7 @@ $result = $stmt->get_result();
                                                         if ($originalExpire->format("Y-m-d") === $today->format("Y-m-d")) {
                                                             $diff = 1;
                                                         }
-                                                        echo "<td class='text-success'>$diff " . $translations["day"] . "</td>";
+                                                        echo "<td class='text-success'><div style='font-weight:600;'>" . $originalExpire->format("d/m/Y") . "</div><small style='color:#6c757d;'>$diff " . $translations["day"] . ($diff == 1 ? "" : "s") . "</small></td>";
                                                     } else {
                                                         echo "<td class='text-danger'>" . $translations["expired"] . " (" . $originalExpire->format("Y-m-d") . ")</td>";
                                                     }
