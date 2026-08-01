@@ -692,7 +692,7 @@ EOD;
                   </label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="" id="acceptBiometric" name="accept_biometric" required>
+                  <input class="form-check-input" type="checkbox" value="1" id="acceptBiometric" name="accept_biometric" required>
                   <label class="form-check-label" for="acceptBiometric">
                     Autorizo el tratamiento de mi fotograf&iacute;a con fines de verificaci&oacute;n biom&eacute;trica de acceso (reconocimiento facial en el torniquete).
                   </label>
