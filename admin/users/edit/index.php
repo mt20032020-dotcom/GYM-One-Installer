@@ -321,6 +321,56 @@ if ($stmt = $conn->prepare($sql)) {
 
 
 
+/* cambiar_foto: reemplaza la foto de perfil y la reenvia al SpeedFace */
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["cambiar_foto"]) && !empty($_POST["foto_b64"])) {
+    $uidF = (int)($_POST["uid_foto"] ?? 0);
+    $b64in = preg_replace("#^data:image/\w+;base64,#", "", $_POST["foto_b64"]);
+    $binF = base64_decode($b64in, true);
+    $tmpF = "/tmp/cap_$uidF.jpg";
+    if ($binF) file_put_contents($tmpF, $binF);
+    $infF = $binF ? @getimagesize($tmpF) : false;
+    if ($uidF && $infF) {
+        $imF = false;
+        if ($infF[2] === IMAGETYPE_JPEG) $imF = @imagecreatefromjpeg($tmpF);
+        elseif ($infF[2] === IMAGETYPE_PNG) $imF = @imagecreatefrompng($tmpF);
+        elseif ($infF[2] === IMAGETYPE_WEBP) $imF = @imagecreatefromwebp($tmpF);
+        if ($imF) {
+            if ($infF[2] === IMAGETYPE_JPEG && function_exists("exif_read_data")) {
+                $exF = @exif_read_data($tmpF);
+                if (!empty($exF["Orientation"])) {
+                    $rotF = 0;
+                    if ($exF["Orientation"] == 3) $rotF = 180;
+                    elseif ($exF["Orientation"] == 6) $rotF = -90;
+                    elseif ($exF["Orientation"] == 8) $rotF = 90;
+                    if ($rotF) { $rr = imagerotate($imF, $rotF, 0); if ($rr) { imagedestroy($imF); $imF = $rr; } }
+                }
+            }
+            $w0F = imagesx($imF); $h0F = imagesy($imF);
+            if ($w0F > 544) {
+                $nwF = 544; $nhF = (int)round($h0F * 544 / $w0F);
+                $dsF = imagecreatetruecolor($nwF, $nhF);
+                imagecopyresampled($dsF, $imF, 0,0,0,0, $nwF,$nhF, $w0F,$h0F);
+                imagedestroy($imF); $imF = $dsF;
+            }
+            imagepng($imF, "/app/assets/img/profiles/$uidF.png", 6);
+            @chmod("/app/assets/img/profiles/$uidF.png", 0666);
+            imagejpeg($imF, "/tmp/reenrol_$uidF.jpg", 85);
+            imagedestroy($imF);
+            $rC = $conn->query("SELECT cedula FROM users WHERE userid = $uidF");
+            $cedF = $rC ? ($rC->fetch_assoc()["cedula"] ?? "") : "";
+            if ($cedF !== "" && file_exists("/tmp/reenrol_$uidF.jpg")) {
+                $b64F = base64_encode(file_get_contents("/tmp/reenrol_$uidF.jpg"));
+                $cmdF = "C:".random_int(300000,399999).":DATA UPDATE biophoto PIN=$cedF\tType=9\tSize=".strlen($b64F)."\tContent=$b64F";
+                @file_put_contents("/app/iclock/cmd_queue.txt", $cmdF."\n", FILE_APPEND);
+                @chmod("/app/iclock/cmd_queue.txt", 0666);
+                @unlink("/tmp/reenrol_$uidF.jpg");
+                $_SESSION["msg_foto"] = "Foto actualizada y enviada al torniquete.";
+            } else { $_SESSION["msg_foto"] = "Foto actualizada (sin cedula, no se envio al torniquete)."; }
+        } else { $_SESSION["msg_foto"] = "Formato de imagen no soportado."; }
+    } else { $_SESSION["msg_foto"] = "Imagen invalida o mayor a 8MB."; }
+    header("Location: ?user=".urlencode($_POST["uid_foto"]));
+    exit();
+}
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['userid'])) {
 
   $sql_update = "UPDATE users SET confirmed = 'Yes' WHERE userid = $useridgymuser";
@@ -639,6 +689,73 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['userid'])) {
               </form>
               <div style="margin-top:8px;">
                 <?php require "/app/includes/cortesia_ui.php"; ?>
+              </div>
+              <!-- FOTO_ABAJO -->
+              <div style="margin-top:12px;padding-top:12px;border-top:1px solid #eee;">
+                <?php if (!empty($_SESSION["msg_foto"])): ?>
+                  <div class="alert alert-info" style="font-size:13px;padding:10px;"><?php echo htmlspecialchars($_SESSION["msg_foto"]); unset($_SESSION["msg_foto"]); ?></div>
+                <?php endif; ?>
+                <button type="button" class="btn btn-primary" onclick="pfAbrirCamara()">
+                  <i class="bi bi-camera-fill"></i> Tomar foto para el torniquete
+                </button>
+                <div id="pfCamModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;align-items:center;justify-content:center;">
+                  <div style="background:#fff;border-radius:14px;padding:18px;max-width:460px;width:92%;text-align:center;">
+                    <h5 style="margin:0 0 12px;">Foto para el torniquete</h5>
+                    <video id="pfCamVideo" autoplay playsinline style="width:100%;border-radius:10px;background:#000;"></video>
+                    <canvas id="pfCamCanvas" style="display:none;"></canvas>
+                    <img id="pfPreview" style="display:none;width:100%;border-radius:10px;">
+                    <p style="font-size:12px;color:#6B7280;margin:10px 0 4px;">De frente, con buena luz y sin gorra</p>
+                    <div style="display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap;">
+                      <button type="button" id="pfBtnCap" class="btn btn-danger" onclick="pfCapturar()"><i class="bi bi-camera-fill"></i> Capturar</button>
+                      <button type="button" id="pfBtnRep" class="btn btn-default" style="display:none;" onclick="pfRepetir()">Repetir</button>
+                      <button type="button" id="pfBtnEnv" class="btn btn-primary" style="display:none;" onclick="pfEnviar()"><i class="bi bi-check-lg"></i> Enviar al torniquete</button>
+                      <button type="button" class="btn btn-default" onclick="pfCerrar()">Cancelar</button>
+                    </div>
+                    <div id="pfEstado" style="margin-top:10px;font-size:13px;"></div>
+                  </div>
+                </div>
+                <form method="post" id="pfForm" style="display:none;">
+                  <input type="hidden" name="uid_foto" value="<?php echo htmlspecialchars($useridgymuser); ?>">
+                  <input type="hidden" name="foto_b64" id="pfB64">
+                  <input type="hidden" name="cambiar_foto" value="1">
+                </form>
+                <script>
+                var pfStream = null;
+                function pfAbrirCamara() {
+                  document.getElementById("pfCamModal").style.display = "flex";
+                  document.getElementById("pfPreview").style.display = "none";
+                  document.getElementById("pfCamVideo").style.display = "block";
+                  document.getElementById("pfBtnCap").style.display = "";
+                  document.getElementById("pfBtnRep").style.display = "none";
+                  document.getElementById("pfBtnEnv").style.display = "none";
+                  document.getElementById("pfEstado").innerHTML = "";
+                  navigator.mediaDevices.getUserMedia({ video: { facingMode: "user", width:{ideal:640}, height:{ideal:720} } })
+                    .then(function(s){ pfStream = s; document.getElementById("pfCamVideo").srcObject = s; })
+                    .catch(function(e){ alert("No se pudo acceder a la camara: " + e.message); pfCerrar(); });
+                }
+                function pfCapturar() {
+                  var v = document.getElementById("pfCamVideo"), c = document.getElementById("pfCamCanvas");
+                  c.width = v.videoWidth; c.height = v.videoHeight;
+                  c.getContext("2d").drawImage(v, 0, 0);
+                  document.getElementById("pfB64").value = c.toDataURL("image/jpeg", 0.9);
+                  document.getElementById("pfPreview").src = document.getElementById("pfB64").value;
+                  document.getElementById("pfPreview").style.display = "block";
+                  document.getElementById("pfCamVideo").style.display = "none";
+                  document.getElementById("pfBtnCap").style.display = "none";
+                  document.getElementById("pfBtnRep").style.display = "";
+                  document.getElementById("pfBtnEnv").style.display = "";
+                  if (pfStream) { pfStream.getTracks().forEach(function(t){t.stop();}); pfStream = null; }
+                }
+                function pfRepetir() { pfAbrirCamara(); }
+                function pfEnviar() {
+                  document.getElementById("pfEstado").innerHTML = "Enviando...";
+                  document.getElementById("pfForm").submit();
+                }
+                function pfCerrar() {
+                  if (pfStream) { pfStream.getTracks().forEach(function(t){t.stop();}); pfStream = null; }
+                  document.getElementById("pfCamModal").style.display = "none";
+                }
+                </script>
               </div>
             </div>
           </div>

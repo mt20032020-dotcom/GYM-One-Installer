@@ -154,8 +154,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
                     }
                     if (!$img) { $error = 'Formato de foto no soportado.'; }
                     else {
+                        /* PROCESAR_FOTO: rotar segun EXIF y reducir a tamano util para el SpeedFace.
+                           Sin esto quedan fotos acostadas de 6 MB que el equipo no puede reconocer. */
+                        if ($info[2] === IMAGETYPE_JPEG && function_exists('exif_read_data')) {
+                            $ex = @exif_read_data($tmp);
+                            if (!empty($ex['Orientation'])) {
+                                $rot = 0;
+                                if ($ex['Orientation'] == 3) $rot = 180;
+                                elseif ($ex['Orientation'] == 6) $rot = -90;
+                                elseif ($ex['Orientation'] == 8) $rot = 90;
+                                if ($rot) { $r = imagerotate($img, $rot, 0); if ($r) { imagedestroy($img); $img = $r; } }
+                            }
+                        }
+                        $w0 = imagesx($img); $h0 = imagesy($img);
+                        $maxW = 544;
+                        if ($w0 > $maxW) {
+                            $nw = $maxW; $nh = (int)round($h0 * $maxW / $w0);
+                            $tmpImg = imagecreatetruecolor($nw, $nh);
+                            imagecopyresampled($tmpImg, $img, 0,0,0,0, $nw,$nh, $w0,$h0);
+                            imagedestroy($img); $img = $tmpImg;
+                        }
                         $dest = __DIR__ . '/../assets/img/profiles/' . $uid . '.png';
-                        imagepng($img, $dest);
+                        imagepng($img, $dest, 6);
                         @chmod($dest, 0666);
                         imagedestroy($img);
                         $hash = password_hash($pass, PASSWORD_DEFAULT);
