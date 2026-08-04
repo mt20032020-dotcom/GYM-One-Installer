@@ -81,7 +81,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $update_stmt->execute();
                 $update_stmt->close();
                 $_SESSION['userid'] = $userid;
-                $redirect = !empty($_POST["redirect"]) ? $_POST["redirect"] : (!empty($_GET["redirect"]) ? $_GET["redirect"] : "../dashboard");
+                /* LOGIN_TICKET: los enlaces de WhatsApp usan ?ticket=N para evitar
+                   caracteres codificados que el navegador interno puede alterar. */
+                $tk = $_POST["ticket"] ?? $_GET["ticket"] ?? "";
+                if ($tk !== "" && ctype_digit((string)$tk)) {
+                    $redirect = "../checkout/?ticket=" . (int)$tk;
+                } else {
+                    $redirect = !empty($_POST["redirect"]) ? $_POST["redirect"] : (!empty($_GET["redirect"]) ? $_GET["redirect"] : "../dashboard");
+                }
                 header("Location: " . $redirect);
                 exit();
             } else {
@@ -253,6 +260,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <?php endif; ?>
                             <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                                 <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($_GET["redirect"] ?? ""); ?>">
+                                <input type="hidden" name="ticket" value="<?php echo htmlspecialchars($_GET["ticket"] ?? ""); ?>">
                                 <div class="form-group lg-anim lg-d2">
                                     <label for="email"><?php echo $translations["email"]; ?></label>
                                     <input type="email" class="form-control" id="email" name="email" required>

@@ -221,8 +221,8 @@ $redirect_url = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER
             <input type="hidden" name="action" value="register">
             <input type="hidden" name="ticket_id" value="<?php echo $ticket_id; ?>">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
-                <input type="text" name="firstname" class="form-control" placeholder="Nombre" required style="font-size:0.9em;">
-                <input type="text" name="lastname" class="form-control" placeholder="Apellido" required style="font-size:0.9em;">
+                <input type="text" name="firstname" class="form-control" placeholder="Apellido" required style="font-size:0.9em;">
+                <input type="text" name="lastname" class="form-control" placeholder="Nombre(s)" required style="font-size:0.9em;">
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
                 <input type="text" name="cedula" class="form-control" placeholder="Cédula" required style="font-size:0.9em;">
