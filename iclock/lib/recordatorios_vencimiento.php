@@ -35,8 +35,20 @@ while ($rowR = $resR->fetch_assoc()) {
     ];
     if ($rowR['opportunities'] !== null) $filasR['Tikets restantes'] = $rowR['opportunities'];
     
+    /* BOTON_RENOVAR: el enlace lleva al checkout del mismo plan que vence */
+    $tidR = null;
+    $stT = $connR->prepare("SELECT id FROM tickets WHERE name = ? AND visible = 1 LIMIT 1");
+    $stT->bind_param('s', $rowR['ticketname']);
+    $stT->execute();
+    $rowT = $stT->get_result()->fetch_assoc();
+    $stT->close();
+    $tidR = $rowT['id'] ?? null;
+    $urlR = $tidR
+        ? 'https://gympasto.com/login/?redirect=%2Fcheckout%2F%3Fticket%3D' . $tidR
+        : 'https://gympasto.com/prices/';
     $extraR = '<div style="text-align:center;margin-top:24px;">
-        <span style="color:#6B7280;font-size:14px;">Renueva en recepción o desde nuestra web para no perder tu ritmo. 💪</span>
+        <a href="' . $urlR . '" style="background:#e53935;color:#fff;text-decoration:none;padding:14px 30px;border-radius:8px;font-weight:600;display:inline-block;font-size:15px;">Renovar mi plan</a>
+        <p style="color:#6B7280;font-size:13px;margin-top:14px;">Tambien puedes renovar en recepción del gym. 💪</p>
     </div>';
     
     $bodyR = adrenaline_email(
@@ -55,14 +67,6 @@ while ($rowR = $resR->fetch_assoc()) {
         $planR  = $rowR['ticketname'];
         $vencR  = date('d/m/Y', strtotime($rowR['expiredate']));
         $msgR   = "Hola $nomR, tu plan $planR vence el $vencR.";
-        /* el boton lleva al checkout del mismo plan que vence */
-        $tidR = null;
-        $stT = $connR->prepare("SELECT id FROM tickets WHERE name = ? LIMIT 1");
-        $stT->bind_param('s', $planR);
-        $stT->execute();
-        $rowT = $stT->get_result()->fetch_assoc();
-        $stT->close();
-        $tidR = $rowT['id'] ?? null;
         $btnR = (string)($tidR ?: 13);
         @enviar_plantilla_chatwoot($celR, trim($rowR['lastname'].' '.$rowR['firstname']), 'recordatorio_vencimiento',
             [$nomR, $planR, $vencR], $btnR, $msgR);
