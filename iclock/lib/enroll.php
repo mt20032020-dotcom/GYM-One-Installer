@@ -17,6 +17,20 @@ function enrolar_en_speedface($userid) {
     $u = $stmt->get_result()->fetch_assoc();
     $stmt->close();
     if (!$u || empty($u['cedula'])) { $r['error']='Usuario sin cedula'; return $r; }
+    /* VALIDAR_PLAN: el equipo abre a cualquiera que este enrolado (Grupo 1 viene
+       desbloqueado de fabrica y la tabla userauthorize no se respeta), asi que
+       la unica forma de negar el acceso es NO enrolarlo hasta que tenga plan. */
+    $stP = $conn->prepare("SELECT COUNT(*) t FROM current_tickets WHERE userid = ? AND expiredate >= CURDATE() AND (opportunities IS NULL OR opportunities > 0)");
+    $stP->bind_param('i', $userid);
+    $stP->execute();
+    $rowP = $stP->get_result()->fetch_assoc();
+    $stP->close();
+    if (empty($rowP['t'])) {
+        $r['error'] = 'Sin plan vigente: no se enrola hasta que compre';
+        $r['sin_plan'] = true;
+        $conn->close();
+        return $r;
+    }
     $pin = preg_replace('/\D/','',$u['cedula']);
     $nombre = trim($u['lastname'] . ' ' . $u['firstname']); // lastname=nombre por herencia hungara
     $r['pasos'][] = "usuario: $nombre pin: $pin";
@@ -49,6 +63,7 @@ function enrolar_en_speedface($userid) {
     $cmds = [
         "C:{$base}1:DATA UPDATE user CardNo=\tPin={$pin}\tPassword=\tGroup=1\tStartTime=0\tEndTime=0\tName={$nombre}\tPrivilege=0",
         "C:{$base}2:DATA UPDATE biophoto PIN={$pin}\tType=9\tSize={$size}\tContent={$b64}",
+        "C:{$base}3:DATA UPDATE userauthorize Pin={$pin}\tAuthorizeTimezoneId=1\tAuthorizeDoorId=1",
     ];
     $fh = fopen('/app/iclock/cmd_queue.txt', 'a');
     if (!$fh) { $r['error']='No se pudo abrir la cola'; { @unlink($tmp); return $r; } }
@@ -57,6 +72,8 @@ function enrolar_en_speedface($userid) {
     flock($fh, LOCK_UN);
     fclose($fh);
     @chmod('/app/iclock/cmd_queue.txt', 0666);
+    $cF=@new mysqli($env['DB_SERVER'],$env['DB_USERNAME'],$env['DB_PASSWORD'],$env['DB_NAME']);
+    if($cF && !$cF->connect_error){ @$cF->query("UPDATE users SET speedface_enrolado=1 WHERE userid=".(int)$userid); $cF->close(); }
     $r['pasos'][] = 'encolados 3 comandos';
     $r['ok'] = true;
     @unlink($tmp); return $r;

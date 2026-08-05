@@ -34,7 +34,19 @@ function sincronizar_acceso_speedface($userid) {
         if (((int)$stmtF->get_result()->fetch_assoc()['t']) > 0) $vigente = false;
         $stmtF->close();
     }
+    $enrolado = 1;
+    if ($vigente) {
+        $rE = @$conn->query("SELECT speedface_enrolado FROM users WHERE userid = " . (int)$userid);
+        $fE = $rE ? $rE->fetch_assoc() : null;
+        if ($fE !== null) $enrolado = (int)$fE['speedface_enrolado'];
+    }
     $conn->close();
+
+    if ($vigente && !$enrolado) {
+        require_once __DIR__ . '/enroll.php';
+        $resE = enrolar_en_speedface($userid);
+        return (!empty($resE['ok'])) ? 'autorizado' : false;
+    }
 
     $base = time() % 100000;
     $cmd = $vigente
