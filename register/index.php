@@ -81,6 +81,17 @@ function save_profile_photo($fileKey, $destPath)
     return false;
   }
 
+  // Corregir orientacion EXIF (fotos de celular llegan de lado)
+  if ($mime === 'image/jpeg' && function_exists('exif_read_data')) {
+    $ex = @exif_read_data($tmp);
+    if (is_array($ex) && !empty($ex['Orientation'])) {
+      $rot = 0;
+      if ($ex['Orientation'] == 3) $rot = 180;
+      elseif ($ex['Orientation'] == 6) $rot = -90;
+      elseif ($ex['Orientation'] == 8) $rot = 90;
+      if ($rot) { $r2 = @imagerotate($src, $rot, 0); if ($r2) { imagedestroy($src); $src = $r2; } }
+    }
+  }
   $w = imagesx($src);
   $h = imagesy($src);
 
