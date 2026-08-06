@@ -784,7 +784,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['userid'])) {
                   <form method="post">
                     <div class="input-group">
                       <input type="text" class="form-control text-danger" id="emailVerifiedInput"
-                        value="<?php echo ($verify == "Yes") ? $translations["yes"] : $translations["no"]; ?>" disabled>
+                        value="<?php echo ($verify == "Yes") ? ($translations["yes"] ?? "Si") : ($translations["no"] ?? "No"); ?>" disabled>
                       <span class="input-group-btn">
                         <button class="btn btn-success" type="submit" <?php if ($verify == "Yes") {
                           echo "disabled";
@@ -798,7 +798,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['userid'])) {
                 </div>
                 <div class="form-group">
                   <label for="addressInput"><?php echo $translations["lastip"]; ?></label>
-                  <input type="text" class="form-control" id="addressInput" value="<?php echo htmlspecialchars($lastip, ENT_QUOTES, 'UTF-8'); ?>" disabled>
+                  <input type="text" class="form-control" id="addressInput" value="<?php echo htmlspecialchars($lastip ?? '', ENT_QUOTES, 'UTF-8'); ?>" disabled>
                 </div>
               </div>
             </div>
