@@ -237,7 +237,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
 
-    $registration_date = date('Y-m-d H:i:s');
+    $registration_date = (new DateTime('now', new DateTimeZone('America/Bogota')))->format('Y-m-d H:i:s');
 
     $conn = new mysqli($db_host, $db_username, $db_password, $db_name);
 

@@ -73,7 +73,7 @@ if ($info === false) { echo json_encode(['ok'=>false,'error'=>'El archivo no es 
 
 $userid = random_int(pow(10,9), pow(10,10)-1);
 $hashed = password_hash($cedula, PASSWORD_DEFAULT); // clave inicial = cedula
-$regDate = date('Y-m-d H:i:s');
+$regDate = (new DateTime('now', new DateTimeZone('America/Bogota')))->format('Y-m-d H:i:s');
 
 $stmt = $conn->prepare("INSERT INTO users (userid, cedula, firstname, lastname, email, password, gender, birthdate, celular, city, registration_date, confirmed) VALUES (?,?,?,?,?,?,?,?,?,?,?, 'Yes')");
 $typesIns = "i" . str_repeat("s", 10);

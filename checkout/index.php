@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && ($_POST["action"] ?? "") === "regis
         } else {
             $new_userid = rand(pow(10, 9), pow(10, 10) - 1);
             $hashed = password_hash($pw, PASSWORD_DEFAULT);
-            $now = date("Y-m-d H:i:s");
+            $now = (new DateTime('now', new DateTimeZone('America/Bogota')))->format('Y-m-d H:i:s');
             $stmt_ins = $db_tmp->prepare("INSERT INTO users (userid, cedula, firstname, lastname, email, password, gender, birthdate, celular, city, registration_date, confirmed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             $gender = in_array($_POST["gender"] ?? "", ["Male","Female","Other"]) ? $_POST["gender"] : "Male";
             $birth = "1990-01-01";

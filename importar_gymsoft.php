@@ -38,7 +38,7 @@ while (($row = fgetcsv($fh)) !== false) {
         } while ($c1 > 0);
         if ($modo === 'importar') {
             $pass = password_hash(bin2hex(random_bytes(16)), PASSWORD_DEFAULT);
-            $gen = 'Male'; $conf = 'YES'; $reg = date('Y-m-d H:i:s');
+            $gen = 'Male'; $conf = 'YES'; $reg = (new DateTime('now', new DateTimeZone('America/Bogota')))->format('Y-m-d H:i:s');
             $stmt = $conn->prepare("INSERT INTO users (userid, cedula, firstname, lastname, email, password, gender, birthdate, celular, registration_date, confirmed) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
             // herencia hungara: firstname=APELLIDO, lastname=NOMBRE
             $stmt->bind_param('issssssssss', $uid, $cedula, $d['apellido'], $d['nombre'], $d['email'], $pass, $gen, $d['nacimiento'], $d['celular'], $reg, $conf);

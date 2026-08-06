@@ -54,7 +54,7 @@ if ($action === 'create') {
     $new_userid = rand(pow(10, 9), pow(10, 10) - 1);
     $em = $em ?: ($ced . '@sincorreo.local');
     $pw = password_hash($ced, PASSWORD_DEFAULT); // clave inicial = su cédula
-    $now = date('Y-m-d H:i:s');
+    $now = (new DateTime('now', new DateTimeZone('America/Bogota')))->format('Y-m-d H:i:s');
     
     $stmt = $conn->prepare("INSERT INTO users (userid, cedula, firstname, lastname, email, password, gender, birthdate, celular, city, registration_date, confirmed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Yes')");
     $stmt->bind_param("issssssssss", $new_userid, $ced, $fn, $ln, $em, $pw, $gender, $birth, $cel, $barrio, $now);
