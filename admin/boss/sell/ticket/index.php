@@ -84,12 +84,14 @@ $stmt->close();
 /* Vásárló adatai a fejléchez (ID a kiválasztó oldalról érkezik) */
 $buyer_firstname = '';
 $buyer_lastname = '';
+$buyer_datos = null;
+$buyer_regdate = '';
 $buyer_found = false;
 if ($ticketbuyerid !== 'N/A' && ctype_digit((string) $ticketbuyerid)) {
-    $bstmt = $conn->prepare("SELECT firstname, lastname FROM users WHERE userid = ? LIMIT 1");
+    $bstmt = $conn->prepare("SELECT firstname, lastname, datos_actualizados, registration_date FROM users WHERE userid = ? LIMIT 1");
     $bstmt->bind_param("s", $ticketbuyerid);
     $bstmt->execute();
-    $bstmt->bind_result($buyer_firstname, $buyer_lastname);
+    $bstmt->bind_result($buyer_firstname, $buyer_lastname, $buyer_datos, $buyer_regdate);
     if ($bstmt->fetch()) {
         $buyer_found = true;
     }
@@ -358,6 +360,11 @@ $is_new_version_available = is_string($latest_version)
                                 <div class="tk-buyer-cap"><?php echo $translations['selected-member'] ?? 'Kiválasztott vásárló'; ?></div>
                                 <div class="tk-buyer-name">
                                     <?php echo $buyer_found ? htmlspecialchars($buyer_firstname . ' ' . $buyer_lastname) : '—'; ?>
+<?php if ($buyer_found && empty($buyer_datos) && substr((string)$buyer_regdate,0,10) < '2026-08-01'): ?>
+<div style="margin-top:10px;padding:9px 14px;background:#fff3cd;border:1px solid #f0ad4e;border-radius:10px;color:#8a6d3b;font-size:13px;font-weight:600;">
+&#9888;&#65039; Este usuario NO ha actualizado sus datos. P&iacute;dele hacerlo ahora en <b>gympasto.com/actualizar/</b> &mdash; desde el <b>15 de agosto</b> el torniquete no le abrir&aacute;.
+</div>
+<?php endif; ?>
                                 </div>
                                 <div class="tk-buyer-id"><i class="bi bi-person-badge"></i> <?php echo htmlspecialchars($ticketbuyerid); ?></div>
                             </div>
