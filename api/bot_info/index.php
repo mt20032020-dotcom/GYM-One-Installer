@@ -51,6 +51,22 @@ while ($h = $rHoras->fetch_assoc()) {
 }
 if (!empty($lineasHoras)) {
     $info[] = ['categoria' => 'Horarios de atencion', 'contenido' => implode("\n", $lineasHoras)];
+
+// ===== 2b. Horarios especiales / festivos (opening_hours_exceptions, en vivo) =====
+$hoyB = (new DateTime('now', new DateTimeZone('America/Bogota')))->format('Y-m-d');
+$rExc = $conn->query("SELECT date, open_time, close_time, is_closed FROM opening_hours_exceptions WHERE date >= '$hoyB' ORDER BY date LIMIT 10");
+if ($rExc && $rExc->num_rows) {
+    $dSemE=['Monday'=>'Lunes','Tuesday'=>'Martes','Wednesday'=>'Miercoles','Thursday'=>'Jueves','Friday'=>'Viernes','Saturday'=>'Sabado','Sunday'=>'Domingo'];
+    $mesE=[1=>'enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+    $linE=[];
+    while($e=$rExc->fetch_assoc()){
+        $dtE=new DateTime($e['date']);
+        $txE=$dSemE[$dtE->format('l')].' '.(int)$dtE->format('j').' de '.$mesE[(int)$dtE->format('n')];
+        if(!empty($e['is_closed'])) $linE[]="$txE: CERRADO todo el dia";
+        else $linE[]="$txE: horario especial de ".date('g:i A',strtotime($e['open_time']))." a ".date('g:i A',strtotime($e['close_time']));
+    }
+    $info[] = ['categoria'=>'Horarios especiales (festivos y fechas proximas)','contenido'=>implode("\n",$linE)];
+}
 }
 
 // ===== 3. Planes y tiqueteras (tabla tickets, en vivo) =====
