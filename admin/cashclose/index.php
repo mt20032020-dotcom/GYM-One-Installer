@@ -29,6 +29,10 @@ if (isset($_POST['action']) && $_POST['action'] === 'add_expense') {
         $stmt = $conn->prepare("INSERT INTO cash_expenses (expense_date, description, amount, created_by) VALUES (?, ?, ?, ?)");
         $stmt->bind_param("ssdi", $hoy, $desc, $amt, $userid);
         $stmt->execute();
+        // Replicar al modulo de Gastos (contabilidad) para que el reporte financiero lo vea
+        $stmtE = $conn->prepare("INSERT INTO expenses (description, category, amount, expense_date, created_by, payment_method) VALUES (?, 'Gasto de caja', ?, ?, ?, 'Efectivo')");
+        $stmtE->bind_param("sdsi", $desc, $amt, $hoy, $userid);
+        @$stmtE->execute(); @$stmtE->close();
         $msg = "Gasto registrado.";
     }
 }
