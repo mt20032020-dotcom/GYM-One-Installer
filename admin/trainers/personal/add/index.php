@@ -100,10 +100,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $target_dir = "/app/assets/img/trainers/";
         $image_extension = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));
 
-        if ($image_extension === 'png') {
+        if (in_array($image_extension, ['png','jpg','jpeg','webp'])) {
             $target_file = $target_dir . "trainer_" . $trainer_id . ".png";
 
-            if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+            // Convertir a PNG (acepta jpg/webp) y corregir orientacion EXIF
+            $tmpUp = $_FILES["image"]["tmp_name"];
+            $okImg = false;
+            $infoU = @getimagesize($tmpUp);
+            if ($infoU) {
+                $srcImg = null;
+                if ($infoU[2] === IMAGETYPE_JPEG) $srcImg = @imagecreatefromjpeg($tmpUp);
+                elseif ($infoU[2] === IMAGETYPE_PNG) $srcImg = @imagecreatefrompng($tmpUp);
+                elseif ($infoU[2] === IMAGETYPE_WEBP && function_exists("imagecreatefromwebp")) $srcImg = @imagecreatefromwebp($tmpUp);
+                if ($srcImg) {
+                    if ($infoU[2] === IMAGETYPE_JPEG && function_exists("exif_read_data")) {
+                        $exU = @exif_read_data($tmpUp);
+                        if (!empty($exU["Orientation"])) {
+                            $rotU = 0;
+                            if ($exU["Orientation"] == 3) $rotU = 180;
+                            elseif ($exU["Orientation"] == 6) $rotU = -90;
+                            elseif ($exU["Orientation"] == 8) $rotU = 90;
+                            if ($rotU) { $r2U = @imagerotate($srcImg, $rotU, 0); if ($r2U) { imagedestroy($srcImg); $srcImg = $r2U; } }
+                        }
+                    }
+                    imagealphablending($srcImg, false); imagesavealpha($srcImg, true);
+                    $okImg = @imagepng($srcImg, $target_file);
+                    imagedestroy($srcImg);
+                    @chmod($target_file, 0664);
+                }
+            }
+            if ($okImg) {
                 $sql = "UPDATE trainers SET image='$target_file' WHERE id='$trainer_id'";
                 if ($conn->query($sql) === TRUE) {
                     echo "New trainer added successfully!";
@@ -115,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 echo "Error uploading file.";
             }
         } else {
-            echo "Error: Only PNG files are allowed.";
+            echo "Error: formato no soportado (usa PNG, JPG o WEBP).";
         }
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
@@ -374,7 +400,7 @@ $conn->close();
                                         </div>
                                         <div class="mb-3">
                                             <label for="image" class="form-label"><?php echo $translations["profileimg"]; ?></label>
-                                            <input type="file" class="form-control" accept="image/png" id="image" name="image" required>
+                                            <input type="file" class="form-control" accept="image/png,image/jpeg,image/webp" id="image" name="image" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="description" class="form-label"><?php echo $translations["description"]; ?></label>
