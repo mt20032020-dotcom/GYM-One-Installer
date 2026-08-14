@@ -107,9 +107,35 @@ if (isset($_GET['id'])) {
         if ($_FILES['image']['name']) {
             $target_dir = "/app/assets/img/trainers/";
             $image_extension = pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
-            $target_file = $target_dir . "trainer_" . $id . "." . $image_extension;
+            $target_file = $target_dir . "trainer_" . $id . ".png";
 
-            if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+            // Convertir a PNG (acepta jpg/webp/png) y corregir orientacion EXIF
+            $tmpUp = $_FILES["image"]["tmp_name"];
+            $okImg = false;
+            $infoU = @getimagesize($tmpUp);
+            if ($infoU) {
+                $srcImg = null;
+                if ($infoU[2] === IMAGETYPE_JPEG) $srcImg = @imagecreatefromjpeg($tmpUp);
+                elseif ($infoU[2] === IMAGETYPE_PNG) $srcImg = @imagecreatefrompng($tmpUp);
+                elseif ($infoU[2] === IMAGETYPE_WEBP && function_exists("imagecreatefromwebp")) $srcImg = @imagecreatefromwebp($tmpUp);
+                if ($srcImg) {
+                    if ($infoU[2] === IMAGETYPE_JPEG && function_exists("exif_read_data")) {
+                        $exU = @exif_read_data($tmpUp);
+                        if (!empty($exU["Orientation"])) {
+                            $rotU = 0;
+                            if ($exU["Orientation"] == 3) $rotU = 180;
+                            elseif ($exU["Orientation"] == 6) $rotU = -90;
+                            elseif ($exU["Orientation"] == 8) $rotU = 90;
+                            if ($rotU) { $r2U = @imagerotate($srcImg, $rotU, 0); if ($r2U) { imagedestroy($srcImg); $srcImg = $r2U; } }
+                        }
+                    }
+                    imagealphablending($srcImg, false); imagesavealpha($srcImg, true);
+                    $okImg = @imagepng($srcImg, $target_file);
+                    imagedestroy($srcImg);
+                    @chmod($target_file, 0664);
+                }
+            }
+            if ($okImg) {
                 $sql = "UPDATE trainers SET name=?, image=?, description=?, price_1hour=?, price_10sessions=?, hourly_wage=? WHERE id=?";
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("sssssdi", $name, $target_file, $description, $price_1hour, $price_10sessions, $hourly_wage, $id);
@@ -391,7 +417,7 @@ $conn->close();
                                             <div class="form-group">
                                                 <div class="mb-3">
                                                     <label for="image" class="form-label"><?php echo $translations["profileimg"]; ?> <?php echo $translations["optional"]; ?></label>
-                                                    <input type="file" accept="image/png" class="form-control" id="image" name="image">
+                                                    <input type="file" accept="image/png,image/jpeg,image/webp" class="form-control" id="image" name="image">
                                                 </div>
                                             </div>
                                         </div>
