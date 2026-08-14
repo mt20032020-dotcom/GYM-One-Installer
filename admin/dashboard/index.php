@@ -177,6 +177,10 @@ if ($result && $result->num_rows > 0) {
 // TEMP USERS TABLE!!!
 /* AUTOSALIDA_DASH: respaldo por si el equipo no esta haciendo poll */
 @$conn->query("DELETE FROM temp_loggeduser WHERE login_date < (NOW() - INTERVAL 90 MINUTE)");
+// Saldos de tiquetera vigentes (para el boton Ingreso extra)
+$tqSaldos = [];
+$rTQ = @$conn->query("SELECT userid, MIN(opportunities) sal FROM current_tickets WHERE opportunities IS NOT NULL AND opportunities > 0 AND expiredate >= CURDATE() GROUP BY userid");
+if ($rTQ) { while ($xTQ = $rTQ->fetch_assoc()) { $tqSaldos[(string)$xTQ["userid"]] = (int)$xTQ["sal"]; } }
 $sql = "SELECT name, userid, login_date FROM temp_loggeduser";
 $result = $conn->query($sql);
 
@@ -729,10 +733,9 @@ if ($countryCode !== '') {
                                                 echo '<td><a class="btn btn-danger" href="logout.php?user=' . urlencode($row["userid"]) . '">' . $translations["userlogout"] . '</a></td>';
                                                 echo '<td><a class= "btn btn-secondary" href="../users/edit/?user=' . urlencode($row["userid"]) . '">' . $translations["editbtn"] . '</a></td>';
                                                 // ==== Boton Ingreso extra (solo tiqueteras con saldo) ====
-                                                $rTq = $conn->query("SELECT opportunities FROM current_tickets WHERE userid = " . (int)$row['userid'] . " AND opportunities IS NOT NULL AND opportunities > 0 AND expiredate >= CURDATE() ORDER BY expiredate ASC LIMIT 1");
-                                                $fTq = $rTq ? $rTq->fetch_assoc() : null;
-                                                if ($fTq) {
-                                                    echo '<td><button class="btn btn-warning" onclick="ingresoExtra(' . (int)$row['userid'] . ',' . (int)$fTq['opportunities'] . ')">Ingreso extra</button></td>';
+                                                $sTQ = $tqSaldos[(string)$row["userid"]] ?? 0;
+                                                if ($sTQ > 0) {
+                                                    echo '<td><button class="btn btn-warning" onclick="ingresoExtra(' . (int)$row["userid"] . ',' . $sTQ . ')">Ingreso extra</button></td>';
                                                 } else { echo '<td></td>'; }
                                                 echo "</tr>";
 
