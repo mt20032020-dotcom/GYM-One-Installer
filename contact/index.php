@@ -393,6 +393,56 @@ EOD;
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="author" content="<?php echo $business_name; ?>">
 
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+.ct-banner{position:relative;min-height:210px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.ct-banner::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.25),rgba(0,0,0,.72))}
+.ct-banner::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,#e11d2a 22%,#e11d2a 78%,transparent)}
+.ct-banner-in{position:relative;z-index:2;text-align:center;padding:24px 20px}
+.ct-banner-quote{font-family:'Oswald',sans-serif;font-weight:500;text-transform:uppercase;color:#fff;font-size:clamp(1.3rem,3.4vw,2.4rem);margin:0;letter-spacing:.02em;transition:opacity .5s ease,transform .5s ease}
+.ct-banner-quote em{font-style:normal;color:#e11d2a}
+.ct-banner-quote.ct-out{opacity:0;transform:translateY(-10px)}
+.ct-wrap{max-width:1180px;margin:0 auto;padding:64px 20px 72px;font-family:'Inter',system-ui,sans-serif}
+.ct-eyebrow{display:block;color:#e11d2a;font-size:.78rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;margin-bottom:12px}
+.ct-title{font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;font-size:clamp(2.2rem,5.5vw,3.6rem);color:#fff;margin:0;line-height:.98}
+.ct-sub{color:#9b9ba1;margin:14px 0 0;max-width:48ch}
+.ct-head{padding-bottom:44px;border-bottom:1px solid rgba(255,255,255,.09)}
+.ct-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin:44px 0 0}
+.ct-card{display:block;text-decoration:none;border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:30px 26px;background:rgba(255,255,255,.02);transition:border-color .2s ease,transform .2s ease,background .2s ease}
+.ct-card:hover{border-color:#e11d2a;transform:translateY(-4px);background:rgba(225,29,42,.06)}
+.ct-card:focus-visible{outline:2px solid #e11d2a;outline-offset:3px}
+.ct-ico{display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:14px;background:rgba(225,29,42,.14);color:#e11d2a;font-size:1.45rem;margin-bottom:18px}
+.ct-ico-wa{background:rgba(37,211,102,.14);color:#25d366}
+.ct-card h3{font-family:'Oswald',sans-serif;text-transform:uppercase;color:#fff;font-size:1.3rem;margin:0 0 8px;letter-spacing:.02em}
+.ct-card p{color:#b6b6bd;margin:0 0 16px;font-size:.98rem;word-break:break-word}
+.ct-go{color:#e11d2a;font-size:.85rem;font-weight:600;display:inline-flex;align-items:center;gap:7px}
+.ct-card-wa .ct-go{color:#25d366}
+.ct-cta-row{display:flex;flex-direction:column;align-items:center;gap:12px;margin:52px 0 0;text-align:center}
+.ct-cta{display:inline-flex;align-items:center;gap:11px;background:#25d366;color:#08130c;text-decoration:none;padding:16px 34px;border-radius:999px;font-weight:700;font-size:1.05rem;transition:transform .18s ease,box-shadow .18s ease}
+.ct-cta:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(37,211,102,.3);color:#08130c}
+.ct-cta-note{color:#8a8a92;font-size:.85rem}
+.ct-form-box{margin:64px auto 0;max-width:620px;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:38px 32px;background:rgba(255,255,255,.02)}
+.ct-form-title{font-family:'Oswald',sans-serif;text-transform:uppercase;color:#fff;font-size:1.6rem;margin:0 0 26px;text-align:center;letter-spacing:.02em}
+.ct-field{margin-bottom:18px}
+.ct-field label{display:block;color:#9b9ba1;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.ct-field input,.ct-field textarea{width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:13px 15px;color:#fff;font-size:1rem;font-family:inherit}
+.ct-field input:focus,.ct-field textarea:focus{outline:none;border-color:#e11d2a;box-shadow:0 0 0 3px rgba(225,29,42,.16)}
+.ct-submit{width:100%;background:#e11d2a;color:#fff;border:0;border-radius:999px;padding:15px;font-weight:700;font-size:1rem;cursor:pointer;transition:transform .18s ease}
+.ct-submit:hover{transform:translateY(-2px)}
+@media(max-width:900px){.ct-grid{grid-template-columns:1fr}.ct-wrap{padding:44px 18px 56px}.ct-banner{min-height:150px}}
+@media(prefers-reduced-motion:reduce){.ct-banner-quote,.ct-card,.ct-cta,.ct-submit{transition:none}}
+</style>
+<style>
+.ct-wrap .ct-form-box.ct-form-box{background:rgba(255,255,255,.03)!important;background-color:rgba(255,255,255,.03)!important;border:1px solid rgba(255,255,255,.12)!important;box-shadow:none!important}
+.ct-wrap .ct-form-box.ct-form-box *{background-image:none!important}
+.ct-wrap .ct-form-box .ct-field input,
+.ct-wrap .ct-form-box .ct-field textarea{background:rgba(0,0,0,.55)!important;border:1px solid rgba(255,255,255,.16)!important;color:#fff!important}
+.ct-wrap .ct-form-box .ct-field input:focus,
+.ct-wrap .ct-form-box .ct-field textarea:focus{border-color:#e11d2a!important;box-shadow:0 0 0 3px rgba(225,29,42,.16)!important}
+.ct-wrap .ct-form-box .ct-field label{color:#9b9ba1!important}
+.ct-wrap .ct-form-box .ct-form-title{color:#fff!important}
+.ct-wrap .ct-form-box .ct-submit{background:#e11d2a!important;color:#fff!important}
+</style>
 </head>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $gkey; ?>"></script>
@@ -442,72 +492,65 @@ EOD;
   </div>
   <div class="container-fluid">
     <div class="row">
-      <div class="col bg-imageback">
+      <div class="col bg-imageback ct-banner">
+        <div class="ct-banner-in">
+          <p class="ct-banner-quote" id="ctRotator">Estamos <em>a un mensaje</em> de distancia</p>
+        </div>
       </div>
     </div>
-    <div class="row text-center ">
-      <div class="col mt-2">
-        <h1><?php echo $translations["contactpage"]; ?></h1>
+    <section class="ct-wrap">
+      <div class="ct-head">
+        <span class="ct-eyebrow">Ponte en contacto</span>
+        <h1 class="ct-title">Hablemos</h1>
+        <p class="ct-sub">Resolvemos tus dudas sobre planes, horarios y entrenamiento personalizado.</p>
       </div>
-    </div>
-    <div class="row text-center ">
-      <div class="col-4">
-        <div class="d-inline-block fs-1 lh-1 text-primary bg-primary bg-opacity-25 p-4 rounded-pill">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill"
-            viewBox="0 0 16 16">
-            <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6" />
-          </svg>
-        </div>
-        <h3 class="mt-1"><?php echo $translations["location"]; ?></h3>
-        <p class="lead"></p>
-        <p class="lead"><?php echo $city; ?>, <?php echo $street; ?> <?php echo $hause_no; ?></p>
+      <div class="ct-grid">
+        <a class="ct-card" href="https://share.google/TW69MDJFtiHFBqjjA" target="_blank" rel="noopener">
+          <span class="ct-ico"><i class="bi bi-geo-alt-fill"></i></span>
+          <h3>Vis&iacute;tanos</h3>
+          <p><?php echo $city; ?>, <?php echo $street; ?> <?php echo $hause_no; ?></p>
+          <span class="ct-go">Ver en el mapa <i class="bi bi-arrow-right"></i></span>
+        </a>
+        <a class="ct-card" href="mailto:<?php echo $mailadress; ?>">
+          <span class="ct-ico"><i class="bi bi-envelope-fill"></i></span>
+          <h3>Escr&iacute;benos</h3>
+          <p><?php echo $mailadress; ?></p>
+          <span class="ct-go">Enviar correo <i class="bi bi-arrow-right"></i></span>
+        </a>
+        <a class="ct-card ct-card-wa" href="https://wa.me/573155425722?text=<?php echo rawurlencode('Hola, quiero informacion sobre las membresias'); ?>" target="_blank" rel="noopener">
+          <span class="ct-ico ct-ico-wa"><i class="bi bi-whatsapp"></i></span>
+          <h3>WhatsApp</h3>
+          <p><?php echo $phoneno; ?></p>
+          <span class="ct-go">Abrir chat <i class="bi bi-arrow-right"></i></span>
+        </a>
       </div>
-      <div class="col-4">
-        <div class="d-inline-block fs-1 lh-1 text-primary bg-primary bg-opacity-25 p-4 rounded-pill">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-            class="bi bi-envelope-at-fill" viewBox="0 0 16 16">
-            <path
-              d="M2 2A2 2 0 0 0 .05 3.555L8 8.414l7.95-4.859A2 2 0 0 0 14 2zm-2 9.8V4.698l5.803 3.546zm6.761-2.97-6.57 4.026A2 2 0 0 0 2 14h6.256A4.5 4.5 0 0 1 8 12.5a4.49 4.49 0 0 1 1.606-3.446l-.367-.225L8 9.586zM16 9.671V4.697l-5.803 3.546.338.208A4.5 4.5 0 0 1 12.5 8c1.414 0 2.675.652 3.5 1.671" />
-            <path
-              d="M15.834 12.244c0 1.168-.577 2.025-1.587 2.025-.503 0-1.002-.228-1.12-.648h-.043c-.118.416-.543.643-1.015.643-.77 0-1.259-.542-1.259-1.434v-.529c0-.844.481-1.4 1.26-1.4.585 0 .87.333.953.63h.03v-.568h.905v2.19c0 .272.18.42.411.42.315 0 .639-.415.639-1.39v-.118c0-1.277-.95-2.326-2.484-2.326h-.04c-1.582 0-2.64 1.067-2.64 2.724v.157c0 1.867 1.237 2.654 2.57 2.654h.045c.507 0 .935-.07 1.18-.18v.731c-.219.1-.643.175-1.237.175h-.044C10.438 16 9 14.82 9 12.646v-.214C9 10.36 10.421 9 12.485 9h.035c2.12 0 3.314 1.43 3.314 3.034zm-4.04.21v.227c0 .586.227.8.581.8.31 0 .564-.17.564-.743v-.367c0-.516-.275-.708-.572-.708-.346 0-.573.245-.573.791" />
-          </svg>
-        </div>
-        <h3 class="mt-1"><?php echo $translations["email"]; ?></h3>
-        <p class="lead"><?php echo $mailadress; ?></p>
+      <div class="ct-cta-row">
+        <a class="ct-cta" href="https://wa.me/573155425722?text=<?php echo rawurlencode('Hola, quiero informacion sobre las membresias'); ?>" target="_blank" rel="noopener">
+          <i class="bi bi-whatsapp"></i> Escr&iacute;benos por WhatsApp
+        </a>
+        <span class="ct-cta-note">Respondemos en minutos durante el horario de atenci&oacute;n.</span>
       </div>
-      <div class="col-4">
-        <div class="d-inline-block fs-1 lh-1 text-primary bg-primary bg-opacity-25 p-4 rounded-pill">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-            class="bi bi-telephone-forward-fill" viewBox="0 0 16 16">
-            <path fill-rule="evenodd"
-              d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877zm10.761.135a.5.5 0 0 1 .708 0l2.5 2.5a.5.5 0 0 1 0 .708l-2.5 2.5a.5.5 0 0 1-.708-.708L14.293 4H9.5a.5.5 0 0 1 0-1h4.793l-1.647-1.646a.5.5 0 0 1 0-.708" />
-          </svg>
-        </div>
-        <h3 class="mt-1"><?php echo $translations["fno"]; ?></h3>
-        <p class="lead"><?php echo $phoneno; ?></p>
-      </div>
-    </div>
-    <div id="contact" class="row text-center justify-content-center">
-      <div class="col-sm-4 py-3">
-        <h1><?php echo $translations["contactform"]; ?></h1>
+      <div id="contact" style="position:relative;top:-80px;height:0;overflow:hidden"></div>
+      <div class="ct-form-box">
+        <h2 class="ct-form-title">O d&eacute;janos tu mensaje</h2>
         <?php echo $alerts_html; ?>
-        <form method="post">
-          <div class="mb-3">
-            <label for="name" class="form-label"><?php echo $translations["fullname"]; ?>:</label>
-            <input type="text" class="form-control" id="name" name="name" required>
+        <form method="post" class="ct-form">
+          <div class="ct-field">
+            <label for="name"><?php echo $translations["fullname"]; ?></label>
+            <input type="text" id="name" name="name" required>
           </div>
-          <div class="mb-3">
-            <label for="email" class="form-label"><?php echo $translations["email"]; ?>:</label>
-            <input type="email" class="form-control" id="email" name="email" required>
+          <div class="ct-field">
+            <label for="email"><?php echo $translations["email"]; ?></label>
+            <input type="email" id="email" name="email" required>
           </div>
-          <div class="mb-3">
-            <label for="message" class="form-label"><?php echo $translations["message"]; ?>:</label>
-            <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+          <div class="ct-field">
+            <label for="message"><?php echo $translations["message"]; ?></label>
+            <textarea id="message" name="message" rows="4" required></textarea>
           </div>
-          <button type="submit" class="btn btn-primary"><?php echo $translations["send"]; ?></button>
+          <button type="submit" class="ct-submit"><?php echo $translations["send"]; ?></button>
         </form>
       </div>
-    </div>
+    </section>
   </div>
 
   <div class="footer">
@@ -586,6 +629,19 @@ EOD;
       </div>
     </div>
   </div>
+<script>
+(function(){
+  var el=document.getElementById('ctRotator');
+  if(!el) return;
+  if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var f=['Estamos <em>a un mensaje</em> de distancia','Resolvemos tus dudas <em>al instante</em>','Ven, conoce <em>la sede</em>','Aqu&iacute; inicia <em>la mejor versi&oacute;n de ti</em>'];
+  var i=0;
+  setInterval(function(){
+    el.classList.add('ct-out');
+    setTimeout(function(){ i=(i+1)%f.length; el.innerHTML=f[i]; el.classList.remove('ct-out'); },520);
+  },4200);
+})();
+</script>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

@@ -137,6 +137,52 @@ $result = $conn->query($sql);
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="author" content="<?php echo $business_name; ?>">
 
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+.tr-wrap{max-width:1180px;margin:0 auto;padding:72px 20px 40px;font-family:'Inter',system-ui,sans-serif}
+.tr-wrap .tr-eyebrow{display:block;color:#e11d2a;font-size:.78rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;margin-bottom:14px}
+.tr-wrap .tr-title{font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;font-size:clamp(2.4rem,6vw,4rem);line-height:.95;color:#fff;margin:0}
+.tr-wrap .tr-sub{color:#9b9ba1;font-size:1.05rem;margin:16px 0 0;max-width:46ch}
+.tr-wrap .tr-head{padding-bottom:56px;border-bottom:1px solid rgba(255,255,255,.09)}
+.tr-wrap .tr-card{display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:56px;align-items:center;padding:72px 0;border-bottom:1px solid rgba(255,255,255,.09)}
+.tr-wrap .tr-media{position:relative}
+.tr-wrap .tr-media::after{content:"";position:absolute;inset:0;border:2px solid #e11d2a;border-radius:22px;transform:translate(16px,16px);z-index:0}
+.tr-wrap .tr-alt .tr-media::after{transform:translate(-16px,16px)}
+.tr-wrap .tr-media img{position:relative;z-index:1;width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:22px;display:block;background:#111}
+.tr-wrap .tr-name{font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;font-size:clamp(1.9rem,4vw,3rem);line-height:1;color:#fff;margin:0;letter-spacing:.01em}
+.tr-wrap .tr-rule{width:62px;height:3px;background:#e11d2a;margin:20px 0 24px}
+.tr-wrap .tr-desc{color:#b6b6bd;font-size:1rem;line-height:1.8;max-width:60ch;text-align:left}
+.tr-wrap .tr-desc p{margin:0 0 14px;text-align:left}
+.tr-wrap .tr-prices{display:flex;gap:14px;flex-wrap:wrap;margin:28px 0 26px}
+.tr-wrap .tr-price{border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:12px 20px;background:rgba(255,255,255,.02)}
+.tr-wrap .tr-price span{display:block;color:#8a8a92;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:4px}
+.tr-wrap .tr-price strong{font-family:'Oswald',sans-serif;font-size:1.45rem;color:#fff;font-weight:500}
+.tr-wrap .tr-cta{display:inline-flex;align-items:center;gap:10px;background:#e11d2a;color:#fff;text-decoration:none;padding:14px 28px;border-radius:999px;font-weight:600;font-size:.98rem;transition:transform .18s ease,box-shadow .18s ease}
+.tr-wrap .tr-cta:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(225,29,42,.32);color:#fff}
+.tr-wrap .tr-cta:focus-visible{outline:2px solid #fff;outline-offset:3px}
+@media(max-width:900px){
+ .tr-wrap{padding:48px 18px 24px}
+ .tr-wrap .tr-card{grid-template-columns:1fr;gap:32px;padding:48px 0}
+ .tr-wrap .tr-media{max-width:380px}
+ .tr-wrap .tr-media::after,.tr-wrap .tr-alt .tr-media::after{transform:translate(10px,10px)}
+}
+@media(prefers-reduced-motion:reduce){.tr-wrap .tr-cta{transition:none}}
+</style>
+<style>
+.tr-banner{position:relative;min-height:230px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.tr-banner::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.25) 0%,rgba(0,0,0,.72) 100%)}
+.tr-banner::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,#e11d2a 22%,#e11d2a 78%,transparent)}
+.tr-banner-in{position:relative;z-index:2;text-align:center;padding:26px 20px}
+.tr-banner-tag{display:inline-block;color:#e11d2a;font-family:'Inter',system-ui,sans-serif;font-size:.7rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;margin-bottom:14px}
+.tr-banner-quote{font-family:'Oswald',sans-serif;font-weight:500;text-transform:uppercase;color:#fff;font-size:clamp(1.3rem,3.4vw,2.4rem);line-height:1.15;margin:0;letter-spacing:.02em}
+.tr-banner-quote em{font-style:normal;color:#e11d2a}
+@media(max-width:900px){.tr-banner{min-height:160px}}
+</style>
+<style>
+.tr-banner-quote{transition:opacity .5s ease,transform .5s ease}
+.tr-banner-quote.tr-rotator-out{opacity:0;transform:translateY(-10px)}
+@media(prefers-reduced-motion:reduce){.tr-banner-quote{transition:none}}
+</style>
 </head>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $gkey; ?>"></script>
@@ -187,29 +233,42 @@ $result = $conn->query($sql);
     </div>
     <div class="container-fluid">
         <div class="row">
-            <div class="col bg-imageback">
+            <div class="col bg-imageback tr-banner">
+                <div class="tr-banner-in">
+                    <p class="tr-banner-quote" id="trRotator" data-i="0">La disciplina transforma <em>m&aacute;s que la motivaci&oacute;n</em></p>
+                </div>
             </div>
         </div>
-        <?php if ($result->num_rows > 0): ?>
-            <?php while ($row = $result->fetch_assoc()): ?>
-                <div class="row mt-2 text-center justify-content-center">
-                    <div class="col-sm-4 text-center">
-                        <img src="<?php echo '../assets/img/trainers/trainer_' . $row['id'] . '.png'; ?>"
-                            alt="<?php echo $row['name']; ?>" width="300px" class="img img-fluid rounded-pill">
-                        <h1 class="mt-3"><?php echo $row['name']; ?></h1>
-                    </div>
-                    <div class="col-sm-4">
-                        <p><?php echo nl2br($row['description']); ?></p>
-                        <p><strong><?php echo $translations["price"]; ?> (1 <?php echo $translations["hour"]; ?>):</strong>
-                            <?php echo $row['price_1hour']; ?>         <?php echo $currency; ?></p>
-                        <p><strong><?php echo $translations["price"]; ?> (10
-                                <?php echo $translations["occasions"]; ?>):</strong> <?php echo $row['price_10sessions']; ?>
-                            <?php echo $currency; ?>
-                        </p>
-                    </div>
-                </div>
-            <?php endwhile; ?>
-        <?php endif; ?>
+        <section class="tr-wrap">
+            <div class="tr-head">
+                <span class="tr-eyebrow">Entrenamiento personalizado</span>
+                <h1 class="tr-title">Nuestros entrenadores</h1>
+                <p class="tr-sub">Sesiones uno a uno, plan armado para tu objetivo y seguimiento en cada entreno.</p>
+            </div>
+            <?php if ($result->num_rows > 0): $tIdx = 0; ?>
+                <?php while ($row = $result->fetch_assoc()): $tIdx++; ?>
+                    <article class="tr-card <?php echo ($tIdx % 2 === 0) ? 'tr-alt' : ''; ?>">
+                        <div class="tr-media">
+                            <img src="<?php echo '../assets/img/trainers/trainer_' . (int)$row['id'] . '.png'; ?>"
+                                 alt="<?php echo htmlspecialchars($row['name']); ?>" loading="lazy">
+                        </div>
+                        <div class="tr-body">
+                            <h2 class="tr-name"><?php echo htmlspecialchars($row['name']); ?></h2>
+                            <div class="tr-rule"></div>
+                            <div class="tr-desc"><?php echo $row['description']; ?></div>
+                            <div class="tr-prices">
+                                <div class="tr-price"><span>1 sesion</span><strong>$<?php echo number_format((float)$row['price_1hour'], 0, ',', '.'); ?></strong></div>
+                                <div class="tr-price"><span>10 sesiones</span><strong>$<?php echo number_format((float)$row['price_10sessions'], 0, ',', '.'); ?></strong></div>
+                            </div>
+                            <a class="tr-cta" target="_blank" rel="noopener"
+                               href="https://wa.me/573155425722?text=<?php echo rawurlencode('Hola, quiero agendar una sesion con ' . $row['name']); ?>">
+                                <i class="bi bi-whatsapp"></i> Agendar por WhatsApp
+                            </a>
+                        </div>
+                    </article>
+                <?php endwhile; ?>
+            <?php endif; ?>
+        </section>
 
 
         <div class="footer">
@@ -290,6 +349,28 @@ $result = $conn->query($sql);
                 </div>
             </div>
         </div>
+<script>
+(function(){
+  var el=document.getElementById('trRotator');
+  if(!el) return;
+  if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var frases=[
+    'La disciplina transforma <em>m&aacute;s que la motivaci&oacute;n</em>',
+    'Cada sesi&oacute;n con <em>plan y prop&oacute;sito</em>',
+    'Tu objetivo, <em>nuestro entrenamiento</em>',
+    'Aqu&iacute; inicia <em>la mejor versi&oacute;n de ti</em>'
+  ];
+  var i=0;
+  setInterval(function(){
+    el.classList.add('tr-rotator-out');
+    setTimeout(function(){
+      i=(i+1)%frases.length;
+      el.innerHTML=frases[i];
+      el.classList.remove('tr-rotator-out');
+    },520);
+  },4200);
+})();
+</script>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
