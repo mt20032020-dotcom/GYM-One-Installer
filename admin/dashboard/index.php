@@ -728,6 +728,12 @@ if ($countryCode !== '') {
                                                 echo "<td>" . $elapsed_time . "</td>";
                                                 echo '<td><a class="btn btn-danger" href="logout.php?user=' . urlencode($row["userid"]) . '">' . $translations["userlogout"] . '</a></td>';
                                                 echo '<td><a class= "btn btn-secondary" href="../users/edit/?user=' . urlencode($row["userid"]) . '">' . $translations["editbtn"] . '</a></td>';
+                                                // ==== Boton Ingreso extra (solo tiqueteras con saldo) ====
+                                                $rTq = $conn->query("SELECT opportunities FROM current_tickets WHERE userid = " . (int)$row['userid'] . " AND opportunities IS NOT NULL AND opportunities > 0 AND expiredate >= CURDATE() ORDER BY expiredate ASC LIMIT 1");
+                                                $fTq = $rTq ? $rTq->fetch_assoc() : null;
+                                                if ($fTq) {
+                                                    echo '<td><button class="btn btn-warning" onclick="ingresoExtra(' . (int)$row['userid'] . ',' . (int)$fTq['opportunities'] . ')">Ingreso extra</button></td>';
+                                                } else { echo '<td></td>'; }
                                                 echo "</tr>";
 
                                                 $counter++;
@@ -1038,6 +1044,23 @@ if ($countryCode !== '') {
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
+<script>
+function ingresoExtra(uid, saldo){
+  var n = prompt('Cuantas personas adicionales ingresan?\nSaldo disponible: ' + saldo, '1');
+  if(n === null) return;
+  n = parseInt(n,10);
+  if(!n || n < 1){ alert('Cantidad invalida'); return; }
+  if(n > saldo){ alert('Saldo insuficiente: solo quedan ' + saldo); return; }
+  var fd = new FormData(); fd.append('userid', uid); fd.append('extras', n);
+  fetch('/admin/dashboard/ingreso_extra.php', {method:'POST', body:fd})
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d.ok){ alert('Listo: ' + d.extras + ' invitado(s) de ' + d.nombre + '.\nLe quedan ' + d.restantes + ' ingresos.'); location.reload(); }
+      else { alert('Error: ' + (d.error||'desconocido')); }
+    })
+    .catch(function(){ alert('Error de conexion'); });
+}
+</script>
 </body>
 
 </html>
