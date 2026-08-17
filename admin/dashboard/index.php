@@ -166,7 +166,7 @@ $is_new_version_available = is_string($latest_version)
 
 // SUM DAILY USERS
 $total_people = 0;
-$sql = "SELECT COALESCE(SUM(number_of_people), 0) AS total_people FROM temp_dailyworkout";
+$sql = "SELECT COUNT(*) AS total_people FROM access_log WHERE DATE(entry_time) = CURDATE()";
 $result = $conn->query($sql);
 if ($result && $result->num_rows > 0) {
     $r = $result->fetch_assoc();
