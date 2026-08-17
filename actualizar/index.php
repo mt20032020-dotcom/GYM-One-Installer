@@ -178,6 +178,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
                         imagepng($img, $dest, 6);
                         @chmod($dest, 0666);
                         imagedestroy($img);
+                        $anioN = (int)substr((string)$nacimiento,0,4);
+                        $limN = (int)(new DateTime("now", new DateTimeZone("America/Bogota")))->format("Y") - 12;
+                        if ($anioN < 1930 || $anioN > $limN) {
+                            $error = "Revisa la fecha de nacimiento: debe estar entre 1930 y " . $limN . ".";
+                            $_SESSION["upd_step"] = "formulario";
+                            $paso = "formulario";
+                            goto fin_actualizar;
+                        }
                         $hash = password_hash($pass, PASSWORD_DEFAULT);
                         $upd = $conn->prepare("UPDATE users SET firstname=?, lastname=?, email=?, celular=?, city=?, birthdate=?, gender=?, password=?, datos_actualizados=NOW() WHERE userid=?");
                         $upd->bind_param('ssssssssi', $apellido, $nombre, $email, $celular, $barrio, $nacimiento, $genero, $hash, $uid);
@@ -206,6 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
     }
 }
 
+fin_actualizar:
 $paso = $_SESSION['upd_step'] ?? 'cedula';
 if ($ok) { $paso = 'listo'; }
 $sendWarning = $_SESSION['upd_send_error'] ?? '';
@@ -299,7 +308,7 @@ small.hint{ color:#a1a1aa; }
         <label>Email</label><input type="email" name="email" value="<?php echo htmlspecialchars($datosActuales['email'] ?? ''); ?>">
         <label>Barrio</label><input type="text" name="barrio" value="<?php echo htmlspecialchars($datosActuales['city'] ?? ''); ?>">
         <div class="row2">
-            <div><label>Fecha de nacimiento</label><input type="date" name="nacimiento" value="<?php echo htmlspecialchars($datosActuales['birthdate'] ?? ''); ?>"></div>
+            <div><label>Fecha de nacimiento</label><input type="date" name="nacimiento" class="nac-min" min="1930-01-01" max="<?php echo (new DateTime('now', new DateTimeZone('America/Bogota')))->modify('-12 years')->format('Y-m-d'); ?>" required value="<?php echo htmlspecialchars($datosActuales['birthdate'] ?? ''); ?>"></div>
             <div><label>G&eacute;nero</label>
                 <select name="genero">
                     <option value="Male" <?php echo ($datosActuales['gender'] ?? '') === 'Male' ? 'selected' : ''; ?>>Masculino</option>
