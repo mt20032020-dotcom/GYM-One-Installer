@@ -84,14 +84,17 @@ $stmt->close();
 /* Vásárló adatai a fejléchez (ID a kiválasztó oldalról érkezik) */
 $buyer_firstname = '';
 $buyer_lastname = '';
+$buyer_bd = '';
+$buyer_cel = '';
+$buyer_mail = '';
 $buyer_datos = null;
 $buyer_regdate = '';
 $buyer_found = false;
 if ($ticketbuyerid !== 'N/A' && ctype_digit((string) $ticketbuyerid)) {
-    $bstmt = $conn->prepare("SELECT firstname, lastname, datos_actualizados, registration_date FROM users WHERE userid = ? LIMIT 1");
+    $bstmt = $conn->prepare("SELECT firstname, lastname, datos_actualizados, registration_date, birthdate, celular, email FROM users WHERE userid = ? LIMIT 1");
     $bstmt->bind_param("s", $ticketbuyerid);
     $bstmt->execute();
-    $bstmt->bind_result($buyer_firstname, $buyer_lastname, $buyer_datos, $buyer_regdate);
+    $bstmt->bind_result($buyer_firstname, $buyer_lastname, $buyer_datos, $buyer_regdate, $buyer_bd, $buyer_cel, $buyer_mail);
     if ($bstmt->fetch()) {
         $buyer_found = true;
     }
@@ -861,6 +864,42 @@ $is_new_version_available = is_string($latest_version)
     </script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="../../../../assets/js/date-time.js"></script>
+<?php
+$avProblemas = [];
+if ($buyer_found) {
+    if (empty($buyer_datos) && substr((string)$buyer_regdate,0,10) < '2026-08-01') {
+        $avProblemas[] = 'No ha actualizado sus datos';
+    }
+    $avAnio = (int)substr((string)$buyer_bd,0,4);
+    $avLim = (int)date('Y') - 12;
+    if ($avAnio < 1930 || $avAnio > $avLim) {
+        $avProblemas[] = 'Fecha de nacimiento invalida (' . htmlspecialchars((string)$buyer_bd) . ')';
+    }
+    $avCel = preg_replace('/\D/','',(string)$buyer_cel);
+    if (strlen($avCel) !== 10 || substr($avCel,0,1) !== '3') {
+        $avProblemas[] = 'Celular invalido (' . htmlspecialchars((string)$buyer_cel) . ')';
+    }
+    if (!filter_var($buyer_mail, FILTER_VALIDATE_EMAIL) || strpos((string)$buyer_mail,'sincorreo.local') !== false) {
+        $avProblemas[] = 'Correo invalido o sin correo';
+    }
+}
+if ($avProblemas): ?>
+<div id="avAlerta" style="position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#fff;border-radius:16px;max-width:480px;width:100%;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.35);">
+    <div style="font-size:2.2rem;line-height:1;margin-bottom:12px;">&#9888;&#65039;</div>
+    <h4 style="margin:0 0 8px;font-weight:800;color:#8a6d3b;">Revisar datos del cliente</h4>
+    <p style="margin:0 0 14px;color:#555;"><strong><?php echo htmlspecialchars($buyer_firstname . ' ' . $buyer_lastname); ?></strong> tiene lo siguiente pendiente:</p>
+    <ul style="margin:0 0 18px;padding-left:20px;color:#333;">
+      <?php foreach ($avProblemas as $p): ?><li style="margin-bottom:6px;"><?php echo $p; ?></li><?php endforeach; ?>
+    </ul>
+    <p style="margin:0 0 20px;font-size:.9em;color:#777;">Puede actualizar desde su celular en <strong>gympasto.com/actualizar</strong> &mdash; recibe una cortesia de 1 dia.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <a href="https://gympasto.com/actualizar/" target="_blank" class="btn btn-warning" style="flex:1;font-weight:600;">Actualizar ahora</a>
+      <button type="button" class="btn btn-secondary" style="flex:1;" onclick="document.getElementById('avAlerta').remove()">Continuar con la venta</button>
+    </div>
+  </div>
+</div>
+<?php endif; ?>
 </body>
 
 </html>
