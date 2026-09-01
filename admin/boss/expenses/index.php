@@ -122,6 +122,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_expense'])) {
 // ----- Delete expense -----
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_expense'])) {
     $delete_id = (int) $_POST['delete_id'];
+    $rDel = $conn->query("SELECT description, amount, expense_date FROM expenses WHERE id = " . $delete_id);
+    $fDel = $rDel ? $rDel->fetch_assoc() : null;
+    if ($fDel) {
+        $descDel = $conn->real_escape_string("Gasto eliminado: " . $fDel["description"] . " por " . number_format($fDel["amount"],0,",",".") . " (fecha " . $fDel["expense_date"] . ")");
+        $conn->query("INSERT INTO logs (userid, action, actioncolor, time) VALUES (" . (int)($_SESSION["userid"] ?? 0) . ", '" . $descDel . "', 'danger', NOW())");
+    }
     $stmt = $conn->prepare("DELETE FROM expenses WHERE id = ?");
     $stmt->bind_param("i", $delete_id);
     $stmt->execute();
