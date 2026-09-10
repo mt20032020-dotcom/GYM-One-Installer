@@ -65,7 +65,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['cortesia_tick
                 'paymentType' => 'Cortesia (sin costo)',
             ], $items);
 
-            $mpdf = new \Mpdf\Mpdf();
+            $mpdf = new \Mpdf\Mpdf(["tempDir" => "/tmp"]);
             $mpdf->WriteHTML($html);
             $pdfName = "{$uidP}-{$invNo}.pdf";
             $mpdf->Output("/app/assets/docs/invoices/{$pdfName}", \Mpdf\Output\Destination::FILE);
