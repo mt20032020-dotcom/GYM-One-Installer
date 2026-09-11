@@ -82,6 +82,22 @@ if ($stmt->num_rows > 0) {
 $stmt->close();
 
 /* Vásárló adatai a fejléchez (ID a kiválasztó oldalról érkezik) */
+// ==== Guardar fecha de nacimiento corregida desde el modal ====
+if (isset($_POST['accion_fecha_nac']) && $_POST['accion_fecha_nac'] === 'guardar') {
+    $fnUid = (int)($_POST['fn_userid'] ?? 0);
+    $fnVal = trim($_POST['fn_fecha'] ?? '');
+    $fnAnio = (int)substr($fnVal, 0, 4);
+    $fnLim = (int)date('Y') - 12;
+    if ($fnUid > 0 && preg_match('/^\d{4}-\d{2}-\d{2}$/', $fnVal) && $fnAnio >= 1930 && $fnAnio <= $fnLim) {
+        $stFN = $conn->prepare("UPDATE users SET birthdate = ? WHERE userid = ?");
+        $stFN->bind_param('si', $fnVal, $fnUid);
+        $stFN->execute();
+        $stFN->close();
+        $conn->query("INSERT INTO logs (userid, action, actioncolor, time) VALUES ($fnUid, 'Fecha de nacimiento corregida en recepcion: $fnVal', 'info', NOW())");
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit();
+    }
+}
 $buyer_firstname = '';
 $buyer_lastname = '';
 $buyer_bd = '';
@@ -365,7 +381,7 @@ $is_new_version_available = is_string($latest_version)
                                     <?php echo $buyer_found ? htmlspecialchars($buyer_firstname . ' ' . $buyer_lastname) : '—'; ?>
 <?php if ($buyer_found && empty($buyer_datos) && substr((string)$buyer_regdate,0,10) < '2026-08-01'): ?>
 <div style="margin-top:10px;padding:9px 14px;background:#fff3cd;border:1px solid #f0ad4e;border-radius:10px;color:#8a6d3b;font-size:13px;font-weight:600;">
-&#9888;&#65039; Este usuario NO ha actualizado sus datos. P&iacute;dele hacerlo ahora en <b>gympasto.com/actualizar/</b> &mdash; desde el <b>15 de agosto</b> el torniquete no le abrir&aacute;.
+&#9888;&#65039; Este usuario NO ha actualizado sus datos. P&iacute;dele hacerlo ahora en <b>gympasto.com/actualizar/</b> &mdash; recibe una cortesia de 1 dia.
 </div>
 <?php endif; ?>
                                 </div>
@@ -883,22 +899,86 @@ if ($buyer_found) {
         $avProblemas[] = 'Correo invalido o sin correo';
     }
 }
+$avFechaMala = false;
+if ($buyer_found) {
+    $avA = (int)substr((string)$buyer_bd,0,4);
+    $avL = (int)date('Y') - 12;
+    if ($avA < 1930 || $avA > $avL) $avFechaMala = true;
+}
 if ($avProblemas): ?>
-<div id="avAlerta" style="position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;">
-  <div style="background:#fff;border-radius:16px;max-width:480px;width:100%;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.35);">
+<div id="avAlerta" style="position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#fff;border-radius:16px;max-width:520px;width:100%;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.4);max-height:90vh;overflow:auto;">
     <div style="font-size:2.2rem;line-height:1;margin-bottom:12px;">&#9888;&#65039;</div>
     <h4 style="margin:0 0 8px;font-weight:800;color:#8a6d3b;">Revisar datos del cliente</h4>
     <p style="margin:0 0 14px;color:#555;"><strong><?php echo htmlspecialchars($buyer_firstname . ' ' . $buyer_lastname); ?></strong> tiene lo siguiente pendiente:</p>
     <ul style="margin:0 0 18px;padding-left:20px;color:#333;">
       <?php foreach ($avProblemas as $p): ?><li style="margin-bottom:6px;"><?php echo $p; ?></li><?php endforeach; ?>
     </ul>
-    <p style="margin:0 0 20px;font-size:.9em;color:#777;">Puede actualizar desde su celular en <strong>gympasto.com/actualizar</strong> &mdash; recibe una cortesia de 1 dia.</p>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;">
-      <a href="https://gympasto.com/actualizar/" target="_blank" class="btn btn-warning" style="flex:1;font-weight:600;">Actualizar ahora</a>
-      <button type="button" class="btn btn-secondary" style="flex:1;" onclick="document.getElementById('avAlerta').remove()">Continuar con la venta</button>
-    </div>
+    <?php if ($avFechaMala): ?>
+      <div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:12px;padding:16px;margin-bottom:18px;">
+        <p style="margin:0 0 12px;font-weight:700;color:#991b1b;">Preg&uacute;ntale su fecha de nacimiento. Es obligatorio corregirla para continuar.</p>
+        <form method="post" id="formFechaNac">
+          <input type="hidden" name="accion_fecha_nac" value="guardar">
+          <input type="hidden" name="fn_userid" value="<?php echo (int)$ticketbuyerid; ?>">
+          <input type="hidden" name="fn_fecha" id="fnHidden">
+          <div style="display:flex;gap:8px;margin-bottom:12px;">
+            <select id="fnDia" required style="flex:1;padding:9px;border-radius:8px;border:1px solid #ccc;">
+              <option value="">D&iacute;a</option>
+              <?php for($d=1;$d<=31;$d++){ $dd=str_pad($d,2,'0',STR_PAD_LEFT); echo "<option value=\"$dd\">$d</option>"; } ?>
+            </select>
+            <select id="fnMes" required style="flex:1.4;padding:9px;border-radius:8px;border:1px solid #ccc;">
+              <option value="">Mes</option>
+              <?php $mn=[1=>'Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+              foreach($mn as $k=>$v){ $kk=str_pad($k,2,'0',STR_PAD_LEFT); echo "<option value=\"$kk\">$v</option>"; } ?>
+            </select>
+            <select id="fnAnio" required style="flex:1;padding:9px;border-radius:8px;border:1px solid #ccc;">
+              <option value="">A&ntilde;o</option>
+              <?php for($a=(int)date('Y')-12;$a>=1930;$a--){ echo "<option value=\"$a\">$a</option>"; } ?>
+            </select>
+          </div>
+          <div id="fnEdad" style="display:none;text-align:center;padding:10px;margin-bottom:12px;border-radius:8px;font-weight:700;"></div>
+          <button type="submit" class="btn btn-danger" style="width:100%;font-weight:700;padding:11px;">Guardar y continuar con la venta</button>
+        </form>
+      </div>
+      <p style="margin:0;font-size:.85em;color:#777;text-align:center;">Sin la fecha correcta no se puede vender.</p>
+    <?php else: ?>
+      <p style="margin:0 0 20px;font-size:.9em;color:#777;">Puede actualizar desde su celular en <strong>gympasto.com/actualizar</strong> &mdash; recibe una cortesia de 1 dia.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a href="https://gympasto.com/actualizar/" target="_blank" class="btn btn-warning" style="flex:1;font-weight:600;">Actualizar ahora</a>
+        <button type="button" class="btn btn-secondary" style="flex:1;" onclick="document.getElementById('avAlerta').remove()">Continuar con la venta</button>
+      </div>
+    <?php endif; ?>
   </div>
 </div>
+<script>
+(function(){
+  var fd=document.getElementById('fnDia'), fm=document.getElementById('fnMes'), fa=document.getElementById('fnAnio'), fh=document.getElementById('fnHidden');
+  var frm=document.getElementById('formFechaNac');
+  if(!frm) return;
+  var cajaEdad=document.getElementById('fnEdad');
+  function calcEdad(){
+    if(!fd.value || !fm.value || !fa.value){ cajaEdad.style.display='none'; return; }
+    var hoy=new Date();
+    var nac=new Date(parseInt(fa.value,10), parseInt(fm.value,10)-1, parseInt(fd.value,10));
+    var edad=hoy.getFullYear()-nac.getFullYear();
+    var m=hoy.getMonth()-nac.getMonth();
+    if(m<0 || (m===0 && hoy.getDate()<nac.getDate())) edad--;
+    cajaEdad.style.display='block';
+    if(edad<12 || edad>90){
+      cajaEdad.style.background='#fee2e2'; cajaEdad.style.color='#991b1b';
+      cajaEdad.innerHTML='&#9888;&#65039; Tendria '+edad+' a\&ntilde;os. Verifica la fecha.';
+    } else {
+      cajaEdad.style.background='#dcfce7'; cajaEdad.style.color='#166534';
+      cajaEdad.innerHTML='Tiene '+edad+' a\&ntilde;os. Confirma con el cliente antes de guardar.';
+    }
+  }
+  [fd,fm,fa].forEach(function(s){ s.addEventListener('change', calcEdad); });
+  frm.addEventListener('submit', function(e){
+    if(!fd.value || !fm.value || !fa.value){ e.preventDefault(); alert('Selecciona dia, mes y año'); return false; }
+    fh.value = fa.value + '-' + fm.value + '-' + fd.value;
+  });
+})();
+</script>
 <?php endif; ?>
 </body>
 
