@@ -60,8 +60,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'close' && !$cierre_hoy) {
     $contado = floatval($_POST['counted'] ?? 0);
     $obs = trim($_POST['observations'] ?? '');
     $dif = $contado - $esperado;
-    $stmt = $conn->prepare("INSERT INTO cash_closures (closure_date, base_amount, cash_sales, card_sales, transfer_sales, web_sales, cash_expenses, expected_cash, counted_cash, difference, observations, closed_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sdddddddddsi", $hoy, $BASE, $rev['cash'], $rev['card'], $rev['transfer'], $rev['web'], $total_gastos, $esperado, $contado, $dif, $obs, $userid);
+    $sobre = max(0, $contado - $BASE);
+    $stmt = $conn->prepare("INSERT INTO cash_closures (closure_date, base_amount, cash_sales, card_sales, transfer_sales, web_sales, cash_expenses, expected_cash, counted_cash, difference, sobre, observations, closed_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sddddddddddsi", $hoy, $BASE, $rev['cash'], $rev['card'], $rev['transfer'], $rev['web'], $total_gastos, $esperado, $contado, $dif, $sobre, $obs, $userid);
     if ($stmt->execute()) {
         // Correo al dueño
         require_once '/app/includes/mailer.php';
@@ -204,6 +205,12 @@ if (isset($_POST['action']) && $_POST['action'] === 'close' && !$cierre_hoy) {
             <span class="v <?php echo $cierre_hoy['difference'] == 0 ? 'dif-ok' : 'dif-bad'; ?>">
                 <?php echo $cierre_hoy['difference'] == 0 ? 'Cuadró ✓' : ($cierre_hoy['difference'] > 0 ? '+' : '') . '$' . number_format($cierre_hoy['difference'],0,',','.'); ?>
             </span>
+        </div>
+        <div style="border-top:2px solid #e5e7eb;margin:14px 0 10px;"></div>
+        <div class="money-row"><span>Base que queda en caja</span><span class="v">$<?php echo number_format($cierre_hoy['base_amount'],0,',','.'); ?></span></div>
+        <div class="money-row" style="background:#ecfdf5;border-radius:10px;padding:10px 12px;margin-top:6px;">
+            <span style="font-weight:800;color:#065f46;">SOBRE A GUARDAR</span>
+            <span class="v" style="font-weight:800;color:#065f46;font-size:1.25em;">$<?php echo number_format($cierre_hoy['sobre'] ?? max(0,$cierre_hoy['counted_cash']-$cierre_hoy['base_amount']),0,',','.'); ?></span>
         </div>
         <?php if ($cierre_hoy['observations']): ?>
         <p style="color:#888;margin-top:10px;"><i class="bi bi-chat-left-text"></i> <?php echo htmlspecialchars($cierre_hoy['observations']); ?></p>
