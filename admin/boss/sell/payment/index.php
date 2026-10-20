@@ -166,60 +166,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $amount = $ticketprice;
     $method = $paymentMethod;
 
+    /* GYMONE_ACUMULADOR_DIFERIDO
+       Aqui SOLO se calculan y validan los montos. El acumulador (revenu_stats)
+       se actualiza mas abajo, unicamente cuando la factura ya quedo creada.
+       Antes se sumaba aqui y cualquier venta fallida o abandonada dejaba plata
+       registrada sin factura (caso 18/10/2026). */
+    $rs_cash = 0.0; $rs_card = 0.0; $rs_transfer = 0.0;
+
     if ($paymentMethod !== 'profile') {
         if ($paymentMethod === 'mixed') {
             $mx_cash = max(0, (float)($_POST['mix_cash'] ?? 0));
             $mx_card = max(0, (float)($_POST['mix_card'] ?? 0));
-            $mx_tr = max(0, (float)($_POST['mix_transfer'] ?? 0));
+            $mx_tr   = max(0, (float)($_POST['mix_transfer'] ?? 0));
             if (abs(($mx_cash + $mx_card + $mx_tr) - (float)$ticketprice) > 0.01) {
                 die("Pago mixto no cuadra con el total.");
             }
-            $sqlM = "SELECT id FROM revenu_stats WHERE date = ?";
-            $stmtM = $conn->prepare($sqlM);
-            $stmtM->bind_param("s", $date);
-            $stmtM->execute();
-            $resM = $stmtM->get_result();
-            if ($resM->num_rows > 0) {
-                $rowM = $resM->fetch_assoc();
-                $stmtM2 = $conn->prepare("UPDATE revenu_stats SET cash = cash + ?, bank_card = bank_card + ?, transfer = transfer + ? WHERE id = ?");
-                $stmtM2->bind_param("dddi", $mx_cash, $mx_card, $mx_tr, $rowM['id']);
-                $stmtM2->execute(); $stmtM2->close();
-            } else {
-                $stmtM2 = $conn->prepare("INSERT INTO revenu_stats (date, bank_card, cash, transfer) VALUES (?, ?, ?, ?)");
-                $stmtM2->bind_param("sddd", $date, $mx_card, $mx_cash, $mx_tr);
-                $stmtM2->execute(); $stmtM2->close();
-            }
-            $stmtM->close();
+            $rs_cash     = $mx_cash;
+            $rs_card     = $mx_card;
+            $rs_transfer = $mx_tr;
         } else {
-        $field = ($method === 'card') ? 'bank_card' : (($method === 'transfer') ? 'transfer' : 'cash');
-
-        $sql = "SELECT id FROM revenu_stats WHERE date = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $date);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows > 0) {
-            $row = $result->fetch_assoc();
-
-            $updateSql = "UPDATE revenu_stats SET $field = $field + ? WHERE id = ?";
-            $updateStmt = $conn->prepare($updateSql);
-            $updateStmt->bind_param("di", $amount, $row['id']);
-            $updateStmt->execute();
-            $updateStmt->close();
-        } else {
-            $insertSql = "INSERT INTO revenu_stats (date, bank_card, cash, transfer) VALUES (?, ?, ?, ?)";
-            $insertStmt = $conn->prepare($insertSql);
-
-            $bank_card = ($method === 'card') ? $amount : 0;
-            $cash = ($method === 'cash') ? $amount : 0;
-            $transfer = ($method === 'transfer') ? $amount : 0;
-
-            $insertStmt->bind_param("sddd", $date, $bank_card, $cash, $transfer);
-            $insertStmt->execute();
-            $insertId = $insertStmt->insert_id;
-            $insertStmt->close();
-        }
+            $rs_card     = ($method === 'card')     ? (float)$amount : 0.0;
+            $rs_transfer = ($method === 'transfer') ? (float)$amount : 0.0;
+            $rs_cash     = ($method !== 'card' && $method !== 'transfer') ? (float)$amount : 0.0;
         }
     }
 
@@ -319,6 +287,24 @@ $inv_pm = ($method == 'profile') ? $translations["profilebalancepay"] : (($metho
     $stmt->bind_param("isdss", $userid, $fullname, $ticketprice, $status, $pathinvoicesql);
 
     if ($stmt->execute()) {
+        /* GYMONE_ACUMULADOR_DIFERIDO: la factura existe -> ahora si se registra la plata */
+        if (($rs_cash + $rs_card + $rs_transfer) > 0) {
+            $rsSel = $conn->prepare("SELECT id FROM revenu_stats WHERE date = ?");
+            $rsSel->bind_param("s", $date);
+            $rsSel->execute();
+            $rsRes = $rsSel->get_result();
+            if ($rsRes && $rsRes->num_rows > 0) {
+                $rsId = (int)$rsRes->fetch_assoc()['id'];
+                $rsUpd = $conn->prepare("UPDATE revenu_stats SET cash = cash + ?, bank_card = bank_card + ?, transfer = transfer + ? WHERE id = ?");
+                $rsUpd->bind_param("dddi", $rs_cash, $rs_card, $rs_transfer, $rsId);
+            } else {
+                $rsUpd = $conn->prepare("INSERT INTO revenu_stats (date, bank_card, cash, transfer) VALUES (?, ?, ?, ?)");
+                $rsUpd->bind_param("sddd", $date, $rs_card, $rs_cash, $rs_transfer);
+            }
+            $rsUpd->execute();
+            $rsUpd->close();
+            $rsSel->close();
+        }
         $alerts_html .= '<div class="alert alert-success" role="alert">
                             ' . $translations["invoiceadded"] . '
                         </div>';
